@@ -129,7 +129,7 @@ const ru = {
     label: 'Загрузка сайта SIMAKOV',
   },
   header: {
-    wordmark: 'SIMAKOV',
+    wordmark: 'SIMAKOOV',
     tagline: ['СОЗДАВАТЬ', 'БОЛЬШЕ, ЧЕМ ОЖИДАЮТ'],
     homeLabel: 'SIMAKOV — наверх',
     drawer: {
@@ -258,7 +258,7 @@ const ru = {
     mailBody: { name: 'Имя', contact: 'Контакт', topic: 'Тема', message: 'Сообщение' },
   },
   footer: {
-    wordmark: 'SIMAKOV',
+    wordmark: 'SIMAKOOV',
     copyright: '© 2026',
     center: 'ДИЗАЙН. ПРОДУКТЫ. ИДЕИ.',
     links: footerLinks,
@@ -291,7 +291,7 @@ const en: Content = {
     label: 'Loading SIMAKOV',
   },
   header: {
-    wordmark: 'SIMAKOV',
+    wordmark: 'SIMAKOOV',
     tagline: ['CREATING', 'BEYOND EXPECTATIONS'],
     homeLabel: 'SIMAKOV — back to top',
     drawer: {
@@ -416,7 +416,7 @@ const en: Content = {
     mailBody: { name: 'Name', contact: 'Contact', topic: 'Topic', message: 'Message' },
   },
   footer: {
-    wordmark: 'SIMAKOV',
+    wordmark: 'SIMAKOOV',
     copyright: '© 2026',
     center: 'DESIGN. PRODUCTS. IDEAS.',
     links: footerLinks,
