@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { colors } from '../theme'
 
 /*
- * Stroke-drawn "Simakov°" preloader.
+ * Stroke-drawn "Simakoov°" preloader.
  * Technique adapted from "Stroke Logo Animation" by Jon Kantner (MIT),
  * https://codepen.io/jkantner/pen/dyZjWvG — three stacked copies of the logo
  * draw themselves with a stagger, the faint ones leaving a trail behind the
@@ -27,7 +27,7 @@ const MIN_VISIBLE_MS = (LAYERS[LAYERS.length - 1].delay + DRAW + HOLD) * 1000
 const MAX_VISIBLE_MS = 6000
 
 /**
- * Letter strokes in a 200×48 box (baseline y=39, x-height y≈17.5).
+ * Letter strokes in a 230×48 box (baseline y=39, x-height y≈17.5).
  * `from`/`to` are the fraction of the layer's draw time the stroke occupies,
  * so multi-stroke letters draw in order (stem, then arch, …).
  */
@@ -51,12 +51,13 @@ const STROKES: { d: string; from: number; to: number }[] = [
   // k
   { d: 'M113,7.3V39.3', from: 0, to: 0.5 },
   { d: 'M127.1,16.4L117.1,27L127.1,39.2', from: 0.5, to: 1 },
-  // o
+  // o, o
   { d: 'M146.5,18.3a9.9,10.5,0,1,0,0,21a9.9,10.5,0,1,0,0,-21', from: 0, to: 1 },
+  { d: 'M176,18.3a9.9,10.5,0,1,0,0,21a9.9,10.5,0,1,0,0,-21', from: 0, to: 1 },
   // v
-  { d: 'M165,17.5L174,39L183,17.5', from: 0, to: 1 },
+  { d: 'M194.5,17.5L203.5,39L212.5,17.5', from: 0, to: 1 },
   // ° — same ring as the header wordmark
-  { d: 'M192,6.5a3,3,0,1,0,0,6a3,3,0,1,0,0,-6', from: 0.6, to: 1 },
+  { d: 'M221.5,6.5a3,3,0,1,0,0,6a3,3,0,1,0,0,-6', from: 0.6, to: 1 },
 ]
 
 /** Lock page scroll while the overlay is up. */
@@ -145,7 +146,7 @@ export default function Loader({ label, onDone }: LoaderProps) {
           <Box
             component={motion.svg}
             aria-hidden
-            viewBox="0 0 200 48"
+            viewBox="0 0 230 48"
             fill="none"
             stroke={colors.gold}
             strokeWidth={3.5}
@@ -153,7 +154,7 @@ export default function Loader({ label, onDone }: LoaderProps) {
             strokeLinejoin="round"
             exit={{ scale: 1.06, opacity: 0, filter: 'blur(6px)' }}
             transition={{ duration: 0.6, ease: [0.65, 0, 0.35, 1] }}
-            sx={{ width: 'clamp(220px, 36vw, 440px)', height: 'auto', overflow: 'visible' }}
+            sx={{ width: 'clamp(250px, 41vw, 500px)', height: 'auto', overflow: 'visible' }}
           >
             {LAYERS.map((layer) => (
               <g key={layer.delay} opacity={layer.opacity}>
