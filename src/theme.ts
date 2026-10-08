@@ -15,7 +15,7 @@ export const colors = {
 }
 
 export const fonts = {
-  sans: '"Onest", system-ui, sans-serif',
+  sans: '"Gilroy", system-ui, sans-serif',
   serif: '"Cormorant Garamond", Georgia, serif',
   script: '"Great Vibes", cursive',
 }
@@ -99,11 +99,11 @@ const theme = createTheme({
   shape: { borderRadius: 4 },
   typography: {
     fontFamily: fonts.sans,
-    // Only Onest 400/500/600 are loaded; keep MUI's light/bold weights within that range.
+    // Gilroy 400/500/600/700 are self-hosted (public/fonts, @font-face in index.html); keep MUI's weights within that range.
     fontWeightLight: 400,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
-    fontWeightBold: 600,
+    fontWeightBold: 700,
     button: { textTransform: 'none', fontWeight: 500 },
   },
   components: {

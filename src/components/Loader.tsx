@@ -121,7 +121,7 @@ export default function Loader({ label, logo = 'SIMAKOOV', onDone }: LoaderProps
     textLength: TEXT_WIDTH,
     lengthAdjust: 'spacingAndGlyphs',
     fontFamily: fonts.sans,
-    fontWeight: 600,
+    fontWeight: 700,
     fontSize: 150,
   } as const
 
