@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Box from '@mui/material/Box'
@@ -21,6 +21,7 @@ import LangSwitch from './LangSwitch'
 import { scrollToHash } from '../utils/scrollTo'
 import Wordmark from './Wordmark'
 import { useIntroReady } from './intro'
+import { useFeedback } from './feedback/context'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -37,6 +38,8 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const { scrollY } = useScroll()
+  const { openFeedback } = useFeedback()
+  const menuButton = useRef<HTMLButtonElement>(null)
 
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 40))
 
@@ -101,7 +104,12 @@ export default function Header() {
 
             <Stack direction="row" spacing={{ xs: 1, sm: 1.5, lg: 2 }} sx={{ justifySelf: 'end', alignItems: 'center' }}>
               <LangSwitch />
-              <IconButton aria-label={header.drawer.openLabel} onClick={() => setOpen(true)} sx={outlinedIconButtonSx}>
+              <IconButton
+                ref={menuButton}
+                aria-label={header.drawer.openLabel}
+                onClick={() => setOpen(true)}
+                sx={outlinedIconButtonSx}
+              >
                 {/* CSS toggle (no useMediaQuery) so the right icon renders on first paint. */}
                 <Menu fontSize="small" sx={{ display: { xs: 'block', md: 'none' } }} />
                 <MoreHoriz fontSize="small" sx={{ display: { xs: 'none', md: 'block' } }} />
@@ -182,7 +190,7 @@ export default function Header() {
           <Divider sx={{ mb: 3 }} />
           <Typography sx={{ ...microLabel, color: colors.muted, mb: 2 }}>{header.drawer.contactsLabel}</Typography>
           <Stack spacing={1.5}>
-            {header.drawer.contacts.map(({ key, label, href, external }, i) => {
+            {header.drawer.contacts.map(({ key, label, href, external, feedback }, i) => {
               const Icon = contactIcons[key]
               return (
                 <motion.div
@@ -192,9 +200,20 @@ export default function Header() {
                   transition={{ duration: 0.5, delay: 0.35 + i * 0.06, ease }}
                 >
                   <Link
-                    href={href}
-                    {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    {...(feedback
+                      ? {
+                          component: 'button',
+                          type: 'button',
+                          'aria-haspopup': 'dialog',
+                          // Close the drawer and open the form; focus returns to the menu button afterwards.
+                          onClick: () => {
+                            setOpen(false)
+                            openFeedback({ returnFocus: menuButton.current })
+                          },
+                        }
+                      : { href, ...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {}) })}
                     sx={{
+                      fontFamily: 'inherit',
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: 1.5,

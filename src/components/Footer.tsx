@@ -6,9 +6,11 @@ import { colors, contentSx, hoverUnderlineSx, microLabel } from '../theme'
 import { useLang } from '../i18n'
 import Wordmark from './Wordmark'
 import GoldDot from './GoldDot'
+import { useFeedback } from './feedback/context'
 
 export default function Footer() {
   const { footer } = useLang().t
+  const { openFeedback } = useFeedback()
   return (
     <Box component="footer" id="contact">
       <Box
@@ -41,9 +43,11 @@ export default function Footer() {
           {footer.links.map((l) => (
             <Link
               key={l.label}
-              href={l.href}
-              {...(l.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              {...(l.feedback
+                ? { component: 'button', type: 'button', 'aria-haspopup': 'dialog', onClick: () => openFeedback() }
+                : { href: l.href, ...(l.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}) })}
               sx={{
+                fontFamily: 'inherit',
                 ...microLabel,
                 fontSize: 10,
                 letterSpacing: '0.2em',

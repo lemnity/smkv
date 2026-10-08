@@ -12,6 +12,7 @@ import { scrollToHash } from '../utils/scrollTo'
 import { MagneticButton } from './effects'
 import GoldDot from './GoldDot'
 import { useIntroReady } from './intro'
+import { useFeedback } from './feedback/context'
 import HeroPortrait from './hero/HeroPortrait'
 import { HeroSideColumn, HeroSideRow, Signature } from './hero/HeroSide'
 
@@ -47,6 +48,7 @@ export default function Hero() {
   const reduce = useReducedMotion()
   const ready = useIntroReady()
   const { hero } = useLang().t
+  const { openFeedback } = useFeedback()
 
   // Scroll: portrait parallax + copy fade-out as the hero leaves the viewport.
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
@@ -173,8 +175,12 @@ export default function Hero() {
                 </MagneticButton>
                 <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
                   <Link
-                    href={hero.writeHref}
+                    component="button"
+                    type="button"
+                    aria-haspopup="dialog"
+                    onClick={() => openFeedback()}
                     sx={{
+                      fontFamily: 'inherit',
                       fontSize: 15,
                       color: colors.text,
                       textDecoration: 'underline',

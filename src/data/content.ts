@@ -45,6 +45,12 @@ export interface Project {
   url: string
 }
 
+export type FeedbackTopicId = 'website' | 'brand' | 'product' | 'other'
+export interface FeedbackTopic {
+  id: FeedbackTopicId
+  label: string
+}
+
 export type Stat =
   | { kind: 'number'; value: number; suffix: string; label: string }
   | { kind: 'infinity'; label: string }
@@ -86,13 +92,15 @@ const heroBase = {
 const footerLinks = [
   { label: 'TELEGRAM', href: contacts.telegram },
   { label: 'INSTAGRAM', href: contacts.instagram },
-  { label: 'EMAIL', href: mailto },
+  // Opens the feedback form modal instead of following the mailto link.
+  { label: 'EMAIL', href: mailto, feedback: true },
 ]
 
 const drawerContacts = [
   { key: 'telegram', label: 'Telegram', href: contacts.telegram, external: true },
   { key: 'instagram', label: 'Instagram', href: contacts.instagram, external: true },
-  { key: 'email', label: contacts.email, href: mailto, external: false },
+  // Opens the feedback form modal (see src/components/feedback).
+  { key: 'email', label: contacts.email, href: mailto, external: false, feedback: true },
 ]
 
 /* ------------------------------------------------------------------ RU */
@@ -140,7 +148,6 @@ const ru = {
     text: 'Создаю цифровые продукты, бренды и пользовательские опыты, которые помогают людям и бизнесу расти.',
     cta: 'Смотреть работы',
     write: 'Написать мне',
-    writeHref: mailto,
     portraitAlt: 'Александр Симаков',
   },
   projects: {
@@ -190,7 +197,6 @@ const ru = {
     title: ['Больше, чем', 'дизайн'],
     text: '12+ лет опыта в дизайне, продуктовой разработке и визуальных коммуникациях. Объединяю стратегию, дизайн и технологии, чтобы создавать продукты с реальной ценностью.',
     more: 'Узнать больше',
-    moreHref: mailto,
     stats: [
       { kind: 'number', value: 12, suffix: '+', label: 'ЛЕТ ОПЫТА' },
       { kind: 'number', value: 50, suffix: '+', label: 'ПРОЕКТОВ' },
@@ -201,7 +207,55 @@ const ru = {
     infinityLabel: 'бесконечность',
     quote: ['Хороший дизайн делает', 'сложное понятным,', 'а возможное — ближе.'],
     cta: ['ДАВАЙТЕ', 'СОЗДАДИМ', 'ЧТО-ТО ВМЕСТЕ'],
-    ctaLabel: 'Давайте создадим что-то вместе — написать письмо',
+    ctaLabel: 'Давайте создадим что-то вместе — открыть форму обратной связи',
+  },
+  feedback: {
+    dialogLabel: 'Форма обратной связи',
+    eyebrow: 'ОБРАТНАЯ СВЯЗЬ',
+    title: 'Обсудим проект',
+    subtitle: 'Пара слов о задаче — и я вернусь с идеями, сроками и следующим шагом.',
+    closeLabel: 'Закрыть форму',
+    topicsLabel: 'Что нужно',
+    topics: [
+      { id: 'website', label: 'Сайт' },
+      { id: 'brand', label: 'Бренд/айдентика' },
+      { id: 'product', label: 'Продукт/UI' },
+      { id: 'other', label: 'Другое' },
+    ] as FeedbackTopic[],
+    fields: {
+      name: 'Имя',
+      contact: 'Email или Telegram',
+      contactHelper: 'Например, name@mail.ru или @username',
+      message: 'Сообщение',
+      messageHelper: 'Что делаем, для кого и к какому сроку',
+      honeypot: 'Не заполняйте это поле',
+    },
+    errors: {
+      summary: 'Проверьте поля:',
+      nameRequired: 'Укажите имя',
+      contactRequired: 'Укажите email или Telegram',
+      contactInvalid: 'Нужен email (name@mail.ru), Telegram-ник (@username) или ссылка t.me',
+      messageRequired: 'Напишите пару слов о задаче',
+      messageShort: 'Слишком коротко — хотя бы 10 символов',
+    },
+    consent: 'Нажимая кнопку, вы соглашаетесь на обработку персональных данных',
+    submit: 'Отправить',
+    sending: 'Отправляю…',
+    success: {
+      title: 'Спасибо!',
+      text: 'Сообщение отправлено. Отвечу в течение дня.',
+      close: 'Закрыть',
+    },
+    failure: {
+      title: 'Не получилось отправить',
+      server: 'Сервис отправки ответил ошибкой.',
+      timeout: 'Сервер не ответил вовремя.',
+      network: 'Похоже, пропало соединение.',
+      retry: 'Попробовать снова',
+      fallback: 'Или напишите на почту:',
+    },
+    /** Labels used in the body of the fallback mailto letter. */
+    mailBody: { name: 'Имя', contact: 'Контакт', topic: 'Тема', message: 'Сообщение' },
   },
   footer: {
     wordmark: 'SIMAKOV',
@@ -255,7 +309,6 @@ const en: Content = {
     text: 'I build digital products, brands and user experiences that help people and businesses grow.',
     cta: 'View my work',
     write: 'Get in touch',
-    writeHref: mailto,
     portraitAlt: 'Alexander Simakov',
   },
   projects: {
@@ -304,7 +357,6 @@ const en: Content = {
     title: ['More than', 'design'],
     text: '12+ years in design, product development and visual communication. I bring strategy, design and technology together to build products that deliver real value.',
     more: 'Learn more',
-    moreHref: mailto,
     stats: [
       { kind: 'number', value: 12, suffix: '+', label: 'YEARS IN DESIGN' },
       { kind: 'number', value: 50, suffix: '+', label: 'PROJECTS' },
@@ -314,7 +366,54 @@ const en: Content = {
     infinityLabel: 'infinity',
     quote: ['Good design makes', 'the complex clear', 'and the possible closer.'],
     cta: ["LET'S CREATE", 'SOMETHING', 'TOGETHER'],
-    ctaLabel: "Let's create something together — send an email",
+    ctaLabel: "Let's create something together — open the contact form",
+  },
+  feedback: {
+    dialogLabel: 'Contact form',
+    eyebrow: 'CONTACT',
+    title: "Let's talk",
+    subtitle: "A few words about the task — and I'll come back with ideas, timing and the next step.",
+    closeLabel: 'Close form',
+    topicsLabel: 'What you need',
+    topics: [
+      { id: 'website', label: 'Website' },
+      { id: 'brand', label: 'Brand identity' },
+      { id: 'product', label: 'Product/UI' },
+      { id: 'other', label: 'Other' },
+    ],
+    fields: {
+      name: 'Name',
+      contact: 'Email or Telegram',
+      contactHelper: 'E.g. name@mail.com or @username',
+      message: 'Message',
+      messageHelper: 'What we are building, for whom and by when',
+      honeypot: 'Leave this field empty',
+    },
+    errors: {
+      summary: 'Please check:',
+      nameRequired: 'Enter your name',
+      contactRequired: 'Enter an email or Telegram',
+      contactInvalid: 'Use an email (name@mail.com), a Telegram handle (@username) or a t.me link',
+      messageRequired: 'Write a few words about the task',
+      messageShort: 'Too short — at least 10 characters',
+    },
+    consent: 'By clicking the button, you agree to the processing of your personal data',
+    submit: 'Send',
+    sending: 'Sending…',
+    success: {
+      title: 'Thank you!',
+      text: "Your message is on its way. I'll reply within a day.",
+      close: 'Close',
+    },
+    failure: {
+      title: "Couldn't send",
+      server: 'The delivery service returned an error.',
+      timeout: 'The server took too long to respond.',
+      network: 'Looks like the connection dropped.',
+      retry: 'Try again',
+      fallback: 'Or email me directly:',
+    },
+    mailBody: { name: 'Name', contact: 'Contact', topic: 'Topic', message: 'Message' },
   },
   footer: {
     wordmark: 'SIMAKOV',

@@ -13,6 +13,7 @@ import { useLang } from '../i18n'
 import { Reveal } from './effects'
 import GoldDot from './GoldDot'
 import StatCounter from './StatCounter'
+import { useFeedback } from './feedback/context'
 
 function Word({ children, progress, range }: { children: string; progress: MotionValue<number>; range: [number, number] }) {
   const opacity = useTransform(progress, range, [0.15, 1])
@@ -77,23 +78,35 @@ function Quote() {
   )
 }
 
-/** Whole row (circle + label) is a single mailto link; the circle is decorative and reacts to the link's hover/focus. */
+/** Whole row (circle + label) is a single button that opens the feedback form; the circle is decorative and reacts to the button's hover/focus. */
 function CreateTogether() {
   const { about } = useLang().t
+  const { openFeedback } = useFeedback()
   const circleActive = {
     borderColor: colors.gold,
     boxShadow: '0 0 24px rgba(196,238,24,0.35)',
   }
   return (
     <Stack
-      component="a"
-      href={about.moreHref}
+      component="button"
+      type="button"
+      onClick={() => openFeedback()}
+      aria-haspopup="dialog"
       aria-label={about.ctaLabel}
       direction="row"
       spacing={3}
       sx={{
         alignItems: 'center',
         flexShrink: 0,
+        // Reset native <button> chrome so it looks exactly like the former link.
+        appearance: 'none',
+        background: 'none',
+        border: 0,
+        p: 0,
+        m: 0,
+        font: 'inherit',
+        textAlign: 'left',
+        cursor: 'pointer',
         textDecoration: 'none',
         color: 'inherit',
         borderRadius: 999,
@@ -157,6 +170,7 @@ function CreateTogether() {
 
 export default function About() {
   const { about } = useLang().t
+  const { openFeedback } = useFeedback()
   return (
     <Box component="section" id="about" aria-labelledby="about-title">
       <Box
@@ -188,8 +202,12 @@ export default function About() {
             </Typography>
             <Stack direction="row" spacing={1.5} sx={{ mt: 3.5, alignItems: 'center' }}>
               <Link
-                href={about.moreHref}
+                component="button"
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() => openFeedback()}
                 sx={{
+                  fontFamily: 'inherit',
                   fontSize: 14,
                   color: colors.text,
                   textDecoration: 'underline',

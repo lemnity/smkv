@@ -95,6 +95,8 @@ const theme = createTheme({
     background: { default: colors.bg, paper: colors.surface },
     text: { primary: colors.text, secondary: colors.muted },
     divider: colors.line,
+    // Softer red that stays readable on the near-black surface (form errors).
+    error: { main: '#ff7b6b' },
   },
   shape: { borderRadius: 4 },
   typography: {

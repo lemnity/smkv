@@ -16,6 +16,7 @@ import Loader from './components/Loader'
 import { IntroContext } from './components/intro'
 import { LANG_FADE, LanguageProvider, useLang } from './i18n'
 import { CustomCursor, GrainOverlay, ScrollProgress } from './components/effects'
+import { FeedbackProvider } from './components/feedback/FeedbackProvider'
 
 function SectionDivider() {
   return (
@@ -67,7 +68,9 @@ export default function App() {
       <CssBaseline />
       <LanguageProvider>
         <MotionConfig reducedMotion="user">
-          <Page />
+          <FeedbackProvider>
+            <Page />
+          </FeedbackProvider>
         </MotionConfig>
       </LanguageProvider>
     </ThemeProvider>
