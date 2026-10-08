@@ -175,7 +175,20 @@ export default function ProjectCard({ project, size }: Props) {
                   mb: large ? 1.5 : 1,
                 }}
               >
-                {project.logo ? (
+                {project.logo?.mark ? (
+                  <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: large ? 1.75 : 1.25 }}>
+                    <Box
+                      component="img"
+                      src={project.logo.src}
+                      alt=""
+                      width={project.logo.width}
+                      height={project.logo.height}
+                      decoding="async"
+                      sx={{ display: 'block', width: 'auto', height: large ? { xs: 40, md: 48 } : { xs: 34, md: 40 }, flexShrink: 0 }}
+                    />
+                    <span>{project.title}</span>
+                  </Box>
+                ) : project.logo ? (
                   <Box
                     component="img"
                     src={project.logo.src}

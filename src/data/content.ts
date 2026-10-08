@@ -45,8 +45,11 @@ export interface Project {
   image: ProjectImage
   /** External site; omit while the project has no public link (the card shows no arrow). */
   url?: string
-  /** Original logo shown instead of the typed title (white artwork on transparent). */
-  logo?: { src: string; width: number; height: number }
+  /**
+   * Original logo. A wordmark replaces the typed title; `mark: true` (a symbol without
+   * lettering) is shown in its own colours next to the title instead.
+   */
+  logo?: { src: string; width: number; height: number; mark?: boolean }
 }
 
 export type FeedbackTopicId = 'website' | 'brand' | 'product' | 'other'
@@ -72,7 +75,8 @@ const projectBase = {
   tumtipb: {
     id: 'tumtipb',
     number: '02',
-    title: 'Tumtipb',
+    title: 'Дом науки и техники',
+    logo: { src: `${BASE}assets/dom-nauki-mark.webp`, width: 128, height: 160, mark: true },
     image: { src: `${BASE}assets/tumtipb-concept.png`, width: 282, height: 174, crop: { x: 0, y: 4, w: 276, h: 158 }, focus: [0, 0.5] },
     url: 'https://new.tumtipb.ru',
   },
@@ -336,6 +340,7 @@ const en: Content = {
       },
       {
         ...projectBase.tumtipb,
+        title: 'House of Science and Technology',
         description: 'An education platform for professionals',
         tags: ['Education', 'Website', 'Public sector'],
       },
