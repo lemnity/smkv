@@ -11,7 +11,6 @@ export const LANGS: readonly Lang[] = ['ru', 'en']
 export const contacts = {
   email: 'CHANGE-ME@example.com',
   telegram: 'https://t.me/',
-  instagram: 'https://instagram.com/',
 }
 
 const mailto = `mailto:${contacts.email}`
@@ -104,14 +103,12 @@ const heroBase = {
 
 const footerLinks = [
   { label: 'TELEGRAM', href: contacts.telegram },
-  { label: 'INSTAGRAM', href: contacts.instagram },
   // Opens the feedback form modal instead of following the mailto link.
   { label: 'EMAIL', href: mailto, feedback: true },
 ]
 
 const drawerContacts = [
   { key: 'telegram', label: 'Telegram', href: contacts.telegram, external: true },
-  { key: 'instagram', label: 'Instagram', href: contacts.instagram, external: true },
   // Opens the feedback form modal (see src/components/feedback).
   { key: 'email', label: contacts.email, href: mailto, external: false, feedback: true },
 ]

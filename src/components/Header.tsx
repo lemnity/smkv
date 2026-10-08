@@ -12,7 +12,6 @@ import MoreHoriz from '@mui/icons-material/MoreHoriz'
 import Menu from '@mui/icons-material/Menu'
 import Close from '@mui/icons-material/Close'
 import Telegram from '@mui/icons-material/Telegram'
-import Instagram from '@mui/icons-material/Instagram'
 import MailOutline from '@mui/icons-material/MailOutlineOutlined'
 import { motion, useMotionValueEvent, useScroll } from 'motion/react'
 import { HEADER_HEIGHT, colors, contentSx, hoverUnderlineSx, microLabel, outlinedIconButtonSx } from '../theme'
@@ -27,7 +26,6 @@ const ease = [0.22, 1, 0.36, 1] as const
 
 const contactIcons: Record<string, typeof Telegram> = {
   telegram: Telegram,
-  instagram: Instagram,
   email: MailOutline,
 }
 
