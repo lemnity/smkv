@@ -40,13 +40,33 @@ export const hero = {
   places: ['TYUMEN', 'RUSSIA', 'WORLDWIDE'],
 }
 
+/** Rectangle in source-image pixels. */
+export interface Rect {
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
+export interface ProjectImage {
+  src: string
+  /** Natural size of the file (for width/height attributes and crop math). */
+  width: number
+  height: number
+  /** Visible part of the image. The concept images are cut from the reference, so they are cropped to drop baked-in text/borders. Use the full image rect for clean images. */
+  crop: Rect
+  /** Focal point (0–1) used when the crop has to be cut further to cover the slot. */
+  focus: [number, number]
+}
+
 export interface Project {
   id: string
   number: string
   title: string
   description: string
+  /** Rendered with a `#` prefix. */
   tags: string[]
-  image: string
+  image: ProjectImage
   url: string
 }
 
@@ -54,6 +74,9 @@ export const projects = {
   eyebrow: 'ПОРТФОЛИО',
   title: 'Избранные проекты',
   text: 'Продукты, бренды и цифровые решения, которые делают идеи реальностью.',
+  prevLabel: 'Предыдущий проект',
+  nextLabel: 'Следующий проект',
+  openLabel: 'Открыть проект',
   items: [
     {
       id: 'lemnity',
@@ -61,7 +84,7 @@ export const projects = {
       title: 'Lemnity',
       description: 'Платформа для создания сайтов, чат-ботов и цифровых продуктов',
       tags: ['SaaS', 'Конструктор', 'AI', 'Продукт'],
-      image: '/assets/lemnity-concept.png',
+      image: { src: '/assets/lemnity-concept.png', width: 466, height: 407, crop: { x: 0, y: 176, w: 466, h: 216 }, focus: [0.4, 0.5] },
       url: 'https://lemnity.ru',
     },
     {
@@ -70,7 +93,7 @@ export const projects = {
       title: 'Tumtipb',
       description: 'Образовательная платформа для профессионалов',
       tags: ['Образование', 'Сайт', 'Гос. сектор'],
-      image: '/assets/tumtipb-concept.png',
+      image: { src: '/assets/tumtipb-concept.png', width: 282, height: 174, crop: { x: 0, y: 4, w: 276, h: 158 }, focus: [0.3, 0.5] },
       url: 'https://tumtipb.ru',
     },
     {
@@ -79,11 +102,15 @@ export const projects = {
       title: 'ProStyle',
       description: 'Сувенирная продукция и корпоративные подарки',
       tags: ['Бренд', 'Интернет-магазин', 'Дизайн'],
-      image: '/assets/prostyle-concept.png',
+      image: { src: '/assets/prostyle-concept.png', width: 282, height: 176, crop: { x: 0, y: 0, w: 276, h: 170 }, focus: [0.4, 0.5] },
       url: 'https://prostyle.gifts',
     },
   ] as Project[],
 }
+
+export type Stat =
+  | { kind: 'number'; value: number; suffix: string; label: string }
+  | { kind: 'infinity'; label: string }
 
 export const about = {
   eyebrow: 'ОБО МНЕ',
@@ -91,13 +118,15 @@ export const about = {
   text: '12+ лет опыта в дизайне, продуктовой разработке и визуальных коммуникациях. Объединяю стратегию, дизайн и технологии, чтобы создавать продукты с реальной ценностью.',
   more: 'Узнать больше',
   stats: [
-    { value: 12, suffix: '+', label: 'ЛЕТ ОПЫТА' },
-    { value: 50, suffix: '+', label: 'ПРОЕКТОВ' },
-    { value: 3, suffix: '', label: 'СТРАНЫ' },
-    { value: null, suffix: '', label: 'ИДЕЙ В РАБОТЕ' },
-  ],
+    { kind: 'number', value: 12, suffix: '+', label: 'ЛЕТ ОПЫТА' },
+    { kind: 'number', value: 50, suffix: '+', label: 'ПРОЕКТОВ' },
+    { kind: 'number', value: 3, suffix: '', label: 'СТРАНЫ' },
+    { kind: 'infinity', label: 'ИДЕЙ В РАБОТЕ' },
+  ] as Stat[],
   quote: ['Хороший дизайн делает', 'сложное понятным,', 'а возможное — ближе.'],
   cta: ['ДАВАЙТЕ', 'СОЗДАДИМ', 'ЧТО-ТО ВМЕСТЕ'],
+  ctaLabel: 'Давайте создадим что-то вместе — написать письмо',
+  moreHref: `mailto:${contacts.email}`,
 }
 
 export const footer = {

@@ -9,6 +9,8 @@ export const colors = {
   goldLight: '#e6c89c',
   goldDark: '#8a6a45',
   line: 'rgba(255,255,255,0.09)',
+  /** Muted dark text used by the About quote. */
+  quote: '#6f6b66',
 }
 
 export const fonts = {

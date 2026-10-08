@@ -7,6 +7,8 @@ import theme, { contentSx } from './theme'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
+import Projects from './components/Projects'
+import About from './components/About'
 import { CustomCursor, GrainOverlay, ScrollProgress } from './components/effects'
 
 function SectionDivider() {
@@ -27,11 +29,9 @@ export default function App() {
         <Box component="main">
           <Hero />
           <SectionDivider />
-          {/* Projects — Task 3 */}
-          <Box id="work" component="section" sx={{ minHeight: 320 }} />
+          <Projects />
           <SectionDivider />
-          {/* About — Task 3 */}
-          <Box id="about" component="section" sx={{ minHeight: 320 }} />
+          <About />
           <SectionDivider />
         </Box>
         <Footer />
