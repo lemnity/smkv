@@ -167,6 +167,8 @@ const ru = {
     prevLabel: 'Предыдущий проект',
     nextLabel: 'Следующий проект',
     openLabel: 'Открыть проект',
+    /** Shown instead of the arrow on projects without a public link yet. */
+    soonLabel: 'Скоро',
     items: [
       {
         ...projectBase.lemnity,
@@ -332,6 +334,7 @@ const en: Content = {
     prevLabel: 'Previous project',
     nextLabel: 'Next project',
     openLabel: 'Open project',
+    soonLabel: 'Coming soon',
     items: [
       {
         ...projectBase.lemnity,

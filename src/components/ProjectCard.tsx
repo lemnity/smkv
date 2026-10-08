@@ -218,7 +218,7 @@ export default function ProjectCard({ project, size }: Props) {
               >
                 {project.description}
               </Typography>
-              {project.url && (
+              {project.url ? (
                 <IconButton
                   className="pc-arrow"
                   component="a"
@@ -238,6 +238,37 @@ export default function ProjectCard({ project, size }: Props) {
                 >
                   <ArrowForward />
                 </IconButton>
+              ) : (
+                <Box
+                  component="span"
+                  sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 1,
+                    mt: large ? 3.5 : 2.5,
+                    px: 1.75,
+                    height: 32,
+                    border: '1px solid rgba(196,238,24,0.45)',
+                    borderRadius: 999,
+                    color: colors.gold,
+                    fontSize: 10,
+                    fontWeight: 500,
+                    letterSpacing: '0.22em',
+                    textTransform: 'uppercase',
+                    '&::before': {
+                      content: '""',
+                      width: 6,
+                      height: 6,
+                      borderRadius: '50%',
+                      bgcolor: colors.gold,
+                      '@keyframes soonBlink': { '50%': { opacity: 0.25 } },
+                      animation: 'soonBlink 1.8s ease-in-out infinite',
+                      '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
+                    },
+                  }}
+                >
+                  {projects.soonLabel}
+                </Box>
               )}
             </Box>
           </motion.div>
