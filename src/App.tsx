@@ -11,6 +11,7 @@ import Hero from './components/Hero'
 import Projects from './components/Projects'
 import Gallery from './components/Gallery'
 import Clients from './components/Clients'
+import FloatingCta from './components/FloatingCta'
 import About from './components/About'
 import Loader from './components/Loader'
 import { IntroContext } from './components/intro'
@@ -55,6 +56,7 @@ function Page() {
         </Box>
         <Footer />
       </motion.div>
+      <FloatingCta />
       <GrainOverlay />
       <CustomCursor />
       <Loader label={t.loader.label} onDone={handleLoaderDone} />

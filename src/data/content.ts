@@ -230,6 +230,10 @@ const ru = {
     cta: ['ДАВАЙТЕ', 'СОЗДАДИМ', 'ЧТО-ТО ВМЕСТЕ'],
     ctaLabel: 'Давайте создадим что-то вместе — открыть форму обратной связи',
   },
+  /** Floating call-to-action shown while scrolling. */
+  floatingCta: {
+    label: 'Заказать проект',
+  },
   feedback: {
     dialogLabel: 'Форма обратной связи',
     eyebrow: 'ОБРАТНАЯ СВЯЗЬ',
@@ -399,6 +403,9 @@ const en: Content = {
     quote: ['Good design makes', 'the complex clear', 'and the possible closer.'],
     cta: ["LET'S CREATE", 'SOMETHING', 'TOGETHER'],
     ctaLabel: "Let's create something together — open the contact form",
+  },
+  floatingCta: {
+    label: 'Order a project',
   },
   feedback: {
     dialogLabel: 'Contact form',
