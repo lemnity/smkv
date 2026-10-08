@@ -98,8 +98,7 @@ export function HeroSideColumn({ reduce }: { reduce: Reduce }) {
         ))}
         <motion.div {...fadeIn(0.84, reduce, ready)}>
           <Box sx={{ width: 20, height: '1px', bgcolor: colors.muted, my: 2.5 }} />
-          <Typography sx={label}>{hero.side.est}</Typography>
-          <Typography sx={label}>{hero.side.year}</Typography>
+          <Typography sx={{ ...label, whiteSpace: 'nowrap' }}>{`${hero.side.est} ${hero.side.year}`}</Typography>
         </motion.div>
       </Box>
 
