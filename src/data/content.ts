@@ -22,6 +22,7 @@ export const hero = {
   cta: 'Смотреть работы',
   write: 'Написать мне',
   portrait: '/assets/portrait-hero.png',
+  portraitAlt: 'Александр Симаков',
   side: { top: ['IDEAS', 'PRODUCTS', 'PEOPLE'], est: 'EST.', year: '1991' },
   signature: 'Simakov',
   signatureLabel: 'ALEXANDER SIMAKOV',

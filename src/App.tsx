@@ -6,6 +6,7 @@ import { MotionConfig } from 'motion/react'
 import theme, { contentSx } from './theme'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import Hero from './components/Hero'
 import { CustomCursor, GrainOverlay, ScrollProgress } from './components/effects'
 
 function SectionDivider() {
@@ -24,8 +25,7 @@ export default function App() {
         <ScrollProgress />
         <Header />
         <Box component="main">
-          {/* Hero — Task 2 */}
-          <Box id="home" sx={{ minHeight: '100vh' }} />
+          <Hero />
           <SectionDivider />
           {/* Projects — Task 3 */}
           <Box id="work" component="section" sx={{ minHeight: 320 }} />
