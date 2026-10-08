@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import AllInclusive from '@mui/icons-material/AllInclusive'
+import { visuallyHidden } from '@mui/utils'
 import { animate, motion, useInView, useReducedMotion } from 'motion/react'
 import { colors, microLabel } from '../theme'
 import type { Stat } from '../data/content'
@@ -44,7 +45,10 @@ function CountUp({ value, suffix }: { value: number; suffix: string }) {
   const suffixOn = reduce || done
 
   return (
-    <Typography ref={ref} sx={numberSx} aria-label={`${value}${suffix}`}>
+    <Typography ref={ref} sx={numberSx}>
+      <Box component="span" sx={visuallyHidden}>
+        {`${value}${suffix}`}
+      </Box>
       <Box component="span" aria-hidden>
         {shown}
       </Box>
@@ -72,7 +76,7 @@ function InfinityMark() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.6 })
   return (
-    <Box ref={ref} sx={numberSx} role="img" aria-label="∞">
+    <Box ref={ref} sx={numberSx} role="img" aria-label="бесконечность">
       <motion.span
         aria-hidden
         initial={reduce ? false : { clipPath: 'inset(0 100% 0 0)' }}

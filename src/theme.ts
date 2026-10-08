@@ -71,6 +71,20 @@ export const outlinedIconButtonSx = {
     boxShadow: '0 0 24px rgba(201,161,115,0.35)',
     background: 'transparent',
   },
+  '&:focus-visible, &.Mui-focusVisible': {
+    borderColor: colors.gold,
+    boxShadow: '0 0 24px rgba(201,161,115,0.35)',
+    outline: `2px solid ${colors.gold}`,
+    outlineOffset: '3px',
+  },
+} as const
+
+/** Section H2 (Projects / About). */
+export const sectionTitleSx = {
+  fontSize: { xs: 38, sm: 46, md: 46, lg: 56 },
+  fontWeight: 400,
+  letterSpacing: '-0.025em',
+  lineHeight: 1.05,
 } as const
 
 const theme = createTheme({

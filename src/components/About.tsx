@@ -1,19 +1,18 @@
 import { useRef } from 'react'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
 import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import FormatQuote from '@mui/icons-material/FormatQuote'
 import MoreHoriz from '@mui/icons-material/MoreHoriz'
+import { visuallyHidden } from '@mui/utils'
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'motion/react'
-import { colors, contentSx, fonts, hoverUnderlineSx, microLabel, outlinedIconButtonSx } from '../theme'
+import { colors, contentSx, fonts, hoverUnderlineSx, microLabel, outlinedIconButtonSx, sectionTitleSx } from '../theme'
 import { about, contacts } from '../data/content'
 import { Reveal } from './effects'
 import GoldDot from './GoldDot'
 import StatCounter from './StatCounter'
-import { sectionTitleSx } from './Projects'
 
 const mailto = `mailto:${contacts.email}`
 
@@ -47,7 +46,6 @@ function Quote() {
       />
       <Typography
         component="blockquote"
-        aria-label={about.quote.join(' ')}
         sx={{
           m: 0,
           fontFamily: fonts.serif,
@@ -57,6 +55,9 @@ function Quote() {
           color: colors.quote,
         }}
       >
+        <Box component="span" sx={visuallyHidden}>
+          {about.quote.join(' ')}
+        </Box>
         {words.map((line, li) => (
           <Box component="span" key={li} aria-hidden sx={{ display: 'block' }}>
             {line.map((w, wi) => {
@@ -77,12 +78,33 @@ function Quote() {
   )
 }
 
+/** Whole row (circle + label) is a single mailto link; the circle is decorative and reacts to the link's hover/focus. */
 function CreateTogether() {
+  const circleActive = {
+    borderColor: colors.gold,
+    boxShadow: '0 0 24px rgba(201,161,115,0.35)',
+  }
   return (
-    <Stack direction="row" spacing={3} sx={{ alignItems: 'center', flexShrink: 0 }}>
-      <Box sx={{ position: 'relative', width: 72, height: 72, flexShrink: 0 }}>
+    <Stack
+      component="a"
+      href={mailto}
+      aria-label={about.ctaLabel}
+      direction="row"
+      spacing={3}
+      sx={{
+        alignItems: 'center',
+        flexShrink: 0,
+        textDecoration: 'none',
+        color: 'inherit',
+        borderRadius: 999,
+        outline: 'none',
+        '&:hover .cta-circle, &:focus-visible .cta-circle': circleActive,
+        '&:focus-visible': { outline: `2px solid ${colors.gold}`, outlineOffset: '10px' },
+        '&:hover .cta-label, &:focus-visible .cta-label': { color: colors.goldLight },
+      }}
+    >
+      <Box aria-hidden sx={{ position: 'relative', width: 72, height: 72, flexShrink: 0 }}>
         <Box
-          aria-hidden
           sx={{
             position: 'absolute',
             inset: -7,
@@ -94,16 +116,22 @@ function CreateTogether() {
             '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
           }}
         />
-        <IconButton
-          component="a"
-          href={mailto}
-          aria-label={about.ctaLabel}
-          sx={{ ...outlinedIconButtonSx, width: 72, height: 72, borderColor: 'rgba(244,241,236,0.3)' }}
+        <Box
+          className="cta-circle"
+          sx={{
+            ...outlinedIconButtonSx,
+            width: 72,
+            height: 72,
+            boxSizing: 'border-box',
+            display: 'grid',
+            placeItems: 'center',
+            borderColor: 'rgba(244,241,236,0.3)',
+          }}
         >
           <MoreHoriz />
-        </IconButton>
+        </Box>
       </Box>
-      <Box aria-hidden>
+      <Box aria-hidden className="cta-label" sx={{ transition: 'color .3s ease' }}>
         {about.cta.map((line, i) => (
           <Typography
             key={line}
@@ -115,6 +143,7 @@ function CreateTogether() {
               display: 'flex',
               alignItems: 'center',
               gap: 1.5,
+              color: 'inherit',
             }}
           >
             {line}

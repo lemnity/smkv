@@ -6,7 +6,8 @@ import Typography from '@mui/material/Typography'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import ArrowForward from '@mui/icons-material/ArrowForward'
 import { LayoutGroup, motion } from 'motion/react'
-import { colors, contentSx, microLabel, outlinedIconButtonSx } from '../theme'
+import { visuallyHidden } from '@mui/utils'
+import { colors, contentSx, microLabel, outlinedIconButtonSx, sectionTitleSx } from '../theme'
 import { projects } from '../data/content'
 import { Reveal } from './effects'
 import ProjectCard from './ProjectCard'
@@ -15,19 +16,20 @@ const ease = [0.22, 1, 0.36, 1] as const
 /** Slot 0 is the large card; slots 1–2 are the stacked small cards. */
 const AREAS = ['big', 'top', 'bottom'] as const
 
-export const sectionTitleSx = {
-  fontSize: { xs: 38, sm: 46, md: 46, lg: 56 },
-  fontWeight: 400,
-  letterSpacing: '-0.025em',
-  lineHeight: 1.05,
-} as const
-
 export default function Projects() {
   const items = projects.items
   // order[slot] = index into items
   const [order, setOrder] = useState(() => items.map((_, i) => i))
-  const next = () => setOrder((o) => [...o.slice(1), o[0]])
-  const prev = () => setOrder((o) => [o[o.length - 1], ...o.slice(0, -1)])
+  // Only announce after the user navigates, not on initial render.
+  const [announce, setAnnounce] = useState('')
+  const featured = (o: number[]) => `${items[o[0]].number} / ${items.length}: ${items[o[0]].title}`
+  const rotate = (fn: (o: number[]) => number[]) => {
+    const o = fn(order)
+    setOrder(o)
+    setAnnounce(featured(o))
+  }
+  const next = () => rotate((o) => [...o.slice(1), o[0]])
+  const prev = () => rotate((o) => [o[o.length - 1], ...o.slice(0, -1)])
 
   return (
     <Box component="section" id="work" aria-labelledby="work-title">
@@ -71,6 +73,10 @@ export default function Projects() {
             </Stack>
           </Box>
         </Reveal>
+
+        <Box sx={visuallyHidden} aria-live="polite" aria-atomic="true">
+          {announce}
+        </Box>
 
         {/* Cards: one large + two stacked; arrows rotate which project is large. */}
         <LayoutGroup id="projects">

@@ -93,7 +93,7 @@ export const projects = {
       title: 'Tumtipb',
       description: 'Образовательная платформа для профессионалов',
       tags: ['Образование', 'Сайт', 'Гос. сектор'],
-      image: { src: '/assets/tumtipb-concept.png', width: 282, height: 174, crop: { x: 0, y: 4, w: 276, h: 158 }, focus: [0.3, 0.5] },
+      image: { src: '/assets/tumtipb-concept.png', width: 282, height: 174, crop: { x: 0, y: 4, w: 276, h: 158 }, focus: [0, 0.5] },
       url: 'https://tumtipb.ru',
     },
     {
@@ -102,7 +102,7 @@ export const projects = {
       title: 'ProStyle',
       description: 'Сувенирная продукция и корпоративные подарки',
       tags: ['Бренд', 'Интернет-магазин', 'Дизайн'],
-      image: { src: '/assets/prostyle-concept.png', width: 282, height: 176, crop: { x: 0, y: 0, w: 276, h: 170 }, focus: [0.4, 0.5] },
+      image: { src: '/assets/prostyle-concept.png', width: 282, height: 176, crop: { x: 0, y: 0, w: 276, h: 170 }, focus: [0, 0.5] },
       url: 'https://prostyle.gifts',
     },
   ] as Project[],
