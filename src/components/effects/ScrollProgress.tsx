@@ -14,7 +14,9 @@ export default function ScrollProgress() {
         right: 0,
         height: 1,
         background: '#c9a173',
-        zIndex: 1600,
+        // Above the AppBar (1100), below Drawer/Modal (1200/1300).
+        zIndex: 1101,
+        pointerEvents: 'none',
       }}
     />
   )

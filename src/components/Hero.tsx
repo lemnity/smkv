@@ -6,7 +6,7 @@ import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
 import ArrowForward from '@mui/icons-material/ArrowForward'
 import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
-import { colors, contentSx, hoverUnderlineSx, microLabel } from '../theme'
+import { HEADER_HEIGHT, colors, contentSx, hoverUnderlineSx, microLabel } from '../theme'
 import { contacts, hero } from '../data/content'
 import { scrollToHash } from '../utils/scrollTo'
 import { MagneticButton } from './effects'
@@ -73,7 +73,12 @@ export default function Hero() {
           position: 'relative',
           minHeight: { md: 'max(100vh, 720px)' },
           maxHeight: { md: 1000 },
-          pt: { xs: '120px', md: '150px', lg: '170px' },
+          // Header height + breathing room.
+          pt: {
+            xs: `${HEADER_HEIGHT.xs + 48}px`,
+            md: `${HEADER_HEIGHT.md + 62}px`,
+            lg: `${HEADER_HEIGHT.md + 82}px`,
+          },
           pb: { xs: 6, md: 10 },
           display: 'flex',
           flexDirection: 'column',

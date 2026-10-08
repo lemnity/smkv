@@ -8,7 +8,6 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Drawer from '@mui/material/Drawer'
 import Divider from '@mui/material/Divider'
-import useMediaQuery from '@mui/material/useMediaQuery'
 import MoreHoriz from '@mui/icons-material/MoreHoriz'
 import Menu from '@mui/icons-material/Menu'
 import Close from '@mui/icons-material/Close'
@@ -16,24 +15,22 @@ import Telegram from '@mui/icons-material/Telegram'
 import Instagram from '@mui/icons-material/Instagram'
 import MailOutline from '@mui/icons-material/MailOutlineOutlined'
 import { motion, useMotionValueEvent, useScroll } from 'motion/react'
-import { colors, contentSx, hoverUnderlineSx, microLabel } from '../theme'
-import { contacts, header, nav } from '../data/content'
+import { HEADER_HEIGHT, colors, contentSx, hoverUnderlineSx, microLabel, outlinedIconButtonSx } from '../theme'
+import { header, nav } from '../data/content'
 import { scrollToHash } from '../utils/scrollTo'
 import Wordmark from './Wordmark'
 
-const MOBILE = '@media (max-width: 767.98px)'
 const ease = [0.22, 1, 0.36, 1] as const
 
-const drawerContacts = [
-  { label: 'Telegram', href: contacts.telegram, Icon: Telegram, external: true },
-  { label: 'Instagram', href: contacts.instagram, Icon: Instagram, external: true },
-  { label: 'Email', href: `mailto:${contacts.email}`, Icon: MailOutline, external: false },
-]
+const contactIcons: Record<string, typeof Telegram> = {
+  telegram: Telegram,
+  instagram: Instagram,
+  email: MailOutline,
+}
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const isMobile = useMediaQuery('(max-width: 767.98px)')
   const { scrollY } = useScroll()
 
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 40))
@@ -69,22 +66,21 @@ export default function Header() {
             disableGutters
             sx={{
               ...contentSx,
-              minHeight: { xs: 72, md: 88 },
+              minHeight: { xs: HEADER_HEIGHT.xs, md: HEADER_HEIGHT.md },
               display: 'grid',
-              gridTemplateColumns: '1fr auto 1fr',
+              gridTemplateColumns: { xs: '1fr auto', md: '1fr auto 1fr' },
               alignItems: 'center',
-              [MOBILE]: { gridTemplateColumns: '1fr auto' },
             }}
           >
-            <Link href="#home" onClick={go('#home')} aria-label="SIMAKOV — наверх" sx={{ justifySelf: 'start' }}>
+            <Link href="#home" onClick={go('#home')} aria-label={header.homeLabel} sx={{ justifySelf: 'start' }}>
               <Wordmark text={header.wordmark} />
             </Link>
 
             <Stack
               component="nav"
               direction="row"
-              spacing={{ md: 6, sm: 4 }}
-              sx={{ [MOBILE]: { display: 'none' } }}
+              spacing={{ md: 5, lg: 6 }}
+              sx={{ display: { xs: 'none', md: 'flex' } }}
             >
               {nav.map((item) => (
                 <Link
@@ -99,15 +95,12 @@ export default function Header() {
             </Stack>
 
             <Stack direction="row" spacing={2} sx={{ justifySelf: 'end', alignItems: 'center' }}>
-              <IconButton
-                variant="outlined"
-                aria-label="Открыть меню"
-                onClick={() => setOpen(true)}
-                sx={{ width: 44, height: 44 }}
-              >
-                {isMobile ? <Menu fontSize="small" /> : <MoreHoriz fontSize="small" />}
+              <IconButton aria-label={header.drawer.openLabel} onClick={() => setOpen(true)} sx={outlinedIconButtonSx}>
+                {/* CSS toggle (no useMediaQuery) so the right icon renders on first paint. */}
+                <Menu fontSize="small" sx={{ display: { xs: 'block', md: 'none' } }} />
+                <MoreHoriz fontSize="small" sx={{ display: { xs: 'none', md: 'block' } }} />
               </IconButton>
-              <Box sx={{ [MOBILE]: { display: 'none' } }}>
+              <Box sx={{ display: { xs: 'none', md: 'block' } }}>
                 {header.tagline.map((line) => (
                   <Typography key={line} sx={{ ...microLabel, fontSize: 10, letterSpacing: '0.2em', lineHeight: 1.6 }}>
                     {line}
@@ -139,7 +132,7 @@ export default function Header() {
       >
         <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
           <Wordmark text={header.wordmark} />
-          <IconButton variant="outlined" aria-label="Закрыть меню" onClick={() => setOpen(false)} sx={{ width: 44, height: 44 }}>
+          <IconButton aria-label={header.drawer.closeLabel} onClick={() => setOpen(false)} sx={outlinedIconButtonSx}>
             <Close fontSize="small" />
           </IconButton>
         </Stack>
@@ -175,33 +168,36 @@ export default function Header() {
 
         <Box sx={{ mt: 'auto', pt: 6 }}>
           <Divider sx={{ mb: 3 }} />
-          <Typography sx={{ ...microLabel, color: colors.muted, mb: 2 }}>Контакты</Typography>
+          <Typography sx={{ ...microLabel, color: colors.muted, mb: 2 }}>{header.drawer.contactsLabel}</Typography>
           <Stack spacing={1.5}>
-            {drawerContacts.map(({ label, href, Icon, external }, i) => (
-              <motion.div
-                key={label}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.35 + i * 0.06, ease }}
-              >
-                <Link
-                  href={href}
-                  {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 1.5,
-                    color: colors.text,
-                    fontSize: 15,
-                    '& svg': { color: colors.gold, fontSize: 20 },
-                    '&:hover': { color: colors.goldLight },
-                  }}
+            {header.drawer.contacts.map(({ key, label, href, external }, i) => {
+              const Icon = contactIcons[key]
+              return (
+                <motion.div
+                  key={key}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.35 + i * 0.06, ease }}
                 >
-                  <Icon />
-                  {label === 'Email' ? contacts.email : label}
-                </Link>
-              </motion.div>
-            ))}
+                  <Link
+                    href={href}
+                    {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    sx={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 1.5,
+                      color: colors.text,
+                      fontSize: 15,
+                      '& svg': { color: colors.gold, fontSize: 20 },
+                      '&:hover': { color: colors.goldLight },
+                    }}
+                  >
+                    <Icon />
+                    {label}
+                  </Link>
+                </motion.div>
+              )
+            })}
           </Stack>
         </Box>
       </Drawer>

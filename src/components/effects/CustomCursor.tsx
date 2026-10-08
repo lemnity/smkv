@@ -4,7 +4,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 
 export default function CustomCursor() {
   const reduce = useReducedMotion()
-  const coarse = useMediaQuery('(pointer: coarse)')
+  const coarse = useMediaQuery('(pointer: coarse)', { noSsr: true })
   const [hover, setHover] = useState(false)
   const [visible, setVisible] = useState(false)
   const x = useMotionValue(-100)

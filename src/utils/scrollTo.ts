@@ -3,6 +3,6 @@ export function scrollToHash(hash: string) {
   const el = document.querySelector(hash)
   if (!el) return
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+  el.scrollIntoView({ behavior: reduce ? 'instant' : 'smooth', block: 'start' })
   history.replaceState(null, '', hash)
 }

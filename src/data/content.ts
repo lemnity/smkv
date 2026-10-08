@@ -13,6 +13,17 @@ export const nav = [
 export const header = {
   wordmark: 'SIMAKOV',
   tagline: ['СОЗДАВАТЬ', 'БОЛЬШЕ, ЧЕМ ОЖИДАЮТ'],
+  homeLabel: 'SIMAKOV — наверх',
+  drawer: {
+    openLabel: 'Открыть меню',
+    closeLabel: 'Закрыть меню',
+    contactsLabel: 'Контакты',
+    contacts: [
+      { key: 'telegram', label: 'Telegram', href: contacts.telegram, external: true },
+      { key: 'instagram', label: 'Instagram', href: contacts.instagram, external: true },
+      { key: 'email', label: contacts.email, href: `mailto:${contacts.email}`, external: false },
+    ],
+  },
 }
 
 export const hero = {
