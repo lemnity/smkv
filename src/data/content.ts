@@ -112,6 +112,21 @@ export const projects = {
   ] as Project[],
 }
 
+export const gallery = {
+  eyebrow: 'АРХИВ',
+  title: 'Галерея работ',
+  text: 'Брендинг, интерфейсы, сайты и мерч — подборка работ разных лет.',
+  initialCount: 12,
+  batchSize: 12,
+  more: 'Показать ещё',
+  /** Accessible name for a tile: `${openLabel}: ${alt}`. */
+  openLabel: 'Открыть работу',
+  dialogLabel: 'Просмотр работы',
+  closeLabel: 'Закрыть просмотр',
+  prevLabel: 'Предыдущая работа',
+  nextLabel: 'Следующая работа',
+}
+
 export type Stat =
   | { kind: 'number'; value: number; suffix: string; label: string }
   | { kind: 'infinity'; label: string }

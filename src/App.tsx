@@ -9,6 +9,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
 import Projects from './components/Projects'
+import Gallery from './components/Gallery'
 import About from './components/About'
 import Loader from './components/Loader'
 import { IntroContext } from './components/intro'
@@ -38,6 +39,8 @@ export default function App() {
             <Hero />
             <SectionDivider />
             <Projects />
+            <SectionDivider />
+            <Gallery />
             <SectionDivider />
             <About />
             <SectionDivider />
