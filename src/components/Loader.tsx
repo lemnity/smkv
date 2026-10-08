@@ -73,8 +73,9 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
       ['.ld-start', { x: ['0em', '-0.05em'] }, { at: OPEN, duration: 1.25 * T, ease }],
       ['.ld-end', { x: ['0em', '0.05em'] }, { at: OPEN, duration: 1.25 * T, ease }],
       ...flashes,
-      ['.ld-grow', { width: '100vw', height: '100dvh' }, { at: GROW, duration: 2 * T, ease }],
-      ['.ld-box', { width: '110vw' }, { at: GROW, duration: 2 * T, ease }],
+      // Grow well past the viewport (any aspect ratio) so no lime edge survives the fade.
+      ['.ld-grow', { width: '300vmax', height: '300vmax' }, { at: GROW, duration: 2 * T, ease }],
+      ['.ld-box', { width: '300vmax' }, { at: GROW, duration: 2 * T, ease }],
     ]
     const controls = animate(sequence)
     controls.then(onFinished)
@@ -86,8 +87,12 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
       ref={scope}
       aria-hidden
       sx={{
-        display: 'flex',
-        justifyContent: 'center',
+        // Equal side tracks keep the window exactly at the viewport centre, so it grows
+        // out symmetrically and covers every edge at the same moment.
+        display: 'grid',
+        gridTemplateColumns: '1fr auto 1fr',
+        alignItems: 'center',
+        width: '100%',
         whiteSpace: 'nowrap',
         fontFamily: fonts.sans,
         fontWeight: 600,
@@ -98,7 +103,7 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
         position: 'relative',
       }}
     >
-      <Box className="ld-start" sx={{ ...half, justifyContent: 'flex-end' }}>
+      <Box className="ld-start" sx={{ ...half, justifySelf: 'end' }}>
         {[...START].map((ch, i) => (
           <Box key={i} component="span" className="ld-letter" sx={letterSx}>
             {ch}
@@ -108,7 +113,8 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
 
       <Box
         className="ld-box"
-        sx={{ width: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative' }}
+        // Stretch to the row height (the letters' line box) so the window has a real height.
+        sx={{ width: 0, alignSelf: 'stretch', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative' }}
       >
         <Box sx={{ minWidth: '1em', height: '95%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <Box
@@ -141,7 +147,7 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
         </Box>
       </Box>
 
-      <Box className="ld-end" sx={{ ...half, justifyContent: 'flex-start' }}>
+      <Box className="ld-end" sx={{ ...half, justifySelf: 'start' }}>
         {[...END].map((ch, i) => (
           <Box key={i} component="span" className="ld-letter" sx={letterSx}>
             {ch}
