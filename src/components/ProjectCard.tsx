@@ -175,7 +175,25 @@ export default function ProjectCard({ project, size }: Props) {
                   mb: large ? 1.5 : 1,
                 }}
               >
-                {project.title}
+                {project.logo ? (
+                  <Box
+                    component="img"
+                    src={project.logo.src}
+                    alt={project.title}
+                    width={project.logo.width}
+                    height={project.logo.height}
+                    decoding="async"
+                    sx={{
+                      display: 'block',
+                      width: 'auto',
+                      maxWidth: '100%',
+                      height: large ? { xs: 30, md: 38 } : { xs: 28, md: 34 },
+                      my: large ? 0.75 : 0.5,
+                    }}
+                  />
+                ) : (
+                  project.title
+                )}
               </Typography>
               <Typography
                 sx={{

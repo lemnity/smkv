@@ -43,6 +43,8 @@ export interface Project {
   tags: string[]
   image: ProjectImage
   url: string
+  /** Original logo shown instead of the typed title (white artwork on transparent). */
+  logo?: { src: string; width: number; height: number }
 }
 
 export type FeedbackTopicId = 'website' | 'brand' | 'product' | 'other'
@@ -61,6 +63,7 @@ const projectBase = {
     id: 'lemnity',
     number: '01',
     title: 'Lemnity',
+    logo: { src: '/clients/lemnity.svg', width: 375, height: 95 },
     image: { src: '/assets/lemnity-concept.png', width: 466, height: 407, crop: { x: 0, y: 176, w: 466, h: 216 }, focus: [0.4, 0.5] },
     url: 'https://lemnity.ru',
   },
@@ -75,6 +78,7 @@ const projectBase = {
     id: 'prostyle',
     number: '03',
     title: 'ProStyle',
+    logo: { src: '/clients/prostyle.svg', width: 340, height: 92 },
     image: { src: '/assets/prostyle-concept.png', width: 282, height: 176, crop: { x: 0, y: 0, w: 276, h: 170 }, focus: [0, 0.5] },
     url: 'https://prostyle.gifts',
   },
@@ -121,7 +125,8 @@ const ru = {
     names: { ru: 'Русский', en: 'English' } as Record<Lang, string>,
   },
   nav: [
-    { label: 'РАБОТЫ', href: '#work' },
+    { label: 'ПРОЕКТЫ', href: '#work' },
+    { label: 'РАБОТЫ', href: '#gallery' },
     { label: 'ОБО МНЕ', href: '#about' },
     { label: 'КОНТАКТЫ', href: '#contact' },
   ],
@@ -151,7 +156,7 @@ const ru = {
     portraitAlt: 'Александр Симаков',
   },
   projects: {
-    eyebrow: 'ПОРТФОЛИО',
+    eyebrow: 'ИЗБРАННОЕ',
     title: 'Избранные проекты',
     text: 'Продукты, бренды и цифровые решения, которые делают идеи реальностью.',
     prevLabel: 'Предыдущий проект',
@@ -176,7 +181,7 @@ const ru = {
     ] as Project[],
   },
   gallery: {
-    eyebrow: 'АРХИВ',
+    eyebrow: 'ПОРТФОЛИО',
     title: 'Галерея работ',
     text: 'Брендинг, интерфейсы, сайты и мерч — подборка работ разных лет.',
     /** Accessible name for a tile: `${openLabel}: ${alt}`. */
@@ -283,7 +288,8 @@ const en: Content = {
     names: { ru: 'Русский', en: 'English' },
   },
   nav: [
-    { label: 'WORK', href: '#work' },
+    { label: 'PROJECTS', href: '#work' },
+    { label: 'WORK', href: '#gallery' },
     { label: 'ABOUT', href: '#about' },
     { label: 'CONTACT', href: '#contact' },
   ],
@@ -312,7 +318,7 @@ const en: Content = {
     portraitAlt: 'Alexander Simakov',
   },
   projects: {
-    eyebrow: 'PORTFOLIO',
+    eyebrow: 'FEATURED',
     title: 'Featured projects',
     text: 'Products, brands and digital solutions that turn ideas into reality.',
     prevLabel: 'Previous project',
@@ -337,7 +343,7 @@ const en: Content = {
     ],
   },
   gallery: {
-    eyebrow: 'ARCHIVE',
+    eyebrow: 'PORTFOLIO',
     title: 'Gallery',
     text: 'Branding, interfaces, websites and merch — a selection of work from over the years.',
     openLabel: 'Open work',
