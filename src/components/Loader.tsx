@@ -26,7 +26,8 @@ const fillEase: [number, number, number, number] = [0.65, 0, 0.35, 1]
 const OPEN = 1.25 * T
 const FIRST_CUT = OPEN + 1.25 * T - 0.05
 const CUT_STEP = 0.5 * T
-const GROW = FIRST_CUT + CUT_STEP * (FLASH.length - 1) + 1.25 * T
+/** The last work isn't cut: the window starts growing while it's still showing… */
+const GROW = FIRST_CUT + CUT_STEP * (FLASH.length - 1) + 0.15
 const FILL = 2.4 * T
 const TOTAL_MS = (GROW + FILL) * 1000
 /** Never block the page longer than this, even if `load` is slow. */
@@ -64,11 +65,13 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
   const [scope, animate] = useAnimate()
 
   useEffect(() => {
-    const flashes: AnimationSequence = FLASH.map((_, i) => [
-      `.ld-flash-${i}`,
-      { opacity: [1, 0] },
-      { at: FIRST_CUT + i * CUT_STEP, duration: 0.05, ease: 'linear' },
-    ])
+    const last = FLASH.length - 1
+    const flashes: AnimationSequence = FLASH.map((_, i) =>
+      i < last
+        ? [`.ld-flash-${i}`, { opacity: [1, 0] }, { at: FIRST_CUT + i * CUT_STEP, duration: 0.05, ease: 'linear' }]
+        : // …and dissolves into the page background as the window fills the screen.
+          [`.ld-flash-${i}`, { opacity: [1, 0] }, { at: GROW + FILL * 0.1, duration: FILL * 0.6, ease: 'easeInOut' }],
+    )
     const sequence: AnimationSequence = [
       ['.ld-letter', { y: ['100%', '0%'] }, { at: 0, duration: 1.25 * T, ease, delay: stagger(0.025) }],
       ['.ld-box', { width: ['0em', '1em'] }, { at: OPEN, duration: 1.25 * T, ease }],
