@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import AllInclusive from '@mui/icons-material/AllInclusive'
 import { visuallyHidden } from '@mui/utils'
 import { animate, motion, useInView, useReducedMotion } from 'motion/react'
 import { colors, microLabel } from '../theme'
@@ -71,34 +70,51 @@ function CountUp({ value, suffix }: { value: number; suffix: string }) {
   )
 }
 
+/** Figure-eight drawn as one continuous stroke through the centre (viewBox 48×24). */
+const LEMNISCATE =
+  'M24,12 C28,6 33,4 37,4 C42,4 45,8 45,12 C45,16 42,20 37,20 C33,20 28,18 24,12 ' +
+  'C20,6 15,4 11,4 C6,4 3,8 3,12 C3,16 6,20 11,20 C15,20 20,18 24,12 Z'
+
 function InfinityMark() {
   const reduce = useReducedMotion()
-  // Observe the unclipped wrapper: IntersectionObserver treats a fully clipped target as not visible.
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.6 })
   const { about } = useLang().t
+  const stroke = { fill: 'none', strokeWidth: 3.6, strokeLinecap: 'round', strokeLinejoin: 'round' } as const
   return (
     <Box ref={ref} sx={numberSx} role="img" aria-label={about.infinityLabel}>
-      <motion.span
-        aria-hidden
-        initial={reduce ? false : { clipPath: 'inset(0 100% 0 0)' }}
-        animate={inView || reduce ? { clipPath: 'inset(0 0% 0 0)' } : undefined}
-        transition={{ duration: 1.4, ease: 'easeInOut' }}
-        style={{ display: 'inline-flex' }}
-      >
-        <AllInclusive
-          sx={{
-            fontSize: 44,
-            color: colors.gold,
-            '@keyframes infPulse': {
-              '0%, 100%': { opacity: 0.85, filter: 'drop-shadow(0 0 0 rgba(196,238,24,0))' },
-              '50%': { opacity: 1, filter: 'drop-shadow(0 0 8px rgba(196,238,24,0.55))' },
-            },
-            animation: 'infPulse 3.2s ease-in-out 1.4s infinite',
-            '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
-          }}
+      <Box component="svg" aria-hidden viewBox="0 0 48 24" sx={{ width: 48, height: 24, overflow: 'visible' }}>
+        {/* Track: draws itself in, then stays as a dim rail. */}
+        <motion.path
+          d={LEMNISCATE}
+          {...stroke}
+          stroke={colors.gold}
+          initial={reduce ? false : { pathLength: 0, opacity: 1 }}
+          animate={inView || reduce ? { pathLength: 1, opacity: reduce ? 1 : 0.32 } : undefined}
+          transition={{ pathLength: { duration: 1.4, ease: 'easeInOut' }, opacity: { duration: 0.8, delay: 1.4 } }}
         />
-      </motion.span>
+        {/* Comet: a bright segment that keeps running around the loop. */}
+        {!reduce && inView && (
+          <Box
+            component="path"
+            d={LEMNISCATE}
+            {...stroke}
+            stroke={colors.gold}
+            pathLength={1}
+            sx={{
+              strokeDasharray: '0.3 0.7',
+              filter: 'drop-shadow(0 0 4px rgba(196,238,24,0.7))',
+              opacity: 0,
+              '@keyframes infRun': {
+                from: { strokeDashoffset: 0 },
+                to: { strokeDashoffset: -1 },
+              },
+              '@keyframes infIn': { to: { opacity: 1 } },
+              animation: 'infRun 2.6s linear 1.2s infinite, infIn 0.6s ease 1.2s forwards',
+            }}
+          />
+        )}
+      </Box>
     </Box>
   )
 }
