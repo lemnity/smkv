@@ -3,6 +3,7 @@
  * Shared, non-translatable data (contacts, URLs, images, numbers) is defined once below
  * and reused by both dictionaries. Components read the current dictionary via `useLang().t`.
  */
+import { BASE } from '../utils/base'
 
 export type Lang = 'ru' | 'en'
 export const LANGS: readonly Lang[] = ['ru', 'en']
@@ -63,30 +64,30 @@ const projectBase = {
     id: 'lemnity',
     number: '01',
     title: 'Lemnity',
-    logo: { src: '/clients/lemnity.svg', width: 375, height: 95 },
-    image: { src: '/assets/lemnity-concept.png', width: 466, height: 407, crop: { x: 0, y: 176, w: 466, h: 216 }, focus: [0.4, 0.5] },
+    logo: { src: `${BASE}clients/lemnity.svg`, width: 375, height: 95 },
+    image: { src: `${BASE}assets/lemnity-concept.png`, width: 466, height: 407, crop: { x: 0, y: 176, w: 466, h: 216 }, focus: [0.4, 0.5] },
     url: 'https://lemnity.ru',
   },
   tumtipb: {
     id: 'tumtipb',
     number: '02',
     title: 'Tumtipb',
-    image: { src: '/assets/tumtipb-concept.png', width: 282, height: 174, crop: { x: 0, y: 4, w: 276, h: 158 }, focus: [0, 0.5] },
+    image: { src: `${BASE}assets/tumtipb-concept.png`, width: 282, height: 174, crop: { x: 0, y: 4, w: 276, h: 158 }, focus: [0, 0.5] },
     url: 'https://tumtipb.ru',
   },
   prostyle: {
     id: 'prostyle',
     number: '03',
     title: 'ProStyle',
-    logo: { src: '/clients/prostyle.svg', width: 340, height: 92 },
-    image: { src: '/assets/prostyle-concept.png', width: 282, height: 176, crop: { x: 0, y: 0, w: 276, h: 170 }, focus: [0, 0.5] },
+    logo: { src: `${BASE}clients/prostyle.svg`, width: 340, height: 92 },
+    image: { src: `${BASE}assets/prostyle-concept.png`, width: 282, height: 176, crop: { x: 0, y: 0, w: 276, h: 170 }, focus: [0, 0.5] },
     url: 'https://prostyle.gifts',
   },
 } satisfies Record<string, Omit<Project, 'description' | 'tags'>>
 
 /** Language-independent hero data. */
 const heroBase = {
-  portrait: '/assets/portrait-hero.png',
+  portrait: `${BASE}assets/portrait-hero.png`,
   signature: 'Simakov',
 }
 

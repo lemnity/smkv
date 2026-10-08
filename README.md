@@ -84,3 +84,11 @@ npm run preview   # локальный просмотр собранной ве�
 - Сборка разбивает JS на отдельные чанки (`react`, `mui`, `motion`, код сайта) — см. `vite.config.ts`.
 - Прелоадер (`src/components/Loader.tsx`) плавно прорисовывает логотип «Simakoov» штрихами акцентного цвета и держится, пока не загрузится страница (не меньше ~2,7 с, не больше 6 с); при включённом «уменьшении движения» не показывается. Эффект основан на [Stroke Logo Animation](https://codepen.io/jkantner/pen/dyZjWvG) Джона Кантнера (MIT).
 - Логотипы клиентов — `public/clients`, список и порядок — `src/data/clients.ts`. Логотипы показываются белыми силуэтами; для знаков, где деталь нарисована цветом (а не вырезана), задаётся свой `filter`.
+
+## Публикация (GitHub Pages)
+
+Сайт публикуется автоматически workflow `.github/workflows/deploy.yml` при каждом пуше в `feat/mui-redesign` или `main` (можно запустить и вручную во вкладке Actions). Адрес: https://lemnity.github.io/smkv/
+
+- В настройках репозитория: Settings → Pages → Source = «GitHub Actions».
+- Сайт живёт в подпапке `/smkv/`, поэтому сборка идёт с `BASE_PATH=/smkv/`. Пути к файлам из `public/` в коде собираются через `BASE` из `src/utils/base.ts` — не пишите их как `/assets/...`.
+- При переходе на свой домен (CNAME) уберите `BASE_PATH` из workflow.
