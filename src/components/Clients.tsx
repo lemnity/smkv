@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { visuallyHidden } from '@mui/utils'
 import { useReducedMotion } from 'motion/react'
-import { colors, contentSx, microLabel, sectionTitleSx } from '../theme'
+import { colors, contentSx, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
 import { clients, type Client } from '../data/clients'
 import { Reveal } from './effects'
@@ -97,9 +97,6 @@ export default function Clients() {
             }}
           >
             <Box>
-              <Typography sx={{ ...microLabel, fontSize: 10, letterSpacing: '0.3em', color: colors.gold, mb: { xs: 2, md: 2.5 } }}>
-                {copy.eyebrow}
-              </Typography>
               <Typography id="clients-title" component="h2" sx={sectionTitleSx}>
                 {copy.title}
               </Typography>

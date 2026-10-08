@@ -162,9 +162,6 @@ export default function ProjectCard({ project, size }: Props) {
                 minWidth: large ? undefined : { xs: 170, md: 190 },
               }}
             >
-              <Typography sx={{ fontSize: 12, color: colors.muted, letterSpacing: '0.08em', mb: large ? 2.5 : 1.5 }}>
-                {project.number}
-              </Typography>
               <Typography
                 component="h3"
                 sx={{

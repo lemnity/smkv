@@ -270,9 +270,6 @@ export default function Gallery() {
             }}
           >
             <Box>
-              <Typography sx={{ ...microLabel, fontSize: 10, letterSpacing: '0.3em', color: colors.gold, mb: { xs: 2, md: 2.5 } }}>
-                {gallery.eyebrow}
-              </Typography>
               <Typography id="gallery-title" component="h2" sx={sectionTitleSx}>
                 {gallery.title}
               </Typography>

@@ -165,7 +165,6 @@ const ru = {
     portraitAlt: 'Александр Симаков',
   },
   projects: {
-    eyebrow: 'ИЗБРАННОЕ',
     title: 'Избранные проекты',
     text: 'Продукты, бренды и цифровые решения, которые делают идеи реальностью.',
     prevLabel: 'Предыдущий проект',
@@ -197,7 +196,6 @@ const ru = {
     ] as Project[],
   },
   gallery: {
-    eyebrow: 'ПОРТФОЛИО',
     title: 'Галерея работ',
     text: 'Брендинг, интерфейсы, сайты и мерч — подборка работ разных лет.',
     /** Accessible name for a tile: `${openLabel}: ${alt}`. */
@@ -208,13 +206,11 @@ const ru = {
     nextLabel: 'Следующая работа',
   },
   clients: {
-    eyebrow: 'КЛИЕНТЫ',
     title: 'Мне доверяют',
     text: 'Компании и команды, с которыми мы запускали бренды, сайты и продукты.',
     listLabel: 'Клиенты',
   },
   about: {
-    eyebrow: 'ОБО МНЕ',
     title: ['Больше, чем', 'дизайн'],
     text: '12+ лет опыта в дизайне, продуктовой разработке и визуальных коммуникациях. Объединяю стратегию, дизайн и технологии, чтобы создавать продукты с реальной ценностью.',
     more: 'Узнать больше',
@@ -341,7 +337,6 @@ const en: Content = {
     portraitAlt: 'Alexander Simakov',
   },
   projects: {
-    eyebrow: 'FEATURED',
     title: 'Featured projects',
     text: 'Products, brands and digital solutions that turn ideas into reality.',
     prevLabel: 'Previous project',
@@ -373,7 +368,6 @@ const en: Content = {
     ],
   },
   gallery: {
-    eyebrow: 'PORTFOLIO',
     title: 'Gallery',
     text: 'Branding, interfaces, websites and merch — a selection of work from over the years.',
     openLabel: 'Open work',
@@ -383,13 +377,11 @@ const en: Content = {
     nextLabel: 'Next work',
   },
   clients: {
-    eyebrow: 'CLIENTS',
     title: 'Trusted by',
     text: 'Companies and teams I have launched brands, websites and products with.',
     listLabel: 'Clients',
   },
   about: {
-    eyebrow: 'ABOUT',
     title: ['More than', 'design'],
     text: '12+ years in design, product development and visual communication. I bring strategy, design and technology together to build products that deliver real value.',
     more: 'Learn more',

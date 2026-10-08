@@ -187,9 +187,6 @@ export default function About() {
         {/* Left */}
         <Reveal>
           <Box sx={{ pr: { md: 2 } }}>
-            <Typography sx={{ ...microLabel, fontSize: 10, letterSpacing: '0.3em', color: colors.gold, mb: { xs: 2, md: 2.5 } }}>
-              {about.eyebrow}
-            </Typography>
             <Typography id="about-title" component="h2" sx={{ ...sectionTitleSx, fontSize: { xs: 38, sm: 44, md: 42, lg: 48 } }}>
               {about.title.map((l) => (
                 <Box component="span" key={l} sx={{ display: 'block' }}>

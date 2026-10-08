@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import ButtonBase from '@mui/material/ButtonBase'
-import ArrowForward from '@mui/icons-material/ArrowForward'
+import Favorite from '@mui/icons-material/Favorite'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { colors, fonts } from '../theme'
 import { useLang } from '../i18n'
@@ -94,13 +94,15 @@ export default function FloatingCta() {
                 transition: 'transform .35s cubic-bezier(0.22,1,0.36,1)',
               },
               '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 16px 48px rgba(0,0,0,0.6), 0 0 24px rgba(196,238,24,0.35)' },
-              '&:hover .cta-arrow': { transform: 'rotate(-45deg)' },
+              '@keyframes ctaBeat': { '0%, 100%': { transform: 'scale(1)' }, '30%': { transform: 'scale(1.22)' }, '60%': { transform: 'scale(0.95)' } },
+              '&:hover .cta-arrow svg': { animation: 'ctaBeat .8s ease-in-out infinite' },
+              '@media (prefers-reduced-motion: reduce)': { '&:hover .cta-arrow svg': { animation: 'none' } },
               '&.Mui-focusVisible': { outline: `2px solid ${colors.goldLight}`, outlineOffset: 4 },
             }}
           >
             {t.floatingCta.label}
             <Box component="span" className="cta-arrow" aria-hidden>
-              <ArrowForward sx={{ fontSize: 18 }} />
+              <Favorite sx={{ fontSize: 18 }} />
             </Box>
           </ButtonBase>
         </Box>

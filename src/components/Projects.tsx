@@ -7,7 +7,7 @@ import ArrowBack from '@mui/icons-material/ArrowBack'
 import ArrowForward from '@mui/icons-material/ArrowForward'
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react'
 import { visuallyHidden } from '@mui/utils'
-import { colors, contentSx, microLabel, outlinedIconButtonSx, sectionTitleSx } from '../theme'
+import { colors, contentSx, outlinedIconButtonSx, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
 import { Reveal } from './effects'
 import ProjectCard from './ProjectCard'
@@ -29,7 +29,7 @@ export default function Projects() {
   // Only announce after the user navigates, not on initial render.
   const [announced, setAnnounced] = useState(false)
   const first = rest[order[0]]
-  const announce = announced && first ? `${first.number} / ${items.length}: ${first.title}` : ''
+  const announce = announced && first ? first.title : ''
   const rotate = (dir: 1 | -1) => {
     setDirection(dir)
     setOrder((o) => (dir === 1 ? [...o.slice(1), o[0]] : [o[o.length - 1], ...o.slice(0, -1)]))
@@ -54,9 +54,6 @@ export default function Projects() {
             }}
           >
             <Box>
-              <Typography sx={{ ...microLabel, fontSize: 10, letterSpacing: '0.3em', color: colors.gold, mb: { xs: 2, md: 2.5 } }}>
-                {projects.eyebrow}
-              </Typography>
               <Typography id="work-title" component="h2" sx={sectionTitleSx}>
                 {projects.title}
               </Typography>
