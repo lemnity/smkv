@@ -69,7 +69,7 @@ const projectBase = {
     number: '01',
     title: 'Lemnity',
     logo: { src: `${BASE}clients/lemnity.svg`, width: 375, height: 95 },
-    image: { src: `${BASE}assets/lemnity-concept.png`, width: 466, height: 407, crop: { x: 0, y: 176, w: 466, h: 216 }, focus: [0.4, 0.5] },
+    image: { src: `${BASE}assets/lemnity-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.4, 0.2] },
     url: 'https://lemnity.ru',
   },
   tumtipb: {
@@ -77,7 +77,7 @@ const projectBase = {
     number: '02',
     title: 'Дом науки и техники',
     logo: { src: `${BASE}assets/dom-nauki-mark.webp`, width: 128, height: 160, mark: true },
-    image: { src: `${BASE}assets/tumtipb-concept.png`, width: 282, height: 174, crop: { x: 0, y: 4, w: 276, h: 158 }, focus: [0, 0.5] },
+    image: { src: `${BASE}assets/dom-nauki-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.72, 0.4] },
     url: 'https://new.tumtipb.ru',
   },
   prostyle: {
@@ -85,7 +85,7 @@ const projectBase = {
     number: '03',
     title: 'ProStyle',
     logo: { src: `${BASE}clients/prostyle.svg`, width: 340, height: 92 },
-    image: { src: `${BASE}assets/prostyle-concept.png`, width: 282, height: 176, crop: { x: 0, y: 0, w: 276, h: 170 }, focus: [0, 0.5] },
+    image: { src: `${BASE}assets/prostyle-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.62, 0.3] },
   },
   sphagnum: {
     id: 'sphagnum',

@@ -13,23 +13,30 @@ import { Reveal } from './effects'
 import ProjectCard from './ProjectCard'
 
 const ease = [0.22, 1, 0.36, 1] as const
-/** Slot 0 is the large card; slots 1–2 are the stacked small cards. */
-const AREAS = ['big', 'top', 'bottom'] as const
+/** The pinned project always takes the large card; the rest scroll through the right column. */
+const PINNED_ID = 'lemnity'
+const SIDE_AREAS = ['top', 'bottom'] as const
 
 export default function Projects() {
   const { projects } = useLang().t
   const items = projects.items
-  // order[slot] = index into items
-  const [order, setOrder] = useState(() => items.map((_, i) => i))
+  const pinned = items.find((p) => p.id === PINNED_ID) ?? items[0]
+  const rest = items.filter((p) => p !== pinned)
+  // order[slot] = index into `rest`; slots 0–1 are visible in the right column.
+  const [order, setOrder] = useState(() => rest.map((_, i) => i))
+  // 1 = scrolled up (next), -1 = scrolled down (prev): drives the enter/exit direction.
+  const [direction, setDirection] = useState(1)
   // Only announce after the user navigates, not on initial render.
   const [announced, setAnnounced] = useState(false)
-  const announce = announced ? `${items[order[0]].number} / ${items.length}: ${items[order[0]].title}` : ''
-  const rotate = (fn: (o: number[]) => number[]) => {
-    setOrder(fn(order))
+  const first = rest[order[0]]
+  const announce = announced && first ? `${first.number} / ${items.length}: ${first.title}` : ''
+  const rotate = (dir: 1 | -1) => {
+    setDirection(dir)
+    setOrder((o) => (dir === 1 ? [...o.slice(1), o[0]] : [o[o.length - 1], ...o.slice(0, -1)]))
     setAnnounced(true)
   }
-  const next = () => rotate((o) => [...o.slice(1), o[0]])
-  const prev = () => rotate((o) => [o[o.length - 1], ...o.slice(0, -1)])
+  const next = () => rotate(1)
+  const prev = () => rotate(-1)
 
   return (
     <Box component="section" id="work" aria-labelledby="work-title">
@@ -78,7 +85,7 @@ export default function Projects() {
           {announce}
         </Box>
 
-        {/* Cards: one large + two stacked; arrows rotate every project through the three slots. */}
+        {/* Cards: the pinned project stays large on the left; the arrows scroll the right column. */}
         <LayoutGroup id="projects">
           <Box
             id="work-grid"
@@ -86,39 +93,53 @@ export default function Projects() {
               display: 'grid',
               gap: '12px',
               gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: 'repeat(2, minmax(0, 1fr))' },
-              gridTemplateRows: { md: 'repeat(2, minmax(0, 1fr))' },
-              gridTemplateAreas: { xs: '"big" "top" "bottom"', md: '"big top" "big bottom"' },
+              gridTemplateAreas: { xs: '"big" "side"', md: '"big side"' },
               height: { md: 548, lg: 560 },
             }}
           >
-            <AnimatePresence initial={false} mode="popLayout">
-            {order.slice(0, AREAS.length).map((itemIndex, slot) => {
-              const project = items[itemIndex]
-              return (
-                <motion.div
-                  key={project.id}
-                  layoutId={`project-${project.id}`}
-                  layout
-                  // A project rotating in/out of the visible three fades rather than popping.
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ layout: { duration: 0.8, ease }, opacity: { duration: 0.5 }, scale: { duration: 0.8, ease } }}
-                  style={{ gridArea: AREAS[slot], display: 'flex', minWidth: 0, minHeight: 0 }}
-                >
-                  <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.15 }}
-                    transition={{ duration: 0.9, delay: itemIndex * 0.12, ease }}
-                    style={{ display: 'flex', flex: 1, minWidth: 0, minHeight: 0 }}
-                  >
-                    <ProjectCard project={project} size={slot === 0 ? 'large' : 'small'} />
-                  </motion.div>
-                </motion.div>
-              )
-            })}
-            </AnimatePresence>
+            <Box sx={{ gridArea: 'big', display: 'flex', minWidth: 0, minHeight: 0, '& > div': { display: 'flex', flex: 1, minWidth: 0 } }}>
+              <Reveal>
+                <ProjectCard project={pinned} size="large" />
+              </Reveal>
+            </Box>
+
+            {/* Clip the column so cards slide in from below / out at the top. */}
+            <Box
+              sx={{
+                gridArea: 'side',
+                display: 'grid',
+                gap: '12px',
+                gridTemplateRows: { xs: 'auto auto', md: 'repeat(2, minmax(0, 1fr))' },
+                gridTemplateAreas: '"top" "bottom"',
+                overflow: 'hidden',
+                minHeight: 0,
+              }}
+            >
+              <AnimatePresence initial={false} mode="popLayout" custom={direction}>
+                {order.slice(0, SIDE_AREAS.length).map((restIndex, slot) => {
+                  const project = rest[restIndex]
+                  return (
+                    <motion.div
+                      key={project.id}
+                      layout
+                      custom={direction}
+                      variants={{
+                        enter: (d: number) => ({ y: d > 0 ? '110%' : '-110%', opacity: 0 }),
+                        center: { y: 0, opacity: 1 },
+                        exit: (d: number) => ({ y: d > 0 ? '-110%' : '110%', opacity: 0 }),
+                      }}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ layout: { duration: 0.7, ease }, y: { duration: 0.7, ease }, opacity: { duration: 0.45 } }}
+                      style={{ gridArea: SIDE_AREAS[slot], display: 'flex', minWidth: 0, minHeight: 0 }}
+                    >
+                      <ProjectCard project={project} size="small" />
+                    </motion.div>
+                  )
+                })}
+              </AnimatePresence>
+            </Box>
           </Box>
         </LayoutGroup>
       </Box>
