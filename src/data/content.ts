@@ -87,10 +87,7 @@ const projectBase = {
 /** Language-independent hero data. */
 const heroBase = {
   portrait: '/assets/portrait-hero.png',
-  side: { top: ['IDEAS', 'PRODUCTS', 'PEOPLE'], est: 'EST.', year: '1991' },
   signature: 'Simakov',
-  signatureLabel: 'ALEXANDER SIMAKOV',
-  places: ['TYUMEN', 'RUSSIA', 'WORLDWIDE'],
 }
 
 const footerLinks = [
@@ -147,6 +144,9 @@ const ru = {
   },
   hero: {
     ...heroBase,
+    side: { top: ['ИДЕИ', 'ПРОДУКТЫ', 'ЛЮДИ'], est: 'С', year: '1991' },
+    signatureLabel: 'АЛЕКСАНДР СИМАКОВ',
+    places: ['ТЮМЕНЬ', 'РОССИЯ', 'ВЕСЬ МИР'],
     eyebrow: 'ДИЗАЙНЕР · ПРОДЮСЕР · ОСНОВАТЕЛЬ',
     /** Three heading lines; the last one is accented. */
     lines: ['Делаю', 'сложное', 'простым.'],
@@ -310,6 +310,9 @@ const en: Content = {
   },
   hero: {
     ...heroBase,
+    side: { top: ['IDEAS', 'PRODUCTS', 'PEOPLE'], est: 'EST.', year: '1991' },
+    signatureLabel: 'ALEXANDER SIMAKOV',
+    places: ['TYUMEN', 'RUSSIA', 'WORLDWIDE'],
     eyebrow: 'DESIGNER · PRODUCER · FOUNDER',
     lines: ['Complex,', 'made', 'simple.'],
     text: 'I build digital products, brands and user experiences that help people and businesses grow.',
