@@ -10,6 +10,10 @@ export const nav = [
   { label: 'КОНТАКТЫ', href: '#contact' },
 ]
 
+export const loader = {
+  label: 'Загрузка сайта SIMAKOV',
+}
+
 export const header = {
   wordmark: 'SIMAKOV',
   tagline: ['СОЗДАВАТЬ', 'БОЛЬШЕ, ЧЕМ ОЖИДАЮТ'],

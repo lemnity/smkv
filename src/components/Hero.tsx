@@ -11,15 +11,16 @@ import { contacts, hero } from '../data/content'
 import { scrollToHash } from '../utils/scrollTo'
 import { MagneticButton } from './effects'
 import GoldDot from './GoldDot'
+import { useIntroReady } from './intro'
 import HeroPortrait from './hero/HeroPortrait'
 import { HeroSideColumn, HeroSideRow, Signature } from './hero/HeroSide'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
 /** Fade-up entrance; under reduced motion the element renders in its final state. */
-const fadeUp = (delay: number, reduce: boolean | null, duration = 0.9) => ({
+const fadeUp = (delay: number, reduce: boolean | null, ready: boolean, duration = 0.9) => ({
   initial: reduce ? false : { opacity: 0, y: 24 },
-  animate: { opacity: 1, y: 0 },
+  animate: ready ? { opacity: 1, y: 0 } : undefined,
   transition: { duration, delay, ease },
 })
 
@@ -44,6 +45,7 @@ const goldTextSx = {
 export default function Hero() {
   const ref = useRef<HTMLElement>(null)
   const reduce = useReducedMotion()
+  const ready = useIntroReady()
 
   // Scroll: portrait parallax + copy fade-out as the hero leaves the viewport.
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
@@ -93,7 +95,7 @@ export default function Hero() {
       >
         <motion.div style={{ y: copyY, opacity: copyOpacity, position: 'relative', zIndex: 3 }}>
           <Box sx={{ maxWidth: { md: '52%', lg: '50%' } }}>
-            <motion.div {...fadeUp(0.2, reduce)}>
+            <motion.div {...fadeUp(0.2, reduce, ready)}>
               <Typography sx={{ ...microLabel, fontSize: { xs: 10, md: 11 }, color: colors.muted, letterSpacing: '0.3em' }}>
                 {hero.eyebrow}
               </Typography>
@@ -121,7 +123,7 @@ export default function Hero() {
                   <Box
                     component={motion.span}
                     initial={reduce ? false : { y: '110%' }}
-                    animate={{ y: '0%' }}
+                    animate={ready ? { y: '0%' } : undefined}
                     transition={{ duration: 1, delay: 0.35 + i * 0.12, ease }}
                     sx={{ display: 'block', ...(i === hero.lines.length - 1 ? goldTextSx : {}) }}
                   >
@@ -132,7 +134,7 @@ export default function Hero() {
               ))}
             </Typography>
 
-            <motion.div {...fadeUp(0.7, reduce, 0.8)}>
+            <motion.div {...fadeUp(0.7, reduce, ready, 0.8)}>
               <Typography
                 sx={{
                   mt: { xs: 3, md: 4 },
@@ -146,7 +148,7 @@ export default function Hero() {
               </Typography>
             </motion.div>
 
-            <motion.div {...fadeUp(0.8, reduce, 0.8)}>
+            <motion.div {...fadeUp(0.8, reduce, ready, 0.8)}>
               <Stack
                 direction="row"
                 sx={{ mt: { xs: 4, md: 5 }, alignItems: 'center', flexWrap: 'wrap', gap: { xs: 3, sm: 4 } }}

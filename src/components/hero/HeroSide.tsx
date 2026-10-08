@@ -5,6 +5,7 @@ import Language from '@mui/icons-material/Language'
 import { motion } from 'motion/react'
 import { colors, fonts, microLabel } from '../../theme'
 import { hero } from '../../data/content'
+import { useIntroReady } from '../intro'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const label = { ...microLabel, fontSize: 10, letterSpacing: '0.22em', lineHeight: 1.9, color: colors.text }
@@ -12,9 +13,9 @@ const label = { ...microLabel, fontSize: 10, letterSpacing: '0.22em', lineHeight
 type Reduce = boolean | null
 
 /** Fade-in entrance; under reduced motion the element renders in its final state. */
-const fadeIn = (delay: number, reduce: Reduce) => ({
+const fadeIn = (delay: number, reduce: Reduce, ready: boolean) => ({
   initial: reduce ? false : { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
+  animate: ready ? { opacity: 1, y: 0 } : undefined,
   transition: { duration: 0.7, delay, ease },
 })
 
@@ -29,6 +30,7 @@ const spinSx = {
  * `inView`: start the write-in when scrolled into view (mobile) instead of on load.
  */
 export function Signature({ size = 64, reduce, inView = false }: { size?: number; reduce: Reduce; inView?: boolean }) {
+  const ready = useIntroReady()
   const delay = inView ? 0.15 : 0.8
   const write = {
     hidden: { clipPath: 'inset(0% 100% 0% 0%)' },
@@ -44,7 +46,7 @@ export function Signature({ size = 64, reduce, inView = false }: { size?: number
     <motion.div
       style={{ textAlign: 'right', width: 'max-content' }}
       initial={reduce ? false : 'hidden'}
-      {...(inView ? { whileInView: 'shown', viewport: { once: true, amount: 0.6 } } : { animate: 'shown' })}
+      {...(!ready ? {} : inView ? { whileInView: 'shown', viewport: { once: true, amount: 0.6 } } : { animate: 'shown' })}
     >
       <motion.div variants={write}>
         <Typography
@@ -72,6 +74,7 @@ export function Signature({ size = 64, reduce, inView = false }: { size?: number
 
 /** Desktop far-right column: labels, signature, places + rotating globe. */
 export function HeroSideColumn({ reduce }: { reduce: Reduce }) {
+  const ready = useIntroReady()
   return (
     <Stack
       sx={{
@@ -87,11 +90,11 @@ export function HeroSideColumn({ reduce }: { reduce: Reduce }) {
     >
       <Box>
         {hero.side.top.map((t, i) => (
-          <motion.div key={t} {...fadeIn(0.6 + i * 0.08, reduce)}>
+          <motion.div key={t} {...fadeIn(0.6 + i * 0.08, reduce, ready)}>
             <Typography sx={label}>{t}</Typography>
           </motion.div>
         ))}
-        <motion.div {...fadeIn(0.84, reduce)}>
+        <motion.div {...fadeIn(0.84, reduce, ready)}>
           <Box sx={{ width: 20, height: '1px', bgcolor: colors.muted, my: 2.5 }} />
           <Typography sx={label}>{hero.side.est}</Typography>
           <Typography sx={label}>{hero.side.year}</Typography>
@@ -104,11 +107,11 @@ export function HeroSideColumn({ reduce }: { reduce: Reduce }) {
 
       <Box>
         {hero.places.map((t, i) => (
-          <motion.div key={t} {...fadeIn(0.9 + i * 0.08, reduce)}>
+          <motion.div key={t} {...fadeIn(0.9 + i * 0.08, reduce, ready)}>
             <Typography sx={label}>{t}</Typography>
           </motion.div>
         ))}
-        <motion.div {...fadeIn(1.1, reduce)}>
+        <motion.div {...fadeIn(1.1, reduce, ready)}>
           <Language aria-hidden sx={{ fontSize: 18, mt: 1.5, color: colors.text, ...spinSx }} />
         </motion.div>
       </Box>
@@ -118,9 +121,10 @@ export function HeroSideColumn({ reduce }: { reduce: Reduce }) {
 
 /** Mobile: all side labels collapsed into one wrapping row. */
 export function HeroSideRow({ reduce }: { reduce: Reduce }) {
+  const ready = useIntroReady()
   const items = [...hero.side.top, `${hero.side.est} ${hero.side.year}`, ...hero.places]
   return (
-    <motion.div {...fadeIn(0.9, reduce)}>
+    <motion.div {...fadeIn(0.9, reduce, ready)}>
       <Stack
         direction="row"
         sx={{

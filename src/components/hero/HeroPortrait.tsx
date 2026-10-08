@@ -2,6 +2,7 @@ import Box from '@mui/material/Box'
 import { motion, useTransform, type MotionValue } from 'motion/react'
 import { colors } from '../../theme'
 import { hero } from '../../data/content'
+import { useIntroReady } from '../intro'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -21,6 +22,7 @@ interface Props {
 }
 
 function Halo({ px, py, reduce }: { px: MotionValue<number>; py: MotionValue<number>; reduce: boolean | null }) {
+  const ready = useIntroReady()
   const x = useTransform(px, (v) => v * -8)
   const y = useTransform(py, (v) => v * -8)
   return (
@@ -49,7 +51,7 @@ function Halo({ px, py, reduce }: { px: MotionValue<number>; py: MotionValue<num
         strokeWidth={6}
         filter="url(#haloGlow)"
         initial={reduce ? false : { pathLength: 0, opacity: 0 }}
-        animate={{ pathLength: 1, opacity: 0.55 }}
+        animate={ready ? { pathLength: 1, opacity: 0.55 } : undefined}
         transition={{ duration: 1.2, delay: 0.6, ease }}
         sx={{
           '@keyframes haloPulse': { '0%, 100%': { strokeOpacity: 1 }, '50%': { strokeOpacity: 0.35 } },
@@ -64,7 +66,7 @@ function Halo({ px, py, reduce }: { px: MotionValue<number>; py: MotionValue<num
         strokeWidth={1.4}
         strokeLinecap="round"
         initial={reduce ? false : { pathLength: 0 }}
-        animate={{ pathLength: 1 }}
+        animate={ready ? { pathLength: 1 } : undefined}
         transition={{ duration: 1.2, delay: 0.6, ease }}
       />
     </motion.svg>
@@ -72,6 +74,7 @@ function Halo({ px, py, reduce }: { px: MotionValue<number>; py: MotionValue<num
 }
 
 export default function HeroPortrait({ scrollY, px, py, reduce, children }: Props) {
+  const ready = useIntroReady()
   const x = useTransform(px, (v) => v * 12)
   const y = useTransform(py, (v) => v * 12)
 
@@ -115,7 +118,7 @@ export default function HeroPortrait({ scrollY, px, py, reduce, children }: Prop
             decoding="async"
             // LCP element: visible from the first frame; reveal is scale + light blur only.
             initial={reduce ? false : { scale: 1.08, filter: 'blur(8px)' }}
-            animate={{ scale: 1, filter: 'blur(0px)' }}
+            animate={ready ? { scale: 1, filter: 'blur(0px)' } : undefined}
             transition={{ duration: 1.3, delay: 0.1, ease }}
             sx={{
               display: 'block',

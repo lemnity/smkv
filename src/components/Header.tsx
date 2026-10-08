@@ -19,6 +19,7 @@ import { HEADER_HEIGHT, colors, contentSx, hoverUnderlineSx, microLabel, outline
 import { header, nav } from '../data/content'
 import { scrollToHash } from '../utils/scrollTo'
 import Wordmark from './Wordmark'
+import { useIntroReady } from './intro'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -29,6 +30,7 @@ const contactIcons: Record<string, typeof Telegram> = {
 }
 
 export default function Header() {
+  const ready = useIntroReady()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const { scrollY } = useScroll()
@@ -59,7 +61,7 @@ export default function Header() {
       >
         <motion.div
           initial={{ opacity: 0, y: -24 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={ready ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.6, ease }}
         >
           <Toolbar
