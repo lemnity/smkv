@@ -1,7 +1,10 @@
 import Box from '@mui/material/Box'
-import { motion, type MotionValue } from 'motion/react'
+import { motion, useReducedMotion, type MotionValue } from 'motion/react'
 import { useLang } from '../../i18n'
 import { PORTRAIT_MASK } from './portraitMask'
+import { useIntroReady } from '../intro'
+
+const ease = [0.22, 1, 0.36, 1] as const
 
 interface Props {
   /** Scroll parallax offset (px). */
@@ -12,6 +15,8 @@ interface Props {
 
 export default function HeroPortrait({ scrollY, children }: Props) {
   const { hero } = useLang().t
+  const ready = useIntroReady()
+  const reduce = useReducedMotion()
 
   return (
     <Box
@@ -41,17 +46,19 @@ export default function HeroPortrait({ scrollY, children }: Props) {
         }}
       />
       <motion.div style={{ y: scrollY, position: 'absolute', inset: 0 }}>
-        {/* The loader measures this box to land its photo exactly here. */}
-        <Box data-hero-portrait sx={{ position: 'absolute', inset: 0, zIndex: 1 }}>
+        <Box sx={{ position: 'absolute', inset: 0, zIndex: 1 }}>
           <Box
-            component="img"
+            component={motion.img}
             src={hero.portrait}
             alt={hero.portraitAlt}
             width={344}
             height={572}
             fetchPriority="high"
             decoding="async"
-            // LCP element; its entrance is the loader's photo landing on this spot.
+            // LCP element: visible from the first frame; reveal is scale + light blur only.
+            initial={reduce ? false : { scale: 1.08, filter: 'blur(8px)' }}
+            animate={ready ? { scale: 1, filter: 'blur(0px)' } : undefined}
+            transition={{ duration: 1.3, delay: 0.1, ease }}
             sx={{
               display: 'block',
               width: '100%',
