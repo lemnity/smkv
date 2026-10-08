@@ -1,62 +1,33 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import { visuallyHidden } from '@mui/utils'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { colors } from '../theme'
+import { AnimatePresence, motion, stagger, useAnimate, useReducedMotion, type AnimationSequence } from 'motion/react'
+import { colors, fonts } from '../theme'
+import { BASE } from '../utils/base'
 
 /*
- * Stroke-drawn "Simakoov" preloader.
- * Technique adapted from "Stroke Logo Animation" by Jon Kantner (MIT),
- * https://codepen.io/jkantner/pen/dyZjWvG — three stacked copies of the logo
- * draw themselves with a stagger, the faint ones leaving a trail behind the
- * solid one.
+ * "SIMA | KOOV" preloader: letters rise, the word splits around a window that
+ * flicks through a few works, then the window grows to fill the screen in the
+ * page background colour and hands over to the site.
+ * Adapted from "Willem Loading Animation" by Osmo (MIT),
+ * https://codepen.io/osmosupply/pen/wBGYEMd — GSAP timeline ported to motion.
  */
 
-/** Seconds one layer takes to draw the whole word. */
-const DRAW = 2
-/** Delay of each stacked layer and its opacity. */
-const LAYERS = [
-  { delay: 0, opacity: 0.2 },
-  { delay: 0.33, opacity: 0.2 },
-  { delay: 0.67, opacity: 1 },
-] as const
-/** Pause on the finished logo before the overlay leaves. */
-const HOLD = 0.35
-const MIN_VISIBLE_MS = (LAYERS[LAYERS.length - 1].delay + DRAW + HOLD) * 1000
+const START = 'SIMA'
+const END = 'KOOV'
+/** Works that flash in the window, top-most first. */
+const FLASH = [`${BASE}works/work-01.webp`, `${BASE}works/work-04.webp`, `${BASE}works/work-10.webp`]
+
+/** Pace relative to the original timeline. */
+const T = 0.8
+const ease: [number, number, number, number] = [0.87, 0, 0.13, 1] // ≈ GSAP expo.inOut
+const OPEN = 1.25 * T
+const FIRST_CUT = OPEN + 1.25 * T - 0.05
+const CUT_STEP = 0.5 * T
+const GROW = FIRST_CUT + CUT_STEP * (FLASH.length - 1) + 1.25 * T
+const TOTAL_MS = (GROW + 2 * T) * 1000
 /** Never block the page longer than this, even if `load` is slow. */
-const MAX_VISIBLE_MS = 6000
-
-/**
- * Letter strokes in a 216×48 box (baseline y=39, x-height y≈17.5).
- * `from`/`to` are the fraction of the layer's draw time the stroke occupies,
- * so multi-stroke letters draw in order (stem, then arch, …).
- */
-const STROKES: { d: string; from: number; to: number }[] = [
-  // S
-  {
-    d: 'M22.672,14.012s-1.362-5.62-8.259-5.62c-6.386,0-8.536,4.088-8.6,7.493-.171,9.026,18.051,4.939,18.051,16.008,0,3.321-1.618,7.152-9.452,7.152-7.918,0-9.451-7.663-9.451-7.663',
-    from: 0,
-    to: 1,
-  },
-  // i
-  { d: 'M33,17.5V39', from: 0, to: 0.6 },
-  { d: 'M33,9.5v0.01', from: 0.6, to: 1 },
-  // m
-  { d: 'M44,17.5V39', from: 0, to: 0.4 },
-  { d: 'M44,26c0-5.3,3.2-8.6,7.5-8.6s7.5,3.3,7.5,8.6V39', from: 0.25, to: 0.75 },
-  { d: 'M59,26c0-5.3,3.2-8.6,7.5-8.6s7.5,3.3,7.5,8.6V39', from: 0.5, to: 1 },
-  // a
-  { d: 'M102.5,28.3a9.5,10.6,0,1,0,-19,0a9.5,10.6,0,1,0,19,0', from: 0, to: 0.7 },
-  { d: 'M102.5,17.5V39', from: 0.4, to: 1 },
-  // k
-  { d: 'M113,7.3V39.3', from: 0, to: 0.5 },
-  { d: 'M127.1,16.4L117.1,27L127.1,39.2', from: 0.5, to: 1 },
-  // o, o
-  { d: 'M146.5,18.3a9.9,10.5,0,1,0,0,21a9.9,10.5,0,1,0,0,-21', from: 0, to: 1 },
-  { d: 'M176,18.3a9.9,10.5,0,1,0,0,21a9.9,10.5,0,1,0,0,-21', from: 0, to: 1 },
-  // v
-  { d: 'M194.5,17.5L203.5,39L212.5,17.5', from: 0, to: 1 },
-]
+const MAX_VISIBLE_MS = TOTAL_MS + 2500
 
 /** Lock page scroll while the overlay is up. */
 function useScrollLock(active: boolean) {
@@ -71,7 +42,7 @@ function useScrollLock(active: boolean) {
   }, [active])
 }
 
-/** Resolves once the window `load` event has fired. */
+/** True once the window `load` event has fired. */
 function useWindowLoaded() {
   const [loaded, setLoaded] = useState(() => document.readyState === 'complete')
   useEffect(() => {
@@ -81,6 +52,104 @@ function useWindowLoaded() {
     return () => window.removeEventListener('load', onLoad)
   }, [loaded])
   return loaded
+}
+
+const half = { display: 'flex', overflow: 'hidden', position: 'relative' } as const
+const letterSx = { display: 'block', transform: 'translateY(100%)' } as const
+
+function Sequence({ onFinished }: { onFinished: () => void }) {
+  const [scope, animate] = useAnimate()
+
+  useEffect(() => {
+    const flashes: AnimationSequence = FLASH.map((_, i) => [
+      `.ld-flash-${i}`,
+      { opacity: [1, 0] },
+      { at: FIRST_CUT + i * CUT_STEP, duration: 0.05, ease: 'linear' },
+    ])
+    const sequence: AnimationSequence = [
+      ['.ld-letter', { y: ['100%', '0%'] }, { at: 0, duration: 1.25 * T, ease, delay: stagger(0.025) }],
+      ['.ld-box', { width: ['0em', '1em'] }, { at: OPEN, duration: 1.25 * T, ease }],
+      ['.ld-grow', { width: ['0%', '100%'] }, { at: OPEN, duration: 1.25 * T, ease }],
+      ['.ld-start', { x: ['0em', '-0.05em'] }, { at: OPEN, duration: 1.25 * T, ease }],
+      ['.ld-end', { x: ['0em', '0.05em'] }, { at: OPEN, duration: 1.25 * T, ease }],
+      ...flashes,
+      ['.ld-grow', { width: '100vw', height: '100dvh' }, { at: GROW, duration: 2 * T, ease }],
+      ['.ld-box', { width: '110vw' }, { at: GROW, duration: 2 * T, ease }],
+    ]
+    const controls = animate(sequence)
+    controls.then(onFinished)
+    return () => controls.stop()
+  }, [animate, onFinished])
+
+  return (
+    <Box
+      ref={scope}
+      aria-hidden
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        whiteSpace: 'nowrap',
+        fontFamily: fonts.sans,
+        fontWeight: 600,
+        fontSize: 'clamp(56px, 12.5vw, 190px)',
+        lineHeight: 0.75,
+        letterSpacing: '-0.02em',
+        color: colors.bg,
+        position: 'relative',
+      }}
+    >
+      <Box className="ld-start" sx={{ ...half, justifyContent: 'flex-end' }}>
+        {[...START].map((ch, i) => (
+          <Box key={i} component="span" className="ld-letter" sx={letterSx}>
+            {ch}
+          </Box>
+        ))}
+      </Box>
+
+      <Box
+        className="ld-box"
+        sx={{ width: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative' }}
+      >
+        <Box sx={{ minWidth: '1em', height: '95%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <Box
+            className="ld-grow"
+            sx={{ width: 0, height: '100%', position: 'absolute', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            {/* Final frame is the page background, so the grown window becomes the site. */}
+            <Box sx={{ position: 'absolute', inset: 0, bgcolor: colors.bg }} />
+            {FLASH.map((src, i) => (
+              <Box
+                key={src}
+                component="img"
+                className={`ld-flash-${i}`}
+                src={src}
+                alt=""
+                draggable={false}
+                sx={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  zIndex: FLASH.length - i,
+                  pointerEvents: 'none',
+                  userSelect: 'none',
+                }}
+              />
+            ))}
+          </Box>
+        </Box>
+      </Box>
+
+      <Box className="ld-end" sx={{ ...half, justifyContent: 'flex-start' }}>
+        {[...END].map((ch, i) => (
+          <Box key={i} component="span" className="ld-letter" sx={letterSx}>
+            {ch}
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  )
 }
 
 type LoaderProps = {
@@ -93,19 +162,16 @@ type LoaderProps = {
 export default function Loader({ label, onDone }: LoaderProps) {
   const reduce = useReducedMotion()
   const loaded = useWindowLoaded()
-  const [minElapsed, setMinElapsed] = useState(false)
+  const [finished, setFinished] = useState(false)
   const [maxElapsed, setMaxElapsed] = useState(false)
+  const handleFinished = useCallback(() => setFinished(true), [])
   // Reduced motion: no loader at all, the page appears immediately.
-  const visible = !reduce && !((loaded && minElapsed) || maxElapsed)
+  const visible = !reduce && !((loaded && finished) || maxElapsed)
 
   useEffect(() => {
     if (reduce) return
-    const min = window.setTimeout(() => setMinElapsed(true), MIN_VISIBLE_MS)
     const max = window.setTimeout(() => setMaxElapsed(true), MAX_VISIBLE_MS)
-    return () => {
-      window.clearTimeout(min)
-      window.clearTimeout(max)
-    }
+    return () => window.clearTimeout(max)
   }, [reduce])
 
   useEffect(() => {
@@ -123,57 +189,23 @@ export default function Loader({ label, onDone }: LoaderProps) {
           role="status"
           aria-live="polite"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.7, ease: [0.65, 0, 0.35, 1] }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
           sx={{
             position: 'fixed',
             inset: 0,
             // Above the drawer, below the custom cursor (2000).
             zIndex: 1999,
-            display: 'grid',
-            placeItems: 'center',
-            bgcolor: colors.bg,
-            '@keyframes loaderDraw': {
-              from: { strokeDashoffset: 1 },
-              to: { strokeDashoffset: 0 },
-            },
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflow: 'hidden',
+            bgcolor: colors.gold,
           }}
         >
           <Box component="span" sx={visuallyHidden}>
             {label}
           </Box>
-          <Box
-            component={motion.svg}
-            aria-hidden
-            viewBox="0 0 216 48"
-            fill="none"
-            stroke={colors.gold}
-            strokeWidth={3.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            exit={{ scale: 1.06, opacity: 0, filter: 'blur(6px)' }}
-            transition={{ duration: 0.6, ease: [0.65, 0, 0.35, 1] }}
-            sx={{ width: 'clamp(240px, 39vw, 480px)', height: 'auto', overflow: 'visible' }}
-          >
-            {LAYERS.map((layer) => (
-              <g key={layer.delay} opacity={layer.opacity}>
-                {STROKES.map((s) => (
-                  <Box
-                    key={s.d}
-                    component="path"
-                    d={s.d}
-                    pathLength={1}
-                    sx={{
-                      strokeDasharray: '1 1',
-                      strokeDashoffset: 1,
-                      animation: 'loaderDraw cubic-bezier(0.5, 0, 0.5, 1) both',
-                      animationDuration: `${(s.to - s.from) * DRAW}s`,
-                      animationDelay: `${layer.delay + s.from * DRAW}s`,
-                    }}
-                  />
-                ))}
-              </g>
-            ))}
-          </Box>
+          <Sequence onFinished={handleFinished} />
         </Box>
       )}
     </AnimatePresence>
