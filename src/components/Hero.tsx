@@ -185,7 +185,7 @@ export default function Hero() {
           </Box>
         </motion.div>
 
-        <HeroPortrait scrollY={portraitY} reduce={reduce}>
+        <HeroPortrait scrollY={portraitY}>
           <Box sx={{ display: { xs: 'block', md: 'none' }, position: 'absolute', zIndex: 3, right: '-6%', bottom: '6%' }}>
             <Signature size={52} reduce={reduce} inView />
           </Box>

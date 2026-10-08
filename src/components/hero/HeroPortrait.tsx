@@ -1,22 +1,16 @@
 import Box from '@mui/material/Box'
 import { motion, type MotionValue } from 'motion/react'
 import { useLang } from '../../i18n'
-import { useIntroReady } from '../intro'
-
-const ease = [0.22, 1, 0.36, 1] as const
-
+import { PORTRAIT_MASK } from './portraitMask'
 
 interface Props {
   /** Scroll parallax offset (px). */
   scrollY: MotionValue<number>
-  /** prefers-reduced-motion: render entrance effects in their final state. */
-  reduce: boolean | null
   /** Extra overlay (e.g. mobile signature). */
   children?: React.ReactNode
 }
 
-export default function HeroPortrait({ scrollY, reduce, children }: Props) {
-  const ready = useIntroReady()
+export default function HeroPortrait({ scrollY, children }: Props) {
   const { hero } = useLang().t
 
   return (
@@ -47,29 +41,25 @@ export default function HeroPortrait({ scrollY, reduce, children }: Props) {
         }}
       />
       <motion.div style={{ y: scrollY, position: 'absolute', inset: 0 }}>
-        <Box sx={{ position: 'absolute', inset: 0, zIndex: 1 }}>
+        {/* The loader measures this box to land its photo exactly here. */}
+        <Box data-hero-portrait sx={{ position: 'absolute', inset: 0, zIndex: 1 }}>
           <Box
-            component={motion.img}
+            component="img"
             src={hero.portrait}
             alt={hero.portraitAlt}
             width={344}
             height={572}
             fetchPriority="high"
             decoding="async"
-            // LCP element: visible from the first frame; reveal is scale + light blur only.
-            initial={reduce ? false : { scale: 1.08, filter: 'blur(8px)' }}
-            animate={ready ? { scale: 1, filter: 'blur(0px)' } : undefined}
-            transition={{ duration: 1.3, delay: 0.1, ease }}
+            // LCP element; its entrance is the loader's photo landing on this spot.
             sx={{
               display: 'block',
               width: '100%',
               height: '100%',
               objectFit: 'cover',
               objectPosition: 'center top',
-              maskImage:
-                'linear-gradient(to right, transparent 0%, #000 22%, #000 78%, transparent 100%), linear-gradient(to top, transparent 0%, #000 28%)',
-              WebkitMaskImage:
-                'linear-gradient(to right, transparent 0%, #000 22%, #000 78%, transparent 100%), linear-gradient(to top, transparent 0%, #000 28%)',
+              maskImage: PORTRAIT_MASK,
+              WebkitMaskImage: PORTRAIT_MASK,
               maskComposite: 'intersect',
               WebkitMaskComposite: 'source-in',
             }}
