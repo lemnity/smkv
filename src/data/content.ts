@@ -85,7 +85,7 @@ const projectBase = {
     number: '03',
     title: 'ProStyle',
     logo: { src: `${BASE}clients/prostyle.svg`, width: 340, height: 92 },
-    image: { src: `${BASE}assets/prostyle-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.62, 0.3] },
+    image: { src: `${BASE}assets/prostyle-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.6, 0.45] },
   },
   sphagnum: {
     id: 'sphagnum',
