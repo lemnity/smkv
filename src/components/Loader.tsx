@@ -4,7 +4,6 @@ import { visuallyHidden } from '@mui/utils'
 import { AnimatePresence, motion, stagger, useAnimate, useReducedMotion, type AnimationSequence } from 'motion/react'
 import { colors, fonts } from '../theme'
 import { BASE } from '../utils/base'
-import { PORTRAIT_MASK } from './hero/portraitMask'
 
 /*
  * "SIMA | KOOV" preloader: letters rise, the word splits around a window that
@@ -70,12 +69,6 @@ const coverSx = {
   objectFit: 'cover',
   pointerEvents: 'none',
   userSelect: 'none',
-} as const
-const portraitMaskSx = {
-  maskImage: PORTRAIT_MASK,
-  WebkitMaskImage: PORTRAIT_MASK,
-  maskComposite: 'intersect',
-  WebkitMaskComposite: 'source-in',
 } as const
 
 function Sequence({ onFinished }: { onFinished: () => void }) {
@@ -182,7 +175,7 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
         >
           <Box sx={{ minWidth: '1em', height: '95%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
             <Box className="ld-grow" sx={{ width: 0, height: '100%', position: 'absolute', overflow: 'hidden', bgcolor: colors.bg }}>
-              <Box component="img" src={PORTRAIT} alt="" draggable={false} sx={{ ...coverSx, objectPosition: '50% 30%', ...portraitMaskSx }} />
+              <Box component="img" src={PORTRAIT} alt="" draggable={false} sx={{ ...coverSx, objectPosition: '50% 30%' }} />
               {FLASH.map((src, i) => (
                 <Box
                   key={src}
@@ -219,7 +212,8 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
           visibility: 'hidden',
           objectFit: 'cover',
           objectPosition: '50% 30%',
-          ...portraitMaskSx,
+          // No edge mask in flight: faded edges would let the lime show through the face.
+          // The photo's own backdrop is near the page black, so the landing stays seamless.
           pointerEvents: 'none',
           zIndex: 2,
         }}

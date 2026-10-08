@@ -152,7 +152,7 @@ const ru = {
     side: { top: ['ИДЕИ', 'ПРОДУКТЫ', 'ЛЮДИ'], est: 'С', year: '1991' },
     signatureLabel: 'АЛЕКСАНДР СИМАКОВ',
     places: ['ТЮМЕНЬ', 'РОССИЯ', 'ВЕСЬ МИР'],
-    eyebrow: 'ДИЗАЙНЕР · ПРОДЮСЕР · ОСНОВАТЕЛЬ',
+    eyebrow: 'РАЗРАБОТЧИК · UI/UX ДИЗАЙНЕР · ПРОДЮСЕР · ОСНОВАТЕЛЬ',
     /** Three heading lines; the last one is accented. */
     lines: ['Делаю', 'сложное', 'простым.'],
     text: 'Создаю цифровые продукты, бренды и пользовательские опыты, которые помогают людям и бизнесу расти.',
@@ -320,7 +320,7 @@ const en: Content = {
     side: { top: ['IDEAS', 'PRODUCTS', 'PEOPLE'], est: 'EST.', year: '1991' },
     signatureLabel: 'ALEXANDER SIMAKOV',
     places: ['TYUMEN', 'RUSSIA', 'WORLDWIDE'],
-    eyebrow: 'DESIGNER · PRODUCER · FOUNDER',
+    eyebrow: 'DEVELOPER · UI/UX DESIGNER · PRODUCER · FOUNDER',
     lines: ['Complex,', 'made', 'simple.'],
     text: 'I build digital products, brands and user experiences that help people and businesses grow.',
     cta: 'View my work',
