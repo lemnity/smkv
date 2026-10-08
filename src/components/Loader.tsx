@@ -21,11 +21,14 @@ const FLASH = [`${BASE}works/work-01.webp`, `${BASE}works/work-04.webp`, `${BASE
 /** Pace relative to the original timeline. */
 const T = 0.8
 const ease: [number, number, number, number] = [0.87, 0, 0.13, 1] // ≈ GSAP expo.inOut
+/** Softer curve for the final fill so the hand-over to the page doesn't snap. */
+const fillEase: [number, number, number, number] = [0.65, 0, 0.35, 1]
 const OPEN = 1.25 * T
 const FIRST_CUT = OPEN + 1.25 * T - 0.05
 const CUT_STEP = 0.5 * T
 const GROW = FIRST_CUT + CUT_STEP * (FLASH.length - 1) + 1.25 * T
-const TOTAL_MS = (GROW + 2 * T) * 1000
+const FILL = 2.4 * T
+const TOTAL_MS = (GROW + FILL) * 1000
 /** Never block the page longer than this, even if `load` is slow. */
 const MAX_VISIBLE_MS = TOTAL_MS + 2500
 
@@ -74,8 +77,8 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
       ['.ld-end', { x: ['0em', '0.05em'] }, { at: OPEN, duration: 1.25 * T, ease }],
       ...flashes,
       // Grow well past the viewport (any aspect ratio) so no lime edge survives the fade.
-      ['.ld-grow', { width: '300vmax', height: '300vmax' }, { at: GROW, duration: 2 * T, ease }],
-      ['.ld-box', { width: '300vmax' }, { at: GROW, duration: 2 * T, ease }],
+      ['.ld-grow', { width: '300vmax', height: '300vmax' }, { at: GROW, duration: FILL, ease: fillEase }],
+      ['.ld-box', { width: '300vmax' }, { at: GROW, duration: FILL, ease: fillEase }],
     ]
     const controls = animate(sequence)
     controls.then(onFinished)
@@ -95,7 +98,7 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
         width: '100%',
         whiteSpace: 'nowrap',
         fontFamily: fonts.sans,
-        fontWeight: 600,
+        fontWeight: 900, // Gilroy Heavy
         fontSize: 'clamp(56px, 12.5vw, 190px)',
         lineHeight: 0.75,
         letterSpacing: '-0.02em',
@@ -194,8 +197,11 @@ export default function Loader({ label, onDone }: LoaderProps) {
           component={motion.div}
           role="status"
           aria-live="polite"
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.45, ease: 'easeOut' }}
+          // Opaque from the first frame (nothing of the page shows through); it eases from the
+          // page background into lime, and fades out slowly at the end.
+          initial={{ backgroundColor: colors.bg }}
+          animate={{ backgroundColor: colors.gold, transition: { duration: 0.7, ease: 'easeOut' } }}
+          exit={{ opacity: 0, transition: { duration: 0.9, ease: [0.4, 0, 0.2, 1] } }}
           sx={{
             position: 'fixed',
             inset: 0,
@@ -205,7 +211,6 @@ export default function Loader({ label, onDone }: LoaderProps) {
             justifyContent: 'center',
             alignItems: 'center',
             overflow: 'hidden',
-            bgcolor: colors.gold,
           }}
         >
           <Box component="span" sx={visuallyHidden}>
