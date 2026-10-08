@@ -25,7 +25,7 @@ export default function Footer() {
         }}
       >
         <Stack direction="row" spacing={2.5} sx={{ justifySelf: { md: 'start' }, alignItems: 'center' }}>
-          <Wordmark text={footer.wordmark} size={16} />
+          <Wordmark text={footer.wordmark} size={20} />
           <Typography sx={{ ...microLabel, fontSize: 10, letterSpacing: '0.15em', color: colors.muted }}>
             {footer.copyright}
           </Typography>
