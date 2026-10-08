@@ -81,7 +81,8 @@ export default function HeroPortrait({ scrollY, px, py, reduce, children }: Prop
         position: { xs: 'relative', md: 'absolute' },
         zIndex: 1,
         bottom: { md: 0 },
-        left: { md: '42%', lg: '45%' },
+        // md (900–1199): start further right so the halo arc clears the headline and lead text.
+        left: { md: 'max(45%, 460px)', lg: '45%' },
         height: { md: 'min(94%, 900px)' },
         width: { xs: '80%', sm: '60%', md: 'auto' },
         maxWidth: { xs: 420, md: 'none' },

@@ -136,7 +136,7 @@ export default function Hero() {
               <Typography
                 sx={{
                   mt: { xs: 3, md: 4 },
-                  maxWidth: 440,
+                  maxWidth: { xs: 440, md: 380, lg: 440 },
                   fontSize: { xs: 16, md: 18 },
                   lineHeight: 1.55,
                   color: 'rgba(244,241,236,0.72)',
