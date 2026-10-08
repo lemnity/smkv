@@ -69,7 +69,7 @@ const projectBase = {
     number: '01',
     title: 'Lemnity',
     logo: { src: `${BASE}clients/lemnity.svg`, width: 375, height: 95 },
-    image: { src: `${BASE}assets/lemnity-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.4, 0.2] },
+    image: { src: `${BASE}assets/lemnity-concept.png`, width: 466, height: 407, crop: { x: 0, y: 176, w: 466, h: 216 }, focus: [0.4, 0.5] },
     url: 'https://lemnity.ru',
   },
   tumtipb: {

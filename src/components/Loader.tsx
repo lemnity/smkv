@@ -109,6 +109,7 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
         top: `${from.top}px`,
         width: `${from.width}px`,
         height: `${from.height}px`,
+        borderRadius: getComputedStyle(win).borderRadius,
         visibility: 'visible',
       })
       win.style.visibility = 'hidden'
@@ -116,7 +117,8 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
       await Promise.all([
         animate(
           photo,
-          { left: target.left, top: target.top, width: target.width, height: target.height, objectPosition: '50% 0%' },
+          // Corners stay soft and round off further as the photo grows.
+          { left: target.left, top: target.top, width: target.width, height: target.height, objectPosition: '50% 0%', borderRadius: '28px' },
           { duration: FLIGHT, ease: landEase },
         ),
         animate('.ld-dark', { opacity: 1 }, { duration: FLIGHT * 0.8, ease: 'easeInOut' }),
@@ -174,7 +176,7 @@ function Sequence({ onFinished }: { onFinished: () => void }) {
           sx={{ width: 0, alignSelf: 'stretch', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative' }}
         >
           <Box sx={{ minWidth: '1em', height: '95%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-            <Box className="ld-grow" sx={{ width: 0, height: '100%', position: 'absolute', overflow: 'hidden', bgcolor: colors.bg }}>
+            <Box className="ld-grow" sx={{ width: 0, height: '100%', position: 'absolute', overflow: 'hidden', bgcolor: colors.bg, borderRadius: 'clamp(6px, 0.08em, 16px)' }}>
               <Box component="img" src={PORTRAIT} alt="" draggable={false} sx={{ ...coverSx, objectPosition: '50% 30%' }} />
               {FLASH.map((src, i) => (
                 <Box
