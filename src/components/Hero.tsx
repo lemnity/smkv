@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
 import ArrowForward from '@mui/icons-material/ArrowForward'
-import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { HEADER_HEIGHT, colors, contentSx, hoverUnderlineSx, microLabel } from '../theme'
 import { useLang } from '../i18n'
 import { scrollToHash } from '../utils/scrollTo'
@@ -56,28 +56,11 @@ export default function Hero() {
   const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60])
   const copyOpacity = useTransform(scrollYProgress, [0, 0.7], [1, reduce ? 1 : 0])
 
-  // Pointer: subtle portrait/halo shift (desktop fine pointers only).
-  const spring = { stiffness: 80, damping: 20, mass: 0.6 }
-  const px = useSpring(useMotionValue(0), spring)
-  const py = useSpring(useMotionValue(0), spring)
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (reduce || e.pointerType !== 'mouse' || !ref.current || window.innerWidth < 900) return
-    const r = ref.current.getBoundingClientRect()
-    px.set(((e.clientX - r.left) / r.width) * 2 - 1)
-    py.set(((e.clientY - r.top) / r.height) * 2 - 1)
-  }
-  const onPointerLeave = () => {
-    px.set(0)
-    py.set(0)
-  }
-
   return (
     <Box
       component="section"
       id="home"
       ref={ref}
-      onPointerMove={onPointerMove}
-      onPointerLeave={onPointerLeave}
       sx={{ position: 'relative', overflow: 'hidden' }}
     >
       <Box
@@ -202,7 +185,7 @@ export default function Hero() {
           </Box>
         </motion.div>
 
-        <HeroPortrait scrollY={portraitY} px={px} py={py} reduce={reduce}>
+        <HeroPortrait scrollY={portraitY} reduce={reduce}>
           <Box sx={{ display: { xs: 'block', md: 'none' }, position: 'absolute', zIndex: 3, right: '-6%', bottom: '6%' }}>
             <Signature size={52} reduce={reduce} inView />
           </Box>

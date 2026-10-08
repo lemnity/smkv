@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import { motion, useTransform, type MotionValue } from 'motion/react'
+import { motion, type MotionValue } from 'motion/react'
 import { colors } from '../../theme'
 import { useLang } from '../../i18n'
 import { useIntroReady } from '../intro'
@@ -13,23 +13,19 @@ interface Props {
   /** Scroll parallax offset (px). */
   scrollY: MotionValue<number>
   /** Pointer offsets in range −1…1 (springed). */
-  px: MotionValue<number>
-  py: MotionValue<number>
   /** prefers-reduced-motion: render entrance effects in their final state. */
   reduce: boolean | null
   /** Extra overlay (e.g. mobile signature). */
   children?: React.ReactNode
 }
 
-function Halo({ px, py, reduce }: { px: MotionValue<number>; py: MotionValue<number>; reduce: boolean | null }) {
+function Halo({ reduce }: { reduce: boolean | null }) {
   const ready = useIntroReady()
-  const x = useTransform(px, (v) => v * -8)
-  const y = useTransform(py, (v) => v * -8)
   return (
     <motion.svg
       viewBox="0 0 344 572"
       aria-hidden
-      style={{ x, y, position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0 }}
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0 }}
     >
       <defs>
         <linearGradient id="haloStroke" x1="0" y1="0" x2="0" y2="1">
@@ -73,11 +69,9 @@ function Halo({ px, py, reduce }: { px: MotionValue<number>; py: MotionValue<num
   )
 }
 
-export default function HeroPortrait({ scrollY, px, py, reduce, children }: Props) {
+export default function HeroPortrait({ scrollY, reduce, children }: Props) {
   const ready = useIntroReady()
   const { hero } = useLang().t
-  const x = useTransform(px, (v) => v * 12)
-  const y = useTransform(py, (v) => v * 12)
 
   return (
     <Box
@@ -107,8 +101,8 @@ export default function HeroPortrait({ scrollY, px, py, reduce, children }: Prop
         }}
       />
       <motion.div style={{ y: scrollY, position: 'absolute', inset: 0 }}>
-        <Halo px={px} py={py} reduce={reduce} />
-        <motion.div style={{ x, y, position: 'absolute', inset: 0, zIndex: 1 }}>
+        <Halo reduce={reduce} />
+        <Box sx={{ position: 'absolute', inset: 0, zIndex: 1 }}>
           <Box
             component={motion.img}
             src={hero.portrait}
@@ -135,7 +129,7 @@ export default function HeroPortrait({ scrollY, px, py, reduce, children }: Prop
               WebkitMaskComposite: 'source-in',
             }}
           />
-        </motion.div>
+        </Box>
       </motion.div>
       {/* warm dark vignette */}
       <Box
