@@ -179,6 +179,12 @@ const ru = {
     prevLabel: 'Предыдущая работа',
     nextLabel: 'Следующая работа',
   },
+  clients: {
+    eyebrow: 'КЛИЕНТЫ',
+    title: 'Мне доверяют',
+    text: 'Компании и команды, с которыми мы запускали бренды, сайты и продукты.',
+    listLabel: 'Клиенты',
+  },
   about: {
     eyebrow: 'ОБО МНЕ',
     title: ['Больше, чем', 'дизайн'],
@@ -286,6 +292,12 @@ const en: Content = {
     closeLabel: 'Close viewer',
     prevLabel: 'Previous work',
     nextLabel: 'Next work',
+  },
+  clients: {
+    eyebrow: 'CLIENTS',
+    title: 'Trusted by',
+    text: 'Companies and teams I have launched brands, websites and products with.',
+    listLabel: 'Clients',
   },
   about: {
     eyebrow: 'ABOUT',

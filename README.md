@@ -7,7 +7,7 @@
 - [Vite](https://vite.dev) + React + TypeScript
 - [MUI](https://mui.com) (`@mui/material`, `@mui/icons-material`, Emotion) — вёрстка, компоненты, иконки, единая тема в `src/theme.ts`
 - [Motion](https://motion.dev) (`motion/react`) — анимации; учитывается системная настройка «уменьшить движение»
-- Шрифты подключены локально через `@fontsource`: Onest, Cormorant Garamond, Great Vibes
+- Шрифты: Gilroy (400/500/600/700) лежит в `public/fonts` и подключается в `index.html`; Cormorant Garamond и Great Vibes — через `@fontsource`. Gilroy — платный шрифт: перед публикацией убедитесь, что лицензия разрешает веб-использование.
 
 ## Запуск
 
@@ -64,3 +64,4 @@ npm run preview   # локальный просмотр собранной ве�
 - `public/assets/portrait-original.jpg`, `portrait-new.jpg` — исходные фотографии.
 - Сборка разбивает JS на отдельные чанки (`react`, `mui`, `motion`, код сайта) — см. `vite.config.ts`.
 - Прелоадер (`src/components/Loader.tsx`): внутри букв «SIMAKOOV» текут волнистые полосы акцентного цвета; держится, пока не загрузится страница (не меньше ~2,6 с, не больше 6 с); при включённом «уменьшении движения» не показывается. Эффект основан на [The Xandali Effect](https://codepen.io/grayghostvisuals/pen/pjbNQY) (Gray Ghost, MIT).
+- Логотипы клиентов — `public/clients`, список и порядок — `src/data/clients.ts`. Логотипы показываются белыми силуэтами; для знаков, где деталь нарисована цветом (а не вырезана), задаётся свой `filter`.

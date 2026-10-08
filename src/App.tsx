@@ -10,6 +10,7 @@ import Footer from './components/Footer'
 import Hero from './components/Hero'
 import Projects from './components/Projects'
 import Gallery from './components/Gallery'
+import Clients from './components/Clients'
 import About from './components/About'
 import Loader from './components/Loader'
 import { IntroContext } from './components/intro'
@@ -45,6 +46,8 @@ function Page() {
           <Projects />
           <SectionDivider />
           <Gallery />
+          <SectionDivider />
+          <Clients />
           <SectionDivider />
           <About />
           <SectionDivider />
