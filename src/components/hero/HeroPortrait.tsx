@@ -1,72 +1,18 @@
 import Box from '@mui/material/Box'
 import { motion, type MotionValue } from 'motion/react'
-import { colors } from '../../theme'
 import { useLang } from '../../i18n'
 import { useIntroReady } from '../intro'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-// Arc on the left side of the head (portrait viewBox = native image size 344×572).
-const ARC = 'M 112 96 A 196 196 0 0 0 4 392'
 
 interface Props {
   /** Scroll parallax offset (px). */
   scrollY: MotionValue<number>
-  /** Pointer offsets in range −1…1 (springed). */
   /** prefers-reduced-motion: render entrance effects in their final state. */
   reduce: boolean | null
   /** Extra overlay (e.g. mobile signature). */
   children?: React.ReactNode
-}
-
-function Halo({ reduce }: { reduce: boolean | null }) {
-  const ready = useIntroReady()
-  return (
-    <motion.svg
-      viewBox="0 0 344 572"
-      aria-hidden
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', zIndex: 0 }}
-    >
-      <defs>
-        <linearGradient id="haloStroke" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor={colors.goldLight} stopOpacity="0" />
-          <stop offset="0.35" stopColor={colors.goldLight} stopOpacity="0.95" />
-          <stop offset="0.75" stopColor={colors.gold} stopOpacity="0.7" />
-          <stop offset="1" stopColor={colors.goldDark} stopOpacity="0" />
-        </linearGradient>
-        <filter id="haloGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="6" />
-        </filter>
-      </defs>
-      {/* soft glow copy — pulses after drawing */}
-      <Box
-        component={motion.path}
-        d={ARC}
-        fill="none"
-        stroke={colors.gold}
-        strokeWidth={6}
-        filter="url(#haloGlow)"
-        initial={reduce ? false : { pathLength: 0, opacity: 0 }}
-        animate={ready ? { pathLength: 1, opacity: 0.55 } : undefined}
-        transition={{ duration: 1.2, delay: 0.6, ease }}
-        sx={{
-          '@keyframes haloPulse': { '0%, 100%': { strokeOpacity: 1 }, '50%': { strokeOpacity: 0.35 } },
-          animation: 'haloPulse 4s ease-in-out 1.8s infinite',
-          '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
-        }}
-      />
-      <motion.path
-        d={ARC}
-        fill="none"
-        stroke="url(#haloStroke)"
-        strokeWidth={1.4}
-        strokeLinecap="round"
-        initial={reduce ? false : { pathLength: 0 }}
-        animate={ready ? { pathLength: 1 } : undefined}
-        transition={{ duration: 1.2, delay: 0.6, ease }}
-      />
-    </motion.svg>
-  )
 }
 
 export default function HeroPortrait({ scrollY, reduce, children }: Props) {
@@ -101,7 +47,6 @@ export default function HeroPortrait({ scrollY, reduce, children }: Props) {
         }}
       />
       <motion.div style={{ y: scrollY, position: 'absolute', inset: 0 }}>
-        <Halo reduce={reduce} />
         <Box sx={{ position: 'absolute', inset: 0, zIndex: 1 }}>
           <Box
             component={motion.img}
