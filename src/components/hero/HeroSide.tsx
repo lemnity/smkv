@@ -9,8 +9,11 @@ import { hero } from '../../data/content'
 const ease = [0.22, 1, 0.36, 1] as const
 const label = { ...microLabel, fontSize: 10, letterSpacing: '0.22em', lineHeight: 1.9, color: colors.text }
 
-const fadeIn = (delay: number) => ({
-  initial: { opacity: 0, y: 12 },
+type Reduce = boolean | null
+
+/** Fade-in entrance; under reduced motion the element renders in its final state. */
+const fadeIn = (delay: number, reduce: Reduce) => ({
+  initial: reduce ? false : { opacity: 0, y: 12 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.7, delay, ease },
 })
@@ -21,15 +24,29 @@ const spinSx = {
   '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
 }
 
-/** Handwritten gold signature that "writes in" left → right. */
-export function Signature({ size = 64 }: { size?: number }) {
+/**
+ * Handwritten gold signature that "writes in" left → right.
+ * `inView`: start the write-in when scrolled into view (mobile) instead of on load.
+ */
+export function Signature({ size = 64, reduce, inView = false }: { size?: number; reduce: Reduce; inView?: boolean }) {
+  const delay = inView ? 0.15 : 0.8
+  const write = {
+    hidden: { clipPath: 'inset(0% 100% 0% 0%)' },
+    shown: { clipPath: 'inset(0% 0% 0% 0%)', transition: { duration: 1, delay, ease: [0.65, 0, 0.35, 1] as const } },
+  }
+  const caption = {
+    hidden: { opacity: 0, y: 12 },
+    shown: { opacity: 1, y: 0, transition: { duration: 0.7, delay: delay + 0.3, ease } },
+  }
+  // The trigger lives on the unclipped wrapper: IntersectionObserver would see the
+  // clip-path'd child as zero-area and never fire.
   return (
-    <Box sx={{ textAlign: 'right', width: 'max-content' }}>
-      <motion.div
-        initial={{ clipPath: 'inset(0% 100% 0% 0%)' }}
-        animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
-        transition={{ duration: 1, delay: 0.9, ease: [0.65, 0, 0.35, 1] }}
-      >
+    <motion.div
+      style={{ textAlign: 'right', width: 'max-content' }}
+      initial={reduce ? false : 'hidden'}
+      {...(inView ? { whileInView: 'shown', viewport: { once: true, amount: 0.6 } } : { animate: 'shown' })}
+    >
+      <motion.div variants={write}>
         <Typography
           aria-hidden
           sx={{
@@ -46,15 +63,15 @@ export function Signature({ size = 64 }: { size?: number }) {
           {hero.signature}
         </Typography>
       </motion.div>
-      <motion.div {...fadeIn(1.5)}>
+      <motion.div variants={caption}>
         <Typography sx={{ ...label, mt: 0.5 }}>{hero.signatureLabel}</Typography>
       </motion.div>
-    </Box>
+    </motion.div>
   )
 }
 
 /** Desktop far-right column: labels, signature, places + rotating globe. */
-export function HeroSideColumn() {
+export function HeroSideColumn({ reduce }: { reduce: Reduce }) {
   return (
     <Stack
       sx={{
@@ -70,11 +87,11 @@ export function HeroSideColumn() {
     >
       <Box>
         {hero.side.top.map((t, i) => (
-          <motion.div key={t} {...fadeIn(0.6 + i * 0.08)}>
+          <motion.div key={t} {...fadeIn(0.6 + i * 0.08, reduce)}>
             <Typography sx={label}>{t}</Typography>
           </motion.div>
         ))}
-        <motion.div {...fadeIn(0.84)}>
+        <motion.div {...fadeIn(0.84, reduce)}>
           <Box sx={{ width: 20, height: '1px', bgcolor: colors.muted, my: 2.5 }} />
           <Typography sx={label}>{hero.side.est}</Typography>
           <Typography sx={label}>{hero.side.year}</Typography>
@@ -82,16 +99,16 @@ export function HeroSideColumn() {
       </Box>
 
       <Box sx={{ alignSelf: 'flex-end' }}>
-        <Signature />
+        <Signature reduce={reduce} />
       </Box>
 
       <Box>
         {hero.places.map((t, i) => (
-          <motion.div key={t} {...fadeIn(1 + i * 0.08)}>
+          <motion.div key={t} {...fadeIn(0.9 + i * 0.08, reduce)}>
             <Typography sx={label}>{t}</Typography>
           </motion.div>
         ))}
-        <motion.div {...fadeIn(1.24)}>
+        <motion.div {...fadeIn(1.1, reduce)}>
           <Language aria-hidden sx={{ fontSize: 18, mt: 1.5, color: colors.text, ...spinSx }} />
         </motion.div>
       </Box>
@@ -100,10 +117,10 @@ export function HeroSideColumn() {
 }
 
 /** Mobile: all side labels collapsed into one wrapping row. */
-export function HeroSideRow() {
+export function HeroSideRow({ reduce }: { reduce: Reduce }) {
   const items = [...hero.side.top, `${hero.side.est} ${hero.side.year}`, ...hero.places]
   return (
-    <motion.div {...fadeIn(1)}>
+    <motion.div {...fadeIn(0.9, reduce)}>
       <Stack
         direction="row"
         sx={{

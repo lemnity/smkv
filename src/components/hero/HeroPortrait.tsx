@@ -14,11 +14,13 @@ interface Props {
   /** Pointer offsets in range −1…1 (springed). */
   px: MotionValue<number>
   py: MotionValue<number>
+  /** prefers-reduced-motion: render entrance effects in their final state. */
+  reduce: boolean | null
   /** Extra overlay (e.g. mobile signature). */
   children?: React.ReactNode
 }
 
-function Halo({ px, py }: { px: MotionValue<number>; py: MotionValue<number> }) {
+function Halo({ px, py, reduce }: { px: MotionValue<number>; py: MotionValue<number>; reduce: boolean | null }) {
   const x = useTransform(px, (v) => v * -8)
   const y = useTransform(py, (v) => v * -8)
   return (
@@ -46,7 +48,7 @@ function Halo({ px, py }: { px: MotionValue<number>; py: MotionValue<number> }) 
         stroke={colors.gold}
         strokeWidth={6}
         filter="url(#haloGlow)"
-        initial={{ pathLength: 0, opacity: 0 }}
+        initial={reduce ? false : { pathLength: 0, opacity: 0 }}
         animate={{ pathLength: 1, opacity: 0.55 }}
         transition={{ duration: 1.2, delay: 0.6, ease }}
         sx={{
@@ -61,7 +63,7 @@ function Halo({ px, py }: { px: MotionValue<number>; py: MotionValue<number> }) 
         stroke="url(#haloStroke)"
         strokeWidth={1.4}
         strokeLinecap="round"
-        initial={{ pathLength: 0 }}
+        initial={reduce ? false : { pathLength: 0 }}
         animate={{ pathLength: 1 }}
         transition={{ duration: 1.2, delay: 0.6, ease }}
       />
@@ -69,7 +71,7 @@ function Halo({ px, py }: { px: MotionValue<number>; py: MotionValue<number> }) 
   )
 }
 
-export default function HeroPortrait({ scrollY, px, py, children }: Props) {
+export default function HeroPortrait({ scrollY, px, py, reduce, children }: Props) {
   const x = useTransform(px, (v) => v * 12)
   const y = useTransform(py, (v) => v * 12)
 
@@ -100,15 +102,20 @@ export default function HeroPortrait({ scrollY, px, py, children }: Props) {
         }}
       />
       <motion.div style={{ y: scrollY, position: 'absolute', inset: 0 }}>
-        <Halo px={px} py={py} />
+        <Halo px={px} py={py} reduce={reduce} />
         <motion.div style={{ x, y, position: 'absolute', inset: 0, zIndex: 1 }}>
           <Box
             component={motion.img}
             src={hero.portrait}
             alt={hero.portraitAlt}
-            initial={{ opacity: 0, scale: 1.08, filter: 'blur(12px)' }}
-            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            transition={{ duration: 1.4, delay: 0.25, ease }}
+            width={344}
+            height={572}
+            fetchPriority="high"
+            decoding="async"
+            // LCP element: visible from the first frame; reveal is scale + light blur only.
+            initial={reduce ? false : { scale: 1.08, filter: 'blur(8px)' }}
+            animate={{ scale: 1, filter: 'blur(0px)' }}
+            transition={{ duration: 1.3, delay: 0.1, ease }}
             sx={{
               display: 'block',
               width: '100%',

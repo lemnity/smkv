@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { Fragment, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -16,20 +16,28 @@ import { HeroSideColumn, HeroSideRow, Signature } from './hero/HeroSide'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 24 },
+/** Fade-up entrance; under reduced motion the element renders in its final state. */
+const fadeUp = (delay: number, reduce: boolean | null, duration = 0.9) => ({
+  initial: reduce ? false : { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.9, delay, ease },
+  transition: { duration, delay, ease },
 })
 
+// Static light-gold gradient (reads gold/gold-light like the reference) with a narrow
+// light sheen band layered on top that sweeps across periodically.
 const goldTextSx = {
-  background: `linear-gradient(100deg, ${colors.goldLight} 0%, ${colors.gold} 30%, ${colors.goldDark} 50%, ${colors.gold} 70%, ${colors.goldLight} 100%)`,
-  backgroundSize: '200% 100%',
+  backgroundImage: `linear-gradient(100deg, transparent 42%, rgba(255,248,235,0.45) 50%, transparent 58%), linear-gradient(100deg, ${colors.goldLight} 0%, ${colors.gold} 70%, ${colors.goldDark} 130%)`,
+  backgroundSize: '250% 100%, 100% 100%',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: '100% 0, 0 0',
   WebkitBackgroundClip: 'text',
   backgroundClip: 'text',
   color: 'transparent',
-  '@keyframes heroSheen': { '0%': { backgroundPosition: '0% 50%' }, '100%': { backgroundPosition: '200% 50%' } },
-  animation: 'heroSheen 8s linear infinite',
+  '@keyframes heroSheen': {
+    '0%': { backgroundPosition: '100% 0, 0 0' },
+    '45%, 100%': { backgroundPosition: '0% 0, 0 0' },
+  },
+  animation: 'heroSheen 7s ease-in-out 2s infinite',
   '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
 }
 
@@ -72,7 +80,6 @@ export default function Hero() {
           ...contentSx,
           position: 'relative',
           minHeight: { md: 'max(100vh, 720px)' },
-          maxHeight: { md: 1000 },
           // Header height + breathing room.
           pt: {
             xs: `${HEADER_HEIGHT.xs + 48}px`,
@@ -86,7 +93,7 @@ export default function Hero() {
       >
         <motion.div style={{ y: copyY, opacity: copyOpacity, position: 'relative', zIndex: 3 }}>
           <Box sx={{ maxWidth: { md: '52%', lg: '50%' } }}>
-            <motion.div {...fadeUp(0.2)}>
+            <motion.div {...fadeUp(0.2, reduce)}>
               <Typography sx={{ ...microLabel, fontSize: { xs: 10, md: 11 }, color: colors.muted, letterSpacing: '0.3em' }}>
                 {hero.eyebrow}
               </Typography>
@@ -104,14 +111,16 @@ export default function Hero() {
               }}
             >
               {hero.lines.map((line, i) => (
+                <Fragment key={line}>
+                {/* Real space between lines so textContent / copy reads as a sentence. */}
+                {i > 0 && ' '}
                 <Box
-                  key={line}
                   component="span"
                   sx={{ display: 'block', overflow: 'hidden', pb: '0.08em', mb: '-0.08em' }}
                 >
                   <Box
                     component={motion.span}
-                    initial={{ y: '110%' }}
+                    initial={reduce ? false : { y: '110%' }}
                     animate={{ y: '0%' }}
                     transition={{ duration: 1, delay: 0.35 + i * 0.12, ease }}
                     sx={{ display: 'block', ...(i === hero.lines.length - 1 ? goldTextSx : {}) }}
@@ -119,10 +128,11 @@ export default function Hero() {
                     {line}
                   </Box>
                 </Box>
+                </Fragment>
               ))}
             </Typography>
 
-            <motion.div {...fadeUp(0.8)}>
+            <motion.div {...fadeUp(0.7, reduce, 0.8)}>
               <Typography
                 sx={{
                   mt: { xs: 3, md: 4 },
@@ -136,7 +146,7 @@ export default function Hero() {
               </Typography>
             </motion.div>
 
-            <motion.div {...fadeUp(0.95)}>
+            <motion.div {...fadeUp(0.8, reduce, 0.8)}>
               <Stack
                 direction="row"
                 sx={{ mt: { xs: 4, md: 5 }, alignItems: 'center', flexWrap: 'wrap', gap: { xs: 3, sm: 4 } }}
@@ -179,17 +189,17 @@ export default function Hero() {
               </Stack>
             </motion.div>
 
-            <HeroSideRow />
+            <HeroSideRow reduce={reduce} />
           </Box>
         </motion.div>
 
-        <HeroPortrait scrollY={portraitY} px={px} py={py}>
+        <HeroPortrait scrollY={portraitY} px={px} py={py} reduce={reduce}>
           <Box sx={{ display: { xs: 'block', md: 'none' }, position: 'absolute', zIndex: 3, right: '-6%', bottom: '6%' }}>
-            <Signature size={52} />
+            <Signature size={52} reduce={reduce} inView />
           </Box>
         </HeroPortrait>
 
-        <HeroSideColumn />
+        <HeroSideColumn reduce={reduce} />
       </Box>
 
       {/* fade the section's bottom edge into the page */}
