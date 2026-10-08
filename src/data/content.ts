@@ -232,7 +232,6 @@ const ru = {
   },
   feedback: {
     dialogLabel: 'Форма обратной связи',
-    eyebrow: 'ОБРАТНАЯ СВЯЗЬ',
     title: 'Обсудим проект',
     subtitle: 'Пара слов о задаче — и я вернусь с идеями, сроками и следующим шагом.',
     closeLabel: 'Закрыть форму',
@@ -401,7 +400,6 @@ const en: Content = {
   },
   feedback: {
     dialogLabel: 'Contact form',
-    eyebrow: 'CONTACT',
     title: "Let's talk",
     subtitle: "A few words about the task — and I'll come back with ideas, timing and the next step.",
     closeLabel: 'Close form',

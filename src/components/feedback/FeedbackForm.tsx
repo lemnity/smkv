@@ -166,10 +166,7 @@ export default function FeedbackForm({ open, preset, onClose, copy }: Props) {
   const isSending = status === 'sending'
 
   const header = (
-    <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between', gap: 2 }}>
-      <Typography sx={{ ...microLabel, fontSize: 10, letterSpacing: '0.3em', color: colors.gold, pt: 1.5 }}>
-        {copy.eyebrow}
-      </Typography>
+    <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'flex-end', gap: 2 }}>
       <IconButton aria-label={copy.closeLabel} onClick={onClose} sx={{ ...outlinedIconButtonSx, flexShrink: 0 }}>
         <Close fontSize="small" />
       </IconButton>
