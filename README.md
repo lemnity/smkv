@@ -48,4 +48,4 @@ npm run preview   # локальный просмотр собранной ве�
 - `public/assets/full-design-reference.png` — утверждённый визуальный референс макета.
 - `public/assets/portrait-original.jpg`, `portrait-new.jpg` — исходные фотографии.
 - Сборка разбивает JS на отдельные чанки (`react`, `mui`, `motion`, код сайта) — см. `vite.config.ts`.
-- Прелоадер (`src/components/Loader.tsx`) прорисовывает логотип «Simakoov°» штрихами и держится, пока не загрузится страница (не меньше ~2,7 с, не больше 6 с); при включённом «уменьшении движения» не показывается. Эффект основан на [Stroke Logo Animation](https://codepen.io/jkantner/pen/dyZjWvG) Джона Кантнера (MIT).
+- Прелоадер (`src/components/Loader.tsx`): внутри букв «SIMAKOOV» текут волнистые полосы акцентного цвета; держится, пока не загрузится страница (не меньше ~2,6 с, не больше 6 с); при включённом «уменьшении движения» не показывается. Эффект основан на [The Xandali Effect](https://codepen.io/grayghostvisuals/pen/pjbNQY) (Gray Ghost, MIT).
