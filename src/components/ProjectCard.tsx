@@ -109,7 +109,7 @@ export default function ProjectCard({ project, size }: Props) {
             overflow: 'hidden',
             borderRadius: 1,
             border: `1px solid ${colors.line}`,
-            background: 'linear-gradient(160deg, #151413 0%, #0c0b0a 100%)',
+            background: 'linear-gradient(160deg, #111111 0%, #070707 100%)',
             minHeight: large ? { xs: 420, sm: 460, md: 0 } : { xs: 230, md: 0 },
             transition: 'border-color .5s ease, box-shadow .5s ease',
             // Pointer-following gold spotlight.
@@ -120,12 +120,12 @@ export default function ProjectCard({ project, size }: Props) {
               zIndex: 1,
               pointerEvents: 'none',
               background:
-                'radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(201,161,115,0.13), transparent 60%)',
+                'radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(196,238,24,0.13), transparent 60%)',
               opacity: 0,
               transition: 'opacity .5s ease',
             },
             '&:hover': {
-              borderColor: 'rgba(201,161,115,0.45)',
+              borderColor: 'rgba(196,238,24,0.45)',
               boxShadow: '0 30px 60px -30px rgba(0,0,0,0.8)',
             },
             '&:hover::after': { opacity: 1 },
@@ -134,7 +134,7 @@ export default function ProjectCard({ project, size }: Props) {
               bgcolor: colors.gold,
               borderColor: colors.gold,
               color: colors.bg,
-              boxShadow: '0 0 24px rgba(201,161,115,0.35)',
+              boxShadow: '0 0 24px rgba(196,238,24,0.35)',
               '& svg': { transform: 'rotate(-45deg)' },
             },
             '@media (prefers-reduced-motion: reduce)': {

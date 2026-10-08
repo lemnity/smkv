@@ -101,7 +101,7 @@ export default function HeroPortrait({ scrollY, px, py, reduce, children }: Prop
         sx={{
           position: 'absolute',
           inset: '-10% -30% 0',
-          background: `radial-gradient(ellipse 50% 45% at 50% 42%, rgba(201,161,115,0.16), rgba(201,161,115,0.04) 55%, transparent 75%)`,
+          background: `radial-gradient(ellipse 50% 45% at 50% 42%, rgba(196,238,24,0.16), rgba(196,238,24,0.04) 55%, transparent 75%)`,
           zIndex: 0,
         }}
       />
@@ -143,7 +143,7 @@ export default function HeroPortrait({ scrollY, px, py, reduce, children }: Prop
           position: 'absolute',
           inset: 0,
           zIndex: 2,
-          background: `radial-gradient(ellipse 70% 60% at 50% 40%, transparent 55%, rgba(10,9,8,0.55) 100%)`,
+          background: `radial-gradient(ellipse 70% 60% at 50% 40%, transparent 55%, rgba(3,3,3,0.55) 100%)`,
         }}
       />
       {children}

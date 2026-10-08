@@ -89,8 +89,8 @@ function InfinityMark() {
             fontSize: 44,
             color: colors.gold,
             '@keyframes infPulse': {
-              '0%, 100%': { opacity: 0.85, filter: 'drop-shadow(0 0 0 rgba(201,161,115,0))' },
-              '50%': { opacity: 1, filter: 'drop-shadow(0 0 8px rgba(201,161,115,0.55))' },
+              '0%, 100%': { opacity: 0.85, filter: 'drop-shadow(0 0 0 rgba(196,238,24,0))' },
+              '50%': { opacity: 1, filter: 'drop-shadow(0 0 8px rgba(196,238,24,0.55))' },
             },
             animation: 'infPulse 3.2s ease-in-out 1.4s infinite',
             '@media (prefers-reduced-motion: reduce)': { animation: 'none' },

@@ -1,4 +1,5 @@
 import { motion, useScroll, useSpring } from 'motion/react'
+import { colors } from '../../theme'
 
 export default function ScrollProgress() {
   const { scrollYProgress } = useScroll()
@@ -13,7 +14,7 @@ export default function ScrollProgress() {
         left: 0,
         right: 0,
         height: 1,
-        background: '#c9a173',
+        background: colors.gold,
         // Above the AppBar (1100), below Drawer/Modal (1200/1300).
         zIndex: 1101,
         pointerEvents: 'none',

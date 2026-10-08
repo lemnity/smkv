@@ -1,13 +1,14 @@
 import { createTheme } from '@mui/material/styles'
 
 export const colors = {
-  bg: '#0a0908',
-  surface: '#121110',
+  bg: '#030303',
+  surface: '#0d0d0d',
   text: '#f4f1ec',
-  muted: '#8e8a84',
-  gold: '#c9a173',
-  goldLight: '#e6c89c',
-  goldDark: '#8a6a45',
+  muted: '#8b8b87',
+  // Accent (lime #C4EE18). Keys keep the historic `gold` names.
+  gold: '#c4ee18',
+  goldLight: '#dbf76a',
+  goldDark: '#7e9a0c',
   line: 'rgba(255,255,255,0.09)',
   /** Muted dark text used by the About quote. */
   quote: '#6f6b66',
@@ -68,12 +69,12 @@ export const outlinedIconButtonSx = {
   transition: 'all .3s ease',
   '&:hover': {
     borderColor: colors.gold,
-    boxShadow: '0 0 24px rgba(201,161,115,0.35)',
+    boxShadow: '0 0 24px rgba(196,238,24,0.35)',
     background: 'transparent',
   },
   '&:focus-visible, &.Mui-focusVisible': {
     borderColor: colors.gold,
-    boxShadow: '0 0 24px rgba(201,161,115,0.35)',
+    boxShadow: '0 0 24px rgba(196,238,24,0.35)',
     outline: `2px solid ${colors.gold}`,
     outlineOffset: '3px',
   },
@@ -129,7 +130,7 @@ const theme = createTheme({
           style: {
             borderColor: colors.gold,
             color: colors.text,
-            '&:hover': { borderColor: colors.goldLight, background: 'rgba(201,161,115,0.1)' },
+            '&:hover': { borderColor: colors.goldLight, background: 'rgba(196,238,24,0.1)' },
           },
         },
       ],

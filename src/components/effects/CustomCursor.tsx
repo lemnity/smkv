@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { colors } from '../../theme'
 
 export default function CustomCursor() {
   const reduce = useReducedMotion()
@@ -38,7 +39,7 @@ export default function CustomCursor() {
         style={{
           x, y, translateX: '-50%', translateY: '-50%',
           position: 'fixed', top: 0, left: 0, width: 8, height: 8, borderRadius: '50%',
-          background: '#c9a173', pointerEvents: 'none', zIndex: 2000,
+          background: colors.gold, pointerEvents: 'none', zIndex: 2000,
         }}
         animate={{ opacity: visible ? 1 : 0 }}
       />
@@ -47,7 +48,7 @@ export default function CustomCursor() {
         style={{
           x: rx, y: ry, translateX: '-50%', translateY: '-50%',
           position: 'fixed', top: 0, left: 0, width: 36, height: 36, borderRadius: '50%',
-          border: '1px solid rgba(201,161,115,0.7)', pointerEvents: 'none', zIndex: 2000,
+          border: '1px solid rgba(196,238,24,0.7)', pointerEvents: 'none', zIndex: 2000,
         }}
         animate={{ opacity: visible ? 1 : 0, scale: hover ? 1.8 : 1 }}
       />

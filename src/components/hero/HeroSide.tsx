@@ -59,7 +59,7 @@ export function Signature({ size = 64, reduce, inView = false }: { size?: number
             color: colors.gold,
             transform: 'rotate(-8deg)',
             transformOrigin: 'right center',
-            textShadow: '0 0 24px rgba(201,161,115,0.25)',
+            textShadow: '0 0 24px rgba(196,238,24,0.25)',
           }}
         >
           {hero.signature}

@@ -49,7 +49,7 @@ export default function Header() {
         position="fixed"
         elevation={0}
         sx={{
-          bgcolor: scrolled ? 'rgba(10,9,8,0.72)' : 'transparent',
+          bgcolor: scrolled ? 'rgba(3,3,3,0.72)' : 'transparent',
           backgroundImage: 'none',
           backdropFilter: scrolled ? 'blur(14px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(14px)' : 'none',

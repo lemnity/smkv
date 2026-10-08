@@ -82,7 +82,7 @@ function Quote() {
 function CreateTogether() {
   const circleActive = {
     borderColor: colors.gold,
-    boxShadow: '0 0 24px rgba(201,161,115,0.35)',
+    boxShadow: '0 0 24px rgba(196,238,24,0.35)',
   }
   return (
     <Stack
@@ -109,7 +109,7 @@ function CreateTogether() {
             position: 'absolute',
             inset: -7,
             borderRadius: '50%',
-            border: `1px dashed rgba(201,161,115,0.55)`,
+            border: `1px dashed rgba(196,238,24,0.55)`,
             pointerEvents: 'none',
             '@keyframes ctaSpin': { to: { transform: 'rotate(360deg)' } },
             animation: 'ctaSpin 24s linear infinite',
