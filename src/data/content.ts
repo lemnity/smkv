@@ -87,6 +87,13 @@ const projectBase = {
     logo: { src: `${BASE}clients/prostyle.svg`, width: 340, height: 92 },
     image: { src: `${BASE}assets/prostyle-concept.png`, width: 282, height: 176, crop: { x: 0, y: 0, w: 276, h: 170 }, focus: [0, 0.5] },
   },
+  sphagnum: {
+    id: 'sphagnum',
+    number: '04',
+    title: 'Sphagnum AE',
+    image: { src: `${BASE}assets/sphagnum-concept.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.9, 0.45] },
+    url: 'https://lemnity.github.io/sphgnm/',
+  },
 } satisfies Record<string, Omit<Project, 'description' | 'tags'>>
 
 /** Language-independent hero data. */
@@ -184,6 +191,11 @@ const ru = {
         ...projectBase.prostyle,
         description: 'Сувенирная продукция и корпоративные подарки',
         tags: ['Бренд', 'Интернет-магазин', 'Дизайн'],
+      },
+      {
+        ...projectBase.sphagnum,
+        description: 'Живые субстраты для зелёных крыш, вертикальных садов и интерьеров',
+        tags: ['Сайт', 'Эко', 'B2B'],
       },
     ] as Project[],
   },
@@ -351,6 +363,11 @@ const en: Content = {
         ...projectBase.prostyle,
         description: 'Branded merchandise and corporate gifts',
         tags: ['Brand', 'E-commerce', 'Design'],
+      },
+      {
+        ...projectBase.sphagnum,
+        description: 'Living substrates for green roofs, vertical gardens and interiors',
+        tags: ['Website', 'Eco', 'B2B'],
       },
     ],
   },

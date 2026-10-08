@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import ArrowForward from '@mui/icons-material/ArrowForward'
-import { LayoutGroup, motion } from 'motion/react'
+import { AnimatePresence, LayoutGroup, motion } from 'motion/react'
 import { visuallyHidden } from '@mui/utils'
 import { colors, contentSx, microLabel, outlinedIconButtonSx, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
@@ -78,7 +78,7 @@ export default function Projects() {
           {announce}
         </Box>
 
-        {/* Cards: one large + two stacked; arrows rotate which project is large. */}
+        {/* Cards: one large + two stacked; arrows rotate every project through the three slots. */}
         <LayoutGroup id="projects">
           <Box
             id="work-grid"
@@ -91,14 +91,19 @@ export default function Projects() {
               height: { md: 548, lg: 560 },
             }}
           >
-            {order.map((itemIndex, slot) => {
+            <AnimatePresence initial={false} mode="popLayout">
+            {order.slice(0, AREAS.length).map((itemIndex, slot) => {
               const project = items[itemIndex]
               return (
                 <motion.div
                   key={project.id}
                   layoutId={`project-${project.id}`}
                   layout
-                  transition={{ layout: { duration: 0.8, ease } }}
+                  // A project rotating in/out of the visible three fades rather than popping.
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ layout: { duration: 0.8, ease }, opacity: { duration: 0.5 }, scale: { duration: 0.8, ease } }}
                   style={{ gridArea: AREAS[slot], display: 'flex', minWidth: 0, minHeight: 0 }}
                 >
                   <motion.div
@@ -113,6 +118,7 @@ export default function Projects() {
                 </motion.div>
               )
             })}
+            </AnimatePresence>
           </Box>
         </LayoutGroup>
       </Box>
