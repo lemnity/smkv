@@ -205,25 +205,27 @@ export default function ProjectCard({ project, size }: Props) {
               >
                 {project.description}
               </Typography>
-              <IconButton
-                className="pc-arrow"
-                component="a"
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${projects.openLabel} ${project.title}`}
-                sx={{
-                  ...outlinedIconButtonSx,
-                  width: 40,
-                  height: 40,
-                  mt: large ? 3.5 : 2.5,
-                  pointerEvents: 'auto',
-                  borderColor: 'rgba(244,241,236,0.35)',
-                  '& svg': { fontSize: 18, transition: 'transform .45s cubic-bezier(0.22,1,0.36,1)' },
-                }}
-              >
-                <ArrowForward />
-              </IconButton>
+              {project.url && (
+                <IconButton
+                  className="pc-arrow"
+                  component="a"
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${projects.openLabel} ${project.title}`}
+                  sx={{
+                    ...outlinedIconButtonSx,
+                    width: 40,
+                    height: 40,
+                    mt: large ? 3.5 : 2.5,
+                    pointerEvents: 'auto',
+                    borderColor: 'rgba(244,241,236,0.35)',
+                    '& svg': { fontSize: 18, transition: 'transform .45s cubic-bezier(0.22,1,0.36,1)' },
+                  }}
+                >
+                  <ArrowForward />
+                </IconButton>
+              )}
             </Box>
           </motion.div>
 

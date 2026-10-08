@@ -43,7 +43,8 @@ export interface Project {
   /** Rendered with a `#` prefix. */
   tags: string[]
   image: ProjectImage
-  url: string
+  /** External site; omit while the project has no public link (the card shows no arrow). */
+  url?: string
   /** Original logo shown instead of the typed title (white artwork on transparent). */
   logo?: { src: string; width: number; height: number }
 }
@@ -73,7 +74,7 @@ const projectBase = {
     number: '02',
     title: 'Tumtipb',
     image: { src: `${BASE}assets/tumtipb-concept.png`, width: 282, height: 174, crop: { x: 0, y: 4, w: 276, h: 158 }, focus: [0, 0.5] },
-    url: 'https://tumtipb.ru',
+    url: 'https://new.tumtipb.ru',
   },
   prostyle: {
     id: 'prostyle',
@@ -81,7 +82,6 @@ const projectBase = {
     title: 'ProStyle',
     logo: { src: `${BASE}clients/prostyle.svg`, width: 340, height: 92 },
     image: { src: `${BASE}assets/prostyle-concept.png`, width: 282, height: 176, crop: { x: 0, y: 0, w: 276, h: 170 }, focus: [0, 0.5] },
-    url: 'https://prostyle.gifts',
   },
 } satisfies Record<string, Omit<Project, 'description' | 'tags'>>
 
