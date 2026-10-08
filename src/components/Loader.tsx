@@ -1,51 +1,62 @@
-import { useEffect, useId, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import { visuallyHidden } from '@mui/utils'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { colors, fonts } from '../theme'
+import { colors } from '../theme'
 
 /*
- * "SIMAKOOV°" preloader: wavy ribbons flow diagonally inside the letterforms.
- * Effect adapted from "The Xandali Effect: Animated Logo" by Gray Ghost (MIT),
- * https://codepen.io/grayghostvisuals/pen/pjbNQY — the word is a clipPath and
- * a stack of wave bands slides through it. The original GreenSock timeline is
- * replaced by a CSS transform loop; the palette follows the site's accent.
+ * Stroke-drawn "Simakoov" preloader.
+ * Technique adapted from "Stroke Logo Animation" by Jon Kantner (MIT),
+ * https://codepen.io/jkantner/pen/dyZjWvG — three stacked copies of the logo
+ * draw themselves with a stagger, the faint ones leaving a trail behind the
+ * solid one.
  */
 
-/** viewBox size; the word is stretched to fill `TEXT_WIDTH`. */
-const W = 760
-const H = 150
-const TEXT_X = 10
-const TEXT_WIDTH = 690
-const BASELINE = 128
-
-/** Wave band geometry. One loop moves the stack by one colour period. */
-const BAND = 20
-const AMPLITUDE = 9
-const WAVELENGTH = 190
-const BAND_COLORS = [colors.gold, colors.goldLight, '#3d4a08', colors.goldDark, colors.text, '#161c02']
-const PERIOD = BAND * BAND_COLORS.length
-/** Seconds per seamless loop. */
-const LOOP = 2.4
-
-/** Shortest time the logo stays up, and a hard cap so a slow `load` never blocks the page. */
-const MIN_VISIBLE_MS = 2600
+/** Seconds one layer takes to draw the whole word. */
+const DRAW = 2
+/** Delay of each stacked layer and its opacity. */
+const LAYERS = [
+  { delay: 0, opacity: 0.2 },
+  { delay: 0.33, opacity: 0.2 },
+  { delay: 0.67, opacity: 1 },
+] as const
+/** Pause on the finished logo before the overlay leaves. */
+const HOLD = 0.35
+const MIN_VISIBLE_MS = (LAYERS[LAYERS.length - 1].delay + DRAW + HOLD) * 1000
+/** Never block the page longer than this, even if `load` is slow. */
 const MAX_VISIBLE_MS = 6000
 
-/** Closed path for one wavy band whose top edge sits at `y`. */
-function bandPath(y: number) {
-  const x0 = -WAVELENGTH * 2
-  const x1 = W + WAVELENGTH * 2
-  const step = 10
-  const top: string[] = []
-  const bottom: string[] = []
-  for (let x = x0; x <= x1; x += step) {
-    const dy = Math.sin((x / WAVELENGTH) * Math.PI * 2) * AMPLITUDE
-    top.push(`${x},${(y + dy).toFixed(2)}`)
-    bottom.unshift(`${x},${(y + BAND + dy).toFixed(2)}`)
-  }
-  return `M${top.join('L')}L${bottom.join('L')}Z`
-}
+/**
+ * Letter strokes in a 216×48 box (baseline y=39, x-height y≈17.5).
+ * `from`/`to` are the fraction of the layer's draw time the stroke occupies,
+ * so multi-stroke letters draw in order (stem, then arch, …).
+ */
+const STROKES: { d: string; from: number; to: number }[] = [
+  // S
+  {
+    d: 'M22.672,14.012s-1.362-5.62-8.259-5.62c-6.386,0-8.536,4.088-8.6,7.493-.171,9.026,18.051,4.939,18.051,16.008,0,3.321-1.618,7.152-9.452,7.152-7.918,0-9.451-7.663-9.451-7.663',
+    from: 0,
+    to: 1,
+  },
+  // i
+  { d: 'M33,17.5V39', from: 0, to: 0.6 },
+  { d: 'M33,9.5v0.01', from: 0.6, to: 1 },
+  // m
+  { d: 'M44,17.5V39', from: 0, to: 0.4 },
+  { d: 'M44,26c0-5.3,3.2-8.6,7.5-8.6s7.5,3.3,7.5,8.6V39', from: 0.25, to: 0.75 },
+  { d: 'M59,26c0-5.3,3.2-8.6,7.5-8.6s7.5,3.3,7.5,8.6V39', from: 0.5, to: 1 },
+  // a
+  { d: 'M102.5,28.3a9.5,10.6,0,1,0,-19,0a9.5,10.6,0,1,0,19,0', from: 0, to: 0.7 },
+  { d: 'M102.5,17.5V39', from: 0.4, to: 1 },
+  // k
+  { d: 'M113,7.3V39.3', from: 0, to: 0.5 },
+  { d: 'M127.1,16.4L117.1,27L127.1,39.2', from: 0.5, to: 1 },
+  // o, o
+  { d: 'M146.5,18.3a9.9,10.5,0,1,0,0,21a9.9,10.5,0,1,0,0,-21', from: 0, to: 1 },
+  { d: 'M176,18.3a9.9,10.5,0,1,0,0,21a9.9,10.5,0,1,0,0,-21', from: 0, to: 1 },
+  // v
+  { d: 'M194.5,17.5L203.5,39L212.5,17.5', from: 0, to: 1 },
+]
 
 /** Lock page scroll while the overlay is up. */
 function useScrollLock(active: boolean) {
@@ -60,7 +71,7 @@ function useScrollLock(active: boolean) {
   }, [active])
 }
 
-/** True once the window `load` event has fired. */
+/** Resolves once the window `load` event has fired. */
 function useWindowLoaded() {
   const [loaded, setLoaded] = useState(() => document.readyState === 'complete')
   useEffect(() => {
@@ -75,29 +86,17 @@ function useWindowLoaded() {
 type LoaderProps = {
   /** Accessible status text while loading. */
   label: string
-  /** Word drawn as the logo. */
-  logo?: string
   /** Called once the overlay has started leaving — start page intros here. */
   onDone: () => void
 }
 
-export default function Loader({ label, logo = 'SIMAKOOV', onDone }: LoaderProps) {
+export default function Loader({ label, onDone }: LoaderProps) {
   const reduce = useReducedMotion()
   const loaded = useWindowLoaded()
   const [minElapsed, setMinElapsed] = useState(false)
   const [maxElapsed, setMaxElapsed] = useState(false)
   // Reduced motion: no loader at all, the page appears immediately.
   const visible = !reduce && !((loaded && minElapsed) || maxElapsed)
-  const clipId = `loader-clip-${useId().replace(/:/g, '')}`
-
-  // Enough bands to cover the word plus one full period of travel.
-  const bands = useMemo(() => {
-    const count = Math.ceil((H + PERIOD + AMPLITUDE * 2) / BAND) + BAND_COLORS.length
-    return Array.from({ length: count }, (_, i) => ({
-      d: bandPath(i * BAND - PERIOD - AMPLITUDE),
-      fill: BAND_COLORS[i % BAND_COLORS.length],
-    }))
-  }, [])
 
   useEffect(() => {
     if (reduce) return
@@ -114,16 +113,6 @@ export default function Loader({ label, logo = 'SIMAKOOV', onDone }: LoaderProps
   }, [visible, onDone])
 
   useScrollLock(visible)
-
-  const textProps = {
-    x: TEXT_X,
-    y: BASELINE,
-    textLength: TEXT_WIDTH,
-    lengthAdjust: 'spacingAndGlyphs',
-    fontFamily: fonts.sans,
-    fontWeight: 700,
-    fontSize: 150,
-  } as const
 
   return (
     <AnimatePresence>
@@ -143,9 +132,9 @@ export default function Loader({ label, logo = 'SIMAKOOV', onDone }: LoaderProps
             display: 'grid',
             placeItems: 'center',
             bgcolor: colors.bg,
-            '@keyframes loaderFlow': {
-              from: { transform: 'translate(0px, 0px)' },
-              to: { transform: `translate(${WAVELENGTH}px, ${PERIOD}px)` },
+            '@keyframes loaderDraw': {
+              from: { strokeDashoffset: 1 },
+              to: { strokeDashoffset: 0 },
             },
           }}
         >
@@ -155,40 +144,35 @@ export default function Loader({ label, logo = 'SIMAKOOV', onDone }: LoaderProps
           <Box
             component={motion.svg}
             aria-hidden
-            viewBox={`0 0 ${W} ${H}`}
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ scale: 1.08, opacity: 0, filter: 'blur(8px)' }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            sx={{
-              width: 'clamp(280px, 56vw, 720px)',
-              height: 'auto',
-              overflow: 'visible',
-              filter: `drop-shadow(0 0 18px ${colors.gold}22)`,
-            }}
+            viewBox="0 0 216 48"
+            fill="none"
+            stroke={colors.gold}
+            strokeWidth={3.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            exit={{ scale: 1.06, opacity: 0, filter: 'blur(6px)' }}
+            transition={{ duration: 0.6, ease: [0.65, 0, 0.35, 1] }}
+            sx={{ width: 'clamp(240px, 39vw, 480px)', height: 'auto', overflow: 'visible' }}
           >
-            <defs>
-              <clipPath id={clipId}>
-                <text {...textProps}>{logo}</text>
-              </clipPath>
-            </defs>
-
-            <g clipPath={`url(#${clipId})`}>
-              <rect width={W} height={H} fill="#0d0d0d" />
-              <Box component="g" sx={{ animation: `loaderFlow ${LOOP}s linear infinite` }}>
-                {bands.map((b, i) => (
-                  <path key={i} d={b.d} fill={b.fill} stroke="rgba(255,255,255,0.06)" strokeWidth={3} />
+            {LAYERS.map((layer) => (
+              <g key={layer.delay} opacity={layer.opacity}>
+                {STROKES.map((s) => (
+                  <Box
+                    key={s.d}
+                    component="path"
+                    d={s.d}
+                    pathLength={1}
+                    sx={{
+                      strokeDasharray: '1 1',
+                      strokeDashoffset: 1,
+                      animation: 'loaderDraw cubic-bezier(0.5, 0, 0.5, 1) both',
+                      animationDuration: `${(s.to - s.from) * DRAW}s`,
+                      animationDelay: `${layer.delay + s.from * DRAW}s`,
+                    }}
+                  />
                 ))}
-              </Box>
-            </g>
-
-            {/* Hairline outline keeps the letter edges crisp against the dark bg. */}
-            <text {...textProps} fill="none" stroke={colors.goldDark} strokeWidth={1} strokeOpacity={0.6}>
-              {logo}
-            </text>
-
-            {/* ° — same ring as the header wordmark */}
-            <circle cx={TEXT_X + TEXT_WIDTH + 30} cy={30} r={11} fill="none" stroke={colors.gold} strokeWidth={6} />
+              </g>
+            ))}
           </Box>
         </Box>
       )}
