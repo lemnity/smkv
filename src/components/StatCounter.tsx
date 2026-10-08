@@ -6,6 +6,7 @@ import { visuallyHidden } from '@mui/utils'
 import { animate, motion, useInView, useReducedMotion } from 'motion/react'
 import { colors, microLabel } from '../theme'
 import type { Stat } from '../data/content'
+import { useLang } from '../i18n'
 
 const numberSx = {
   fontSize: { xs: 36, md: 40 },
@@ -75,8 +76,9 @@ function InfinityMark() {
   // Observe the unclipped wrapper: IntersectionObserver treats a fully clipped target as not visible.
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.6 })
+  const { about } = useLang().t
   return (
-    <Box ref={ref} sx={numberSx} role="img" aria-label="бесконечность">
+    <Box ref={ref} sx={numberSx} role="img" aria-label={about.infinityLabel}>
       <motion.span
         aria-hidden
         initial={reduce ? false : { clipPath: 'inset(0 100% 0 0)' }}

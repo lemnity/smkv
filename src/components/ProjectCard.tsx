@@ -8,7 +8,8 @@ import Typography from '@mui/material/Typography'
 import ArrowForward from '@mui/icons-material/ArrowForward'
 import { motion, useReducedMotion, useSpring } from 'motion/react'
 import { colors, outlinedIconButtonSx } from '../theme'
-import { projects, type Project, type ProjectImage } from '../data/content'
+import type { Project, ProjectImage } from '../data/content'
+import { useLang } from '../i18n'
 
 export type CardSize = 'large' | 'small'
 
@@ -67,6 +68,7 @@ interface Props {
 }
 
 export default function ProjectCard({ project, size }: Props) {
+  const { projects } = useLang().t
   const large = size === 'large'
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()

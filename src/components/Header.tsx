@@ -16,7 +16,8 @@ import Instagram from '@mui/icons-material/Instagram'
 import MailOutline from '@mui/icons-material/MailOutlineOutlined'
 import { motion, useMotionValueEvent, useScroll } from 'motion/react'
 import { HEADER_HEIGHT, colors, contentSx, hoverUnderlineSx, microLabel, outlinedIconButtonSx } from '../theme'
-import { header, nav } from '../data/content'
+import { useLang } from '../i18n'
+import LangSwitch from './LangSwitch'
 import { scrollToHash } from '../utils/scrollTo'
 import Wordmark from './Wordmark'
 import { useIntroReady } from './intro'
@@ -31,6 +32,8 @@ const contactIcons: Record<string, typeof Telegram> = {
 
 export default function Header() {
   const ready = useIntroReady()
+  const { t } = useLang()
+  const { header, nav } = t
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const { scrollY } = useScroll()
@@ -96,13 +99,15 @@ export default function Header() {
               ))}
             </Stack>
 
-            <Stack direction="row" spacing={2} sx={{ justifySelf: 'end', alignItems: 'center' }}>
+            <Stack direction="row" spacing={{ xs: 1, sm: 1.5, lg: 2 }} sx={{ justifySelf: 'end', alignItems: 'center' }}>
+              <LangSwitch />
               <IconButton aria-label={header.drawer.openLabel} onClick={() => setOpen(true)} sx={outlinedIconButtonSx}>
                 {/* CSS toggle (no useMediaQuery) so the right icon renders on first paint. */}
                 <Menu fontSize="small" sx={{ display: { xs: 'block', md: 'none' } }} />
                 <MoreHoriz fontSize="small" sx={{ display: { xs: 'none', md: 'block' } }} />
               </IconButton>
-              <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+              {/* Two-line tagline only where the right column has room for it next to the switch. */}
+              <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
                 {header.tagline.map((line) => (
                   <Typography key={line} sx={{ ...microLabel, fontSize: 10, letterSpacing: '0.2em', lineHeight: 1.6 }}>
                     {line}
@@ -169,6 +174,11 @@ export default function Header() {
         </Stack>
 
         <Box sx={{ mt: 'auto', pt: 6 }}>
+          <Divider sx={{ mb: 3 }} />
+          <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+            <Typography sx={{ ...microLabel, color: colors.muted }}>{header.drawer.languageLabel}</Typography>
+            <LangSwitch size="large" />
+          </Stack>
           <Divider sx={{ mb: 3 }} />
           <Typography sx={{ ...microLabel, color: colors.muted, mb: 2 }}>{header.drawer.contactsLabel}</Typography>
           <Stack spacing={1.5}>

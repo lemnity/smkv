@@ -9,12 +9,10 @@ import MoreHoriz from '@mui/icons-material/MoreHoriz'
 import { visuallyHidden } from '@mui/utils'
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'motion/react'
 import { colors, contentSx, fonts, hoverUnderlineSx, microLabel, outlinedIconButtonSx, sectionTitleSx } from '../theme'
-import { about, contacts } from '../data/content'
+import { useLang } from '../i18n'
 import { Reveal } from './effects'
 import GoldDot from './GoldDot'
 import StatCounter from './StatCounter'
-
-const mailto = `mailto:${contacts.email}`
 
 function Word({ children, progress, range }: { children: string; progress: MotionValue<number>; range: [number, number] }) {
   const opacity = useTransform(progress, range, [0.15, 1])
@@ -25,6 +23,7 @@ function Word({ children, progress, range }: { children: string; progress: Motio
 function Quote() {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
+  const { about } = useLang().t
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.95', 'end 0.85'] })
   const words = about.quote.map((line) => line.split(' '))
   const total = words.flat().length
@@ -80,6 +79,7 @@ function Quote() {
 
 /** Whole row (circle + label) is a single mailto link; the circle is decorative and reacts to the link's hover/focus. */
 function CreateTogether() {
+  const { about } = useLang().t
   const circleActive = {
     borderColor: colors.gold,
     boxShadow: '0 0 24px rgba(196,238,24,0.35)',
@@ -87,7 +87,7 @@ function CreateTogether() {
   return (
     <Stack
       component="a"
-      href={mailto}
+      href={about.moreHref}
       aria-label={about.ctaLabel}
       direction="row"
       spacing={3}
@@ -156,6 +156,7 @@ function CreateTogether() {
 }
 
 export default function About() {
+  const { about } = useLang().t
   return (
     <Box component="section" id="about" aria-labelledby="about-title">
       <Box

@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box'
 import { motion, useTransform, type MotionValue } from 'motion/react'
 import { colors } from '../../theme'
-import { hero } from '../../data/content'
+import { useLang } from '../../i18n'
 import { useIntroReady } from '../intro'
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -75,6 +75,7 @@ function Halo({ px, py, reduce }: { px: MotionValue<number>; py: MotionValue<num
 
 export default function HeroPortrait({ scrollY, px, py, reduce, children }: Props) {
   const ready = useIntroReady()
+  const { hero } = useLang().t
   const x = useTransform(px, (v) => v * 12)
   const y = useTransform(py, (v) => v * 12)
 

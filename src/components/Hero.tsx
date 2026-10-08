@@ -7,7 +7,7 @@ import Link from '@mui/material/Link'
 import ArrowForward from '@mui/icons-material/ArrowForward'
 import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
 import { HEADER_HEIGHT, colors, contentSx, hoverUnderlineSx, microLabel } from '../theme'
-import { contacts, hero } from '../data/content'
+import { useLang } from '../i18n'
 import { scrollToHash } from '../utils/scrollTo'
 import { MagneticButton } from './effects'
 import GoldDot from './GoldDot'
@@ -46,6 +46,7 @@ export default function Hero() {
   const ref = useRef<HTMLElement>(null)
   const reduce = useReducedMotion()
   const ready = useIntroReady()
+  const { hero } = useLang().t
 
   // Scroll: portrait parallax + copy fade-out as the hero leaves the viewport.
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
@@ -172,7 +173,7 @@ export default function Hero() {
                 </MagneticButton>
                 <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
                   <Link
-                    href={`mailto:${contacts.email}`}
+                    href={hero.writeHref}
                     sx={{
                       fontSize: 15,
                       color: colors.text,

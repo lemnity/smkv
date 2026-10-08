@@ -8,7 +8,7 @@ import ArrowForward from '@mui/icons-material/ArrowForward'
 import { LayoutGroup, motion } from 'motion/react'
 import { visuallyHidden } from '@mui/utils'
 import { colors, contentSx, microLabel, outlinedIconButtonSx, sectionTitleSx } from '../theme'
-import { projects } from '../data/content'
+import { useLang } from '../i18n'
 import { Reveal } from './effects'
 import ProjectCard from './ProjectCard'
 
@@ -17,16 +17,16 @@ const ease = [0.22, 1, 0.36, 1] as const
 const AREAS = ['big', 'top', 'bottom'] as const
 
 export default function Projects() {
+  const { projects } = useLang().t
   const items = projects.items
   // order[slot] = index into items
   const [order, setOrder] = useState(() => items.map((_, i) => i))
   // Only announce after the user navigates, not on initial render.
-  const [announce, setAnnounce] = useState('')
-  const featured = (o: number[]) => `${items[o[0]].number} / ${items.length}: ${items[o[0]].title}`
+  const [announced, setAnnounced] = useState(false)
+  const announce = announced ? `${items[order[0]].number} / ${items.length}: ${items[order[0]].title}` : ''
   const rotate = (fn: (o: number[]) => number[]) => {
-    const o = fn(order)
-    setOrder(o)
-    setAnnounce(featured(o))
+    setOrder(fn(order))
+    setAnnounced(true)
   }
   const next = () => rotate((o) => [...o.slice(1), o[0]])
   const prev = () => rotate((o) => [o[o.length - 1], ...o.slice(0, -1)])

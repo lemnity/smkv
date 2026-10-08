@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import ButtonBase from '@mui/material/ButtonBase'
 import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
@@ -17,15 +16,20 @@ import ZoomIn from '@mui/icons-material/ZoomIn'
 import { motion } from 'motion/react'
 import { visuallyHidden } from '@mui/utils'
 import { colors, contentSx, microLabel, outlinedIconButtonSx, sectionTitleSx } from '../theme'
-import { gallery } from '../data/content'
+import { useLang } from '../i18n'
+import type { Lang } from '../data/content'
 import { works } from '../data/works'
 import type { Work } from '../data/works'
 import { Reveal } from './effects'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const pad = (n: number) => String(n).padStart(2, '0')
+const altOf = (work: Work, lang: Lang) => (lang === 'en' ? work.altEn : work.alt)
 
 function Tile({ work, index, cols, onOpen }: { work: Work; index: number; cols: number; onOpen: (i: number) => void }) {
+  const { lang, t } = useLang()
+  const gallery = t.gallery
+  const alt = altOf(work, lang)
   return (
     <ImageListItem sx={{ mb: 0 }}>
       <motion.div
@@ -36,7 +40,7 @@ function Tile({ work, index, cols, onOpen }: { work: Work; index: number; cols: 
       >
         <ButtonBase
           onClick={() => onOpen(index)}
-          aria-label={`${gallery.openLabel}: ${work.alt}`}
+          aria-label={`${gallery.openLabel}: ${alt}`}
           aria-haspopup="dialog"
           sx={{
             display: 'block',
@@ -89,7 +93,7 @@ function Tile({ work, index, cols, onOpen }: { work: Work; index: number; cols: 
             },
           }}
         >
-          <img src={work.thumb} alt={work.alt} width={work.width} height={work.height} loading="lazy" decoding="async" />
+          <img src={work.thumb} alt={alt} width={work.width} height={work.height} loading="lazy" decoding="async" />
           <Box className="tile-overlay" aria-hidden="true">
             <Box className="tile-icon">
               <ZoomIn />
@@ -106,6 +110,9 @@ function Lightbox({ index, onClose, onChange }: { index: number | null; onClose:
   const total = works.length
   const open = index !== null
   const work = open ? works[index] : null
+  const { lang, t } = useLang()
+  const gallery = t.gallery
+  const alt = work ? altOf(work, lang) : ''
 
   const go = useCallback(
     (dir: 1 | -1) => {
@@ -181,7 +188,7 @@ function Lightbox({ index, onClose, onChange }: { index: number | null; onClose:
               <Box component="span" sx={visuallyHidden}>
                 {gallery.dialogLabel}:{' '}
               </Box>
-              {work.alt}
+              {alt}
             </Typography>
             <IconButton aria-label={gallery.closeLabel} onClick={onClose} sx={{ ...outlinedIconButtonSx, flexShrink: 0 }}>
               <Close sx={{ fontSize: 20 }} />
@@ -198,7 +205,7 @@ function Lightbox({ index, onClose, onChange }: { index: number | null; onClose:
             <Box
               ref={scrollRef}
               tabIndex={0}
-              aria-label={work.alt}
+              aria-label={alt}
               sx={{
                 height: '100%',
                 overflowY: 'auto',
@@ -219,7 +226,7 @@ function Lightbox({ index, onClose, onChange }: { index: number | null; onClose:
                 <motion.img
                   key={work.full}
                   src={work.full}
-                  alt={work.alt}
+                  alt={alt}
                   width={work.fullWidth}
                   height={work.fullHeight}
                   decoding="async"
@@ -243,12 +250,10 @@ export default function Gallery() {
   const isWide = useMediaQuery('(min-width:1440px)', { noSsr: true })
   const cols = isWide ? 4 : isMd ? 3 : 2
 
-  const [visible, setVisible] = useState(gallery.initialCount)
+  const { gallery } = useLang().t
   const [active, setActive] = useState<number | null>(null)
   const close = useCallback(() => setActive(null), [])
 
-  const shown = works.slice(0, visible)
-  const rest = works.length - visible
 
   return (
     <Box component="section" id="gallery" aria-labelledby="gallery-title">
@@ -279,26 +284,10 @@ export default function Gallery() {
         </Reveal>
 
         <ImageList id="gallery-grid" variant="masonry" cols={cols} gap={cols === 2 ? 12 : 18} sx={{ m: 0, overflow: 'visible' }}>
-          {shown.map((work, i) => (
+          {works.map((work, i) => (
             <Tile key={work.thumb} work={work} index={i} cols={cols} onOpen={setActive} />
           ))}
         </ImageList>
-
-        {rest > 0 && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: { xs: 4, md: 6 } }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              aria-controls="gallery-grid"
-              onClick={() => setVisible((v) => Math.min(works.length, v + gallery.batchSize))}
-            >
-              {gallery.more}
-              <Box component="span" sx={{ ml: 1, color: colors.muted, fontVariantNumeric: 'tabular-nums' }}>
-                {pad(rest)}
-              </Box>
-            </Button>
-          </Box>
-        )}
       </Box>
 
       <Lightbox index={active} onClose={close} onChange={setActive} />

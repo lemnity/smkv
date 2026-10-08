@@ -3,7 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import { useCallback, useState } from 'react'
-import { MotionConfig } from 'motion/react'
+import { MotionConfig, motion } from 'motion/react'
 import theme, { contentSx } from './theme'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -13,7 +13,7 @@ import Gallery from './components/Gallery'
 import About from './components/About'
 import Loader from './components/Loader'
 import { IntroContext } from './components/intro'
-import { loader } from './data/content'
+import { LANG_FADE, LanguageProvider, useLang } from './i18n'
 import { CustomCursor, GrainOverlay, ScrollProgress } from './components/effects'
 
 function SectionDivider() {
@@ -24,33 +24,49 @@ function SectionDivider() {
   )
 }
 
-export default function App() {
+/** Page body; crossfades briefly while the language switches (opacity only, no remount). */
+function Page() {
   const [introReady, setIntroReady] = useState(false)
   const handleLoaderDone = useCallback(() => setIntroReady(true), [])
+  const { t, fading } = useLang()
 
+  return (
+    <IntroContext.Provider value={introReady}>
+      <ScrollProgress />
+      <Header />
+      <motion.div
+        initial={false}
+        animate={{ opacity: fading ? 0 : 1 }}
+        transition={{ duration: LANG_FADE, ease: 'easeInOut' }}
+      >
+        <Box component="main">
+          <Hero />
+          <SectionDivider />
+          <Projects />
+          <SectionDivider />
+          <Gallery />
+          <SectionDivider />
+          <About />
+          <SectionDivider />
+        </Box>
+        <Footer />
+      </motion.div>
+      <GrainOverlay />
+      <CustomCursor />
+      <Loader label={t.loader.label} onDone={handleLoaderDone} />
+    </IntroContext.Provider>
+  )
+}
+
+export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <MotionConfig reducedMotion="user">
-        <IntroContext.Provider value={introReady}>
-          <ScrollProgress />
-          <Header />
-          <Box component="main">
-            <Hero />
-            <SectionDivider />
-            <Projects />
-            <SectionDivider />
-            <Gallery />
-            <SectionDivider />
-            <About />
-            <SectionDivider />
-          </Box>
-          <Footer />
-          <GrainOverlay />
-          <CustomCursor />
-          <Loader label={loader.label} onDone={handleLoaderDone} />
-        </IntroContext.Provider>
-      </MotionConfig>
+      <LanguageProvider>
+        <MotionConfig reducedMotion="user">
+          <Page />
+        </MotionConfig>
+      </LanguageProvider>
     </ThemeProvider>
   )
 }

@@ -3,11 +3,12 @@ import Stack from '@mui/material/Stack'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { colors, contentSx, hoverUnderlineSx, microLabel } from '../theme'
-import { footer } from '../data/content'
+import { useLang } from '../i18n'
 import Wordmark from './Wordmark'
 import GoldDot from './GoldDot'
 
 export default function Footer() {
+  const { footer } = useLang().t
   return (
     <Box component="footer" id="contact">
       <Box

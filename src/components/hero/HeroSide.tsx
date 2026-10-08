@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import Language from '@mui/icons-material/Language'
 import { motion } from 'motion/react'
 import { colors, fonts, microLabel } from '../../theme'
-import { hero } from '../../data/content'
+import { useLang } from '../../i18n'
 import { useIntroReady } from '../intro'
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -31,6 +31,7 @@ const spinSx = {
  */
 export function Signature({ size = 64, reduce, inView = false }: { size?: number; reduce: Reduce; inView?: boolean }) {
   const ready = useIntroReady()
+  const { hero } = useLang().t
   const delay = inView ? 0.15 : 0.8
   const write = {
     hidden: { clipPath: 'inset(0% 100% 0% 0%)' },
@@ -75,6 +76,7 @@ export function Signature({ size = 64, reduce, inView = false }: { size?: number
 /** Desktop far-right column: labels, signature, places + rotating globe. */
 export function HeroSideColumn({ reduce }: { reduce: Reduce }) {
   const ready = useIntroReady()
+  const { hero } = useLang().t
   return (
     <Stack
       sx={{
@@ -122,6 +124,7 @@ export function HeroSideColumn({ reduce }: { reduce: Reduce }) {
 /** Mobile: all side labels collapsed into one wrapping row. */
 export function HeroSideRow({ reduce }: { reduce: Reduce }) {
   const ready = useIntroReady()
+  const { hero } = useLang().t
   const items = [...hero.side.top, `${hero.side.est} ${hero.side.year}`, ...hero.places]
   return (
     <motion.div {...fadeIn(0.9, reduce, ready)}>
