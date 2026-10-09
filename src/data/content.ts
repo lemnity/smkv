@@ -118,7 +118,7 @@ const drawerContacts = [
 const ru = {
   /** <title>, meta description and Open Graph (applied at runtime on language change). */
   meta: {
-    title: 'SIMAKOV — Делаю сложное простым',
+    title: 'SIMAKOOV — Делаю сложное простым',
     description:
       'Александр Симаков — дизайнер, продюсер и основатель. Создаю цифровые продукты, бренды и пользовательские опыты, которые помогают людям и бизнесу расти.',
     ogDescription: 'Создаю цифровые продукты, бренды и пользовательские опыты, которые помогают людям и бизнесу расти.',
@@ -137,12 +137,12 @@ const ru = {
     { label: 'КОНТАКТЫ', href: '#contact' },
   ],
   loader: {
-    label: 'Загрузка сайта SIMAKOV',
+    label: 'Загрузка сайта SIMAKOOV',
   },
   header: {
     wordmark: 'SIMAKOOV',
     tagline: ['СОЗДАВАТЬ', 'БОЛЬШЕ, ЧЕМ ОЖИДАЮТ'],
-    homeLabel: 'SIMAKOV — наверх',
+    homeLabel: 'SIMAKOOV — наверх',
     drawer: {
       openLabel: 'Открыть меню',
       closeLabel: 'Закрыть меню',
@@ -291,7 +291,7 @@ export type Content = typeof ru
 
 const en: Content = {
   meta: {
-    title: 'SIMAKOV — Complex made simple',
+    title: 'SIMAKOOV — Complex made simple',
     description:
       'Alexander Simakov — designer, producer and founder. I build digital products, brands and user experiences that help people and businesses grow.',
     ogDescription: 'I build digital products, brands and user experiences that help people and businesses grow.',
@@ -309,12 +309,12 @@ const en: Content = {
     { label: 'CONTACT', href: '#contact' },
   ],
   loader: {
-    label: 'Loading SIMAKOV',
+    label: 'Loading SIMAKOOV',
   },
   header: {
     wordmark: 'SIMAKOOV',
     tagline: ['CREATING', 'BEYOND EXPECTATIONS'],
-    homeLabel: 'SIMAKOV — back to top',
+    homeLabel: 'SIMAKOOV — back to top',
     drawer: {
       openLabel: 'Open menu',
       closeLabel: 'Close menu',

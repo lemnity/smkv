@@ -19,4 +19,4 @@ export const feedbackFallbackEmail = 'thesimakov@gmail.com'
 export const feedbackTimeoutMs = 15_000
 
 /** Subject of the letter the owner receives (always Russian — it is read by the owner). */
-export const feedbackSubject = (name: string) => `Заявка с сайта SIMAKOV — ${name}`
+export const feedbackSubject = (name: string) => `Заявка с сайта SIMAKOOV — ${name}`
