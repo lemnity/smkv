@@ -8,6 +8,8 @@ import theme, { contentSx } from './theme'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
+import Services from './components/Services'
+import Faq from './components/Faq'
 import Projects from './components/Projects'
 import Gallery from './components/Gallery'
 import Clients from './components/Clients'
@@ -45,6 +47,8 @@ function Page() {
         <Box component="main">
           <Hero />
           <SectionDivider />
+          <Services />
+          <SectionDivider />
           <Projects />
           <SectionDivider />
           <Gallery />
@@ -52,6 +56,8 @@ function Page() {
           <Clients />
           <SectionDivider />
           <About />
+          <SectionDivider />
+          <Faq />
           <SectionDivider />
         </Box>
         <Footer />
