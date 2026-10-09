@@ -91,3 +91,12 @@ npm run preview   # локальный просмотр собранной ве�
 - В настройках репозитория: Settings → Pages → Source = «GitHub Actions».
 - Сайт живёт в подпапке `/smkv/`, поэтому сборка идёт с `BASE_PATH=/smkv/`. Пути к файлам из `public/` в коде собираются через `BASE` из `src/utils/base.ts` — не пишите их как `/assets/...`.
 - При переходе на свой домен (CNAME) уберите `BASE_PATH` из workflow.
+
+## Сервер simakoov.ru
+
+Основной адрес сайта — https://simakoov.ru (www.simakoov.ru тоже работает). DNS домена (reg.ru) указывает на VPS `153.76.160.216` (Ubuntu 24.04, ISPmanager).
+
+- Файлы сайта: `/var/www/simakoov.ru`, конфиг nginx: `/etc/nginx/sites-available/simakoov.ru` (вне управления ISPmanager).
+- HTTPS: сертификат Let's Encrypt через certbot, продлевается автоматически; http → https.
+- Выгрузка: `npm run deploy` — собирает сайт и заливает его на сервер по ssh (нужен доступ `root@153.76.160.216`, лучше по ssh-ключу). Хост и папку можно переопределить через `DEPLOY_HOST` / `DEPLOY_DIR`.
+
