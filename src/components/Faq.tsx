@@ -29,13 +29,13 @@ export default function Faq() {
           </Reveal>
           <Reveal delay={0.1}>
             <Box>
-              {copy.items.map((item) => (
+              {copy.items.map((item, i) => (
                 <Accordion
                   key={item.q}
                   disableGutters
                   elevation={0}
                   square
-                  slotProps={{ transition: { unmountOnExit: false } }}
+                  slotProps={{ transition: { unmountOnExit: false }, region: { id: `faq-a${i}`, 'aria-labelledby': `faq-q${i}` } }}
                   sx={{
                     bgcolor: 'transparent',
                     backgroundImage: 'none',
@@ -45,14 +45,16 @@ export default function Faq() {
                     '&:first-of-type': { borderTop: `1px solid ${colors.line}` },
                     '& .MuiAccordionSummary-expandIconWrapper': { color: colors.gold },
                     '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': { transform: 'rotate(135deg)' },
-                    '&:hover .MuiAccordionSummary-content h3': { color: colors.goldLight },
+                    '&:hover .MuiAccordionSummary-content .MuiTypography-root': { color: colors.goldLight },
                   }}
                 >
                   <AccordionSummary
+                    id={`faq-q${i}`}
+                    aria-controls={`faq-a${i}`}
                     expandIcon={<Add />}
                     sx={{ px: 0, py: { xs: 0.5, md: 1 }, '& .MuiAccordionSummary-content': { my: 1.5 } }}
                   >
-                    <Typography component="h3" sx={{ fontSize: { xs: 17, md: 20 }, fontWeight: 500, lineHeight: 1.3, transition: 'color .3s' }}>
+                    <Typography component="span" sx={{ display: 'block', fontSize: { xs: 17, md: 20 }, fontWeight: 500, lineHeight: 1.3, transition: 'color .3s' }}>
                       {item.q}
                     </Typography>
                   </AccordionSummary>

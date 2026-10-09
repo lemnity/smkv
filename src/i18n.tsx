@@ -27,6 +27,8 @@ function detectLang(): Lang {
   } catch {
     // storage unavailable (private mode etc.)
   }
+  // Crawlers get RU: it is the primary indexed language (static fallback + FAQPage JSON-LD are RU).
+  if (typeof navigator !== 'undefined' && /bot|crawl|spider|slurp|yandex|google|bing|duckduck|baidu|lighthouse|headless/i.test(navigator.userAgent)) return 'ru'
   const nav = typeof navigator !== 'undefined' ? navigator.language || '' : ''
   return nav.toLowerCase().startsWith('ru') ? 'ru' : 'en'
 }
