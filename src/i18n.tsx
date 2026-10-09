@@ -43,6 +43,8 @@ function applyDocument(lang: Lang) {
   setMeta('meta[property="og:title"]', meta.title)
   setMeta('meta[property="og:description"]', meta.ogDescription)
   setMeta('meta[property="og:locale"]', meta.ogLocale)
+  setMeta('meta[property="og:locale:alternate"]', lang === 'ru' ? 'en_US' : 'ru_RU')
+  // canonical and og:url stay fixed on https://simakoov.ru/ (set in index.html)
   setMeta('meta[property="og:image:alt"]', meta.ogImageAlt)
 }
 

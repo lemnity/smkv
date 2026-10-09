@@ -118,9 +118,9 @@ const drawerContacts = [
 const ru = {
   /** <title>, meta description and Open Graph (applied at runtime on language change). */
   meta: {
-    title: 'SIMAKOOV — Делаю сложное простым',
+    title: 'SIMAKOOV — разработка сайтов и UI/UX дизайн, Тюмень',
     description:
-      'Александр Симаков — дизайнер, продюсер и основатель. Создаю цифровые продукты, бренды и пользовательские опыты, которые помогают людям и бизнесу расти.',
+      'Александр Симаков (SIMAKOOV): разработчик и UI/UX дизайнер из Тюмени. Сайты, веб-приложения, интерфейсы и бренды. 12+ лет, 50+ проектов. Работаю удалённо.',
     ogDescription: 'Создаю цифровые продукты, бренды и пользовательские опыты, которые помогают людям и бизнесу расти.',
     ogLocale: 'ru_RU',
     ogImageAlt: 'Александр Симаков',
@@ -291,9 +291,9 @@ export type Content = typeof ru
 
 const en: Content = {
   meta: {
-    title: 'SIMAKOOV — Complex made simple',
+    title: 'SIMAKOOV — web developer & UI/UX designer, Tyumen',
     description:
-      'Alexander Simakov — designer, producer and founder. I build digital products, brands and user experiences that help people and businesses grow.',
+      'Alexander Simakov (SIMAKOOV): developer and UI/UX designer from Tyumen. Websites, web apps, interfaces and brands. 12+ years, 50+ projects. Remote worldwide.',
     ogDescription: 'I build digital products, brands and user experiences that help people and businesses grow.',
     ogLocale: 'en_US',
     ogImageAlt: 'Alexander Simakov',
