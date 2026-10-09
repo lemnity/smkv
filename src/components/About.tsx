@@ -15,17 +15,41 @@ import GoldDot from './GoldDot'
 import StatCounter from './StatCounter'
 import { useFeedback } from './feedback/context'
 
-function Word({ children, progress, range }: { children: string; progress: MotionValue<number>; range: [number, number] }) {
-  const opacity = useTransform(progress, range, [0.15, 1])
-  return <motion.span style={{ opacity }}>{children}</motion.span>
+/*
+ * Scroll Reveal — after React Bits (https://reactbits.dev/c/text-animations/scroll-reveal):
+ * the block straightens from a slight tilt while words fade in from 10% and un-blur,
+ * staggered and scrubbed to scroll. GSAP ScrollTrigger is replaced by motion's useScroll.
+ */
+const BASE_OPACITY = 0.1
+const BASE_ROTATION = 3
+const BLUR = 4
+/**
+ * Gap between word starts, in units of one word's tween (GSAP `stagger`). The demo uses
+ * 0.05 on a ~60-word paragraph, which reads as a wave; this quote is ~8 words, so the gap
+ * is scaled to keep the same sweep.
+ */
+const staggerFor = (total: number) => Math.max(0.05, 2.5 / total)
+
+function Word({ children, progress, index, total }: { children: string; progress: MotionValue<number>; index: number; total: number }) {
+  // Timeline like GSAP's: each word tweens for 1 unit, starting `index * STAGGER` in.
+  const stagger = staggerFor(total)
+  const span = 1 + (total - 1) * stagger
+  const local = useTransform(progress, (p) => Math.min(1, Math.max(0, p * span - index * stagger)))
+  const opacity = useTransform(local, [0, 1], [BASE_OPACITY, 1])
+  const filter = useTransform(local, (t) => `blur(${((1 - t) * BLUR).toFixed(2)}px)`)
+  return <motion.span style={{ opacity, filter, display: 'inline-block', whiteSpace: 'pre' }}>{children}</motion.span>
 }
 
-/** Quote whose words light up one by one, scrubbed to scroll position. */
+/** Quote revealed word by word as it scrolls into view. */
 function Quote() {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
   const { about } = useLang().t
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.95', 'end 0.85'] })
+  // The quote is short, so ranges are tied to its top edge (React Bits' 'bottom bottom' end
+  // would come before the start). Both run across most of its trip up the viewport, like the demo.
+  const { scrollYProgress: wordsProgress } = useScroll({ target: ref, offset: ['start 0.92', 'start 0.25'] })
+  const { scrollYProgress: tiltProgress } = useScroll({ target: ref, offset: ['start end', 'start 0.25'] })
+  const rotate = useTransform(tiltProgress, [0, 1], [BASE_ROTATION, 0])
   const words = about.quote.map((line) => line.split(' '))
   const total = words.flat().length
   let i = 0
@@ -44,15 +68,18 @@ function Quote() {
           transform: 'rotate(180deg)',
         }}
       />
+      <motion.div style={reduce ? undefined : { rotate, transformOrigin: '0% 50%' }}>
       <Typography
         component="blockquote"
         sx={{
           m: 0,
-          fontFamily: fonts.serif,
-          fontWeight: 400,
-          fontSize: { xs: 26, sm: 30, md: 26, lg: 34 },
+          // Large bold white text, as in the React Bits demo.
+          fontFamily: fonts.sans,
+          fontWeight: 600,
+          fontSize: { xs: 30, sm: 36, md: 34, lg: 46 },
           lineHeight: 1.2,
-          color: colors.quote,
+          letterSpacing: '-0.02em',
+          color: colors.text,
         }}
       >
         <Box component="span" sx={visuallyHidden}>
@@ -66,7 +93,7 @@ function Quote() {
               return reduce ? (
                 <span key={wi}>{word}</span>
               ) : (
-                <Word key={wi} progress={scrollYProgress} range={[idx / total, (idx + 1) / total]}>
+                <Word key={wi} progress={wordsProgress} index={idx} total={total}>
                   {word}
                 </Word>
               )
@@ -74,6 +101,7 @@ function Quote() {
           </Box>
         ))}
       </Typography>
+      </motion.div>
     </Box>
   )
 }
