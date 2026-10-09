@@ -109,9 +109,11 @@ export default function Services() {
             }}
           >
             {copy.process.steps.map((step, i) => (
-              <Box component="li" key={step.title}>
+              // The Reveal wrapper sits between the li and the card: stretch both so every step
+              // in a row is as tall as the tallest one.
+              <Box component="li" key={step.title} sx={{ display: 'flex', '& > div': { display: 'flex', flex: 1, minWidth: 0 } }}>
                 <Reveal delay={i * 0.06}>
-                  <Box sx={{ ...cardSx, gap: 1.25 }}>
+                  <Box sx={{ ...cardSx, flex: 1, gap: 1.25 }}>
                     <Typography aria-hidden sx={{ fontSize: 13, letterSpacing: '0.2em', color: colors.gold }}>
                       {String(i + 1).padStart(2, '0')}
                     </Typography>
