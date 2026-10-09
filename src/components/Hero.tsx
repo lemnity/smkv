@@ -9,7 +9,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { HEADER_HEIGHT, colors, contentSx, hoverUnderlineSx, microLabel } from '../theme'
 import { useLang } from '../i18n'
 import { scrollToHash } from '../utils/scrollTo'
-import { MagneticButton } from './effects'
+import { MagneticButton, VariableProximity } from './effects'
 import GoldDot from './GoldDot'
 import { useIntroReady } from './intro'
 import { useFeedback } from './feedback/context'
@@ -113,7 +113,7 @@ export default function Hero() {
                     transition={{ duration: 1, delay: 0.35 + i * 0.12, ease }}
                     sx={{ display: 'block', ...(i === hero.lines.length - 1 ? goldTextSx : {}) }}
                   >
-                    {line}
+                    <VariableProximity text={line} strokeColor={i === hero.lines.length - 1 ? colors.goldLight : colors.text} />
                   </Box>
                 </Box>
                 </Fragment>
