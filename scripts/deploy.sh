@@ -10,7 +10,7 @@ DEPLOY_DIR="${DEPLOY_DIR:-/var/www/simakoov.ru}"
 BASE_PATH=/ npm run build
 
 # --no-xattrs / COPYFILE_DISABLE keep macOS metadata out of the archive (GNU tar warns about it).
-COPYFILE_DISABLE=1 tar --no-xattrs -C dist -czf - . | ssh "$DEPLOY_HOST" "set -e
+COPYFILE_DISABLE=1 tar --no-xattrs --exclude='.DS_Store' -C dist -czf - . | ssh "$DEPLOY_HOST" "set -e
   rm -rf '$DEPLOY_DIR.new' && mkdir -p '$DEPLOY_DIR.new'
   tar -xzf - -C '$DEPLOY_DIR.new'
   if [ -d '$DEPLOY_DIR' ]; then mv '$DEPLOY_DIR' '$DEPLOY_DIR.prev'; fi
