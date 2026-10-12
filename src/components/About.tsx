@@ -10,7 +10,7 @@ import { visuallyHidden } from '@mui/utils'
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'motion/react'
 import { colors, contentSx, fonts, hoverUnderlineSx, microLabel, outlinedIconButtonSx, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
-import { Reveal } from './effects'
+import { Reveal, VariableProximity } from './effects'
 import GoldDot from './GoldDot'
 import StatCounter from './StatCounter'
 import { useFeedback } from './feedback/context'
@@ -187,7 +187,7 @@ function CreateTogether() {
               color: 'inherit',
             }}
           >
-            {line}
+            <VariableProximity text={line} />
             {i === about.cta.length - 1 && <GoldDot />}
           </Typography>
         ))}
@@ -218,12 +218,12 @@ export default function About() {
             <Typography id="about-title" component="h2" sx={{ ...sectionTitleSx, fontSize: { xs: 38, sm: 44, md: 42, lg: 48 } }}>
               {about.title.map((l) => (
                 <Box component="span" key={l} sx={{ display: 'block' }}>
-                  {l}
+                  <VariableProximity text={l} />
                 </Box>
               ))}
             </Typography>
             <Typography sx={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(244,241,236,0.72)', mt: 3, maxWidth: 360 }}>
-              {about.text}
+              <VariableProximity text={about.text} />
             </Typography>
             <Stack direction="row" spacing={1.5} sx={{ mt: 3.5, alignItems: 'center' }}>
               <Link

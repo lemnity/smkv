@@ -6,6 +6,7 @@ import { animate, motion, useInView, useReducedMotion } from 'motion/react'
 import { colors, microLabel } from '../theme'
 import type { Stat } from '../data/content'
 import { useLang } from '../i18n'
+import { VariableProximity } from './effects'
 
 const numberSx = {
   fontSize: { xs: 36, md: 40 },
@@ -124,7 +125,7 @@ export default function StatCounter({ stat }: { stat: Stat }) {
     <Box>
       {stat.kind === 'number' ? <CountUp value={stat.value} suffix={stat.suffix} /> : <InfinityMark />}
       <Typography sx={{ ...microLabel, fontSize: 10, letterSpacing: '0.2em', color: colors.text, opacity: 0.8, mt: 1.5, whiteSpace: 'nowrap' }}>
-        {stat.label}
+        <VariableProximity text={stat.label} />
       </Typography>
     </Box>
   )

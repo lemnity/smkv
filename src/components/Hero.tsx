@@ -83,7 +83,7 @@ export default function Hero() {
           <Box sx={{ maxWidth: { md: '52%', lg: '50%' } }}>
             <motion.div {...fadeUp(0.2, reduce, ready)}>
               <Typography sx={{ ...microLabel, fontSize: { xs: 10, md: 11 }, color: colors.muted, letterSpacing: '0.3em' }}>
-                {hero.eyebrow}
+                <VariableProximity text={hero.eyebrow} />
               </Typography>
             </motion.div>
 
@@ -130,7 +130,7 @@ export default function Hero() {
                   color: 'rgba(244,241,236,0.72)',
                 }}
               >
-                {hero.text}
+                <VariableProximity text={hero.text} />
               </Typography>
             </motion.div>
 
@@ -153,7 +153,7 @@ export default function Hero() {
                       '&:hover .MuiButton-endIcon': { transform: 'translateX(5px)' },
                     }}
                   >
-                    {hero.cta}
+                    <VariableProximity text={hero.cta} />
                   </Button>
                 </MagneticButton>
                 <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>

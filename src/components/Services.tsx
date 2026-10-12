@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { colors, contentSx, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
-import { Reveal } from './effects'
+import { Reveal, VariableProximity } from './effects'
 
 const cardSx = {
   height: '100%',
@@ -38,10 +38,10 @@ export default function Services() {
             }}
           >
             <Typography id="services-title" component="h2" sx={sectionTitleSx}>
-              {copy.title}
+              <VariableProximity text={copy.title} />
             </Typography>
             <Typography sx={{ fontSize: 13, lineHeight: 1.6, color: colors.muted, maxWidth: 300, pb: { md: 0.5 } }}>
-              {copy.text}
+              <VariableProximity text={copy.text} />
             </Typography>
           </Box>
         </Reveal>
@@ -57,9 +57,9 @@ export default function Services() {
             <Reveal key={item.title} delay={(i % 3) * 0.08}>
               <Box component="article" sx={cardSx}>
                 <Typography component="h3" sx={{ fontSize: { xs: 20, md: 22 }, fontWeight: 500, lineHeight: 1.25, letterSpacing: '-0.01em' }}>
-                  {item.title}
+                  <VariableProximity text={item.title} />
                 </Typography>
-                <Typography sx={{ fontSize: 14, lineHeight: 1.65, color: colors.muted }}>{item.text}</Typography>
+                <Typography sx={{ fontSize: 14, lineHeight: 1.65, color: colors.muted }}><VariableProximity text={item.text} /></Typography>
                 <Box component="ul" aria-label={copy.deliverablesLabel} sx={{ m: 0, p: 0, mt: 'auto', pt: 1, listStyle: 'none', display: 'grid', gap: 0.75 }}>
                   {item.deliverables.map((d) => (
                     <Box
@@ -82,7 +82,7 @@ export default function Services() {
                         },
                       }}
                     >
-                      {d}
+                      <VariableProximity text={d} />
                     </Box>
                   ))}
                 </Box>
@@ -94,7 +94,7 @@ export default function Services() {
         <Box sx={{ mt: { xs: 7, md: 9 } }}>
           <Reveal>
             <Typography component="h3" sx={{ fontSize: { xs: 28, md: 34 }, fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1.1, mb: { xs: 3, md: 4 } }}>
-              {copy.process.title}
+              <VariableProximity text={copy.process.title} />
             </Typography>
           </Reveal>
           <Box
@@ -118,9 +118,9 @@ export default function Services() {
                       {String(i + 1).padStart(2, '0')}
                     </Typography>
                     <Typography component="h4" sx={{ fontSize: 17, fontWeight: 500, lineHeight: 1.3 }}>
-                      {step.title}
+                      <VariableProximity text={step.title} />
                     </Typography>
-                    <Typography sx={{ fontSize: 13, lineHeight: 1.6, color: colors.muted }}>{step.text}</Typography>
+                    <Typography sx={{ fontSize: 13, lineHeight: 1.6, color: colors.muted }}><VariableProximity text={step.text} /></Typography>
                   </Box>
                 </Reveal>
               </Box>

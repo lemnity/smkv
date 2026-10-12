@@ -10,6 +10,7 @@ import { motion, useReducedMotion, useSpring } from 'motion/react'
 import { colors, outlinedIconButtonSx } from '../theme'
 import type { Project, ProjectImage } from '../data/content'
 import { useLang } from '../i18n'
+import { VariableProximity } from './effects'
 
 export type CardSize = 'large' | 'small'
 
@@ -183,7 +184,7 @@ export default function ProjectCard({ project, size }: Props) {
                       decoding="async"
                       sx={{ display: 'block', width: 'auto', height: large ? { xs: 40, md: 48 } : { xs: 34, md: 40 }, flexShrink: 0 }}
                     />
-                    <span>{project.title}</span>
+                    <span><VariableProximity text={project.title} /></span>
                   </Box>
                 ) : project.logo ? (
                   <Box
@@ -213,7 +214,7 @@ export default function ProjectCard({ project, size }: Props) {
                   maxWidth: large ? 290 : 220,
                 }}
               >
-                {project.description}
+                <VariableProximity text={project.description} />
               </Typography>
               {project.url ? (
                 <IconButton

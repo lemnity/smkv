@@ -20,7 +20,7 @@ import { useLang } from '../i18n'
 import type { Lang } from '../data/content'
 import { works } from '../data/works'
 import type { Work } from '../data/works'
-import { Reveal } from './effects'
+import { Reveal, VariableProximity } from './effects'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const pad = (n: number) => String(n).padStart(2, '0')
@@ -271,11 +271,11 @@ export default function Gallery() {
           >
             <Box>
               <Typography id="gallery-title" component="h2" sx={sectionTitleSx}>
-                {gallery.title}
+                <VariableProximity text={gallery.title} />
               </Typography>
             </Box>
             <Typography sx={{ fontSize: 13, lineHeight: 1.6, color: colors.muted, maxWidth: 300, pb: { md: 0.5 } }}>
-              {gallery.text}
+              <VariableProximity text={gallery.text} />
             </Typography>
           </Box>
         </Reveal>

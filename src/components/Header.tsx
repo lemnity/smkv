@@ -21,6 +21,7 @@ import { scrollToHash } from '../utils/scrollTo'
 import Wordmark from './Wordmark'
 import { useIntroReady } from './intro'
 import { useFeedback } from './feedback/context'
+import { VariableProximity } from './effects'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -95,7 +96,7 @@ export default function Header() {
                   onClick={go(item.href)}
                   sx={{ ...microLabel, color: colors.text, ...hoverUnderlineSx, '&:hover': { color: colors.goldLight } }}
                 >
-                  {item.label}
+                  <VariableProximity text={item.label} />
                 </Link>
               ))}
             </Stack>
@@ -116,7 +117,7 @@ export default function Header() {
               <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
                 {header.tagline.map((line) => (
                   <Typography key={line} sx={{ ...microLabel, fontSize: 10, letterSpacing: '0.2em', lineHeight: 1.6 }}>
-                    {line}
+                    <VariableProximity text={line} />
                   </Typography>
                 ))}
               </Box>
@@ -173,7 +174,7 @@ export default function Header() {
                   ...hoverUnderlineSx,
                 }}
               >
-                {item.label}
+                <VariableProximity text={item.label} />
               </Link>
             </motion.div>
           ))}
@@ -222,7 +223,7 @@ export default function Header() {
                     }}
                   >
                     <Icon />
-                    {label}
+                    <VariableProximity text={label} />
                   </Link>
                 </motion.div>
               )

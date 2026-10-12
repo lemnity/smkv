@@ -6,7 +6,7 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import Add from '@mui/icons-material/Add'
 import { colors, contentSx, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
-import { Reveal } from './effects'
+import { Reveal, VariableProximity } from './effects'
 
 export default function Faq() {
   const { faq: copy } = useLang().t
@@ -24,7 +24,7 @@ export default function Faq() {
         >
           <Reveal>
             <Typography id="faq-title" component="h2" sx={sectionTitleSx}>
-              {copy.title}
+              <VariableProximity text={copy.title} />
             </Typography>
           </Reveal>
           <Reveal delay={0.1}>
@@ -55,11 +55,11 @@ export default function Faq() {
                     sx={{ px: 0, py: { xs: 0.5, md: 1 }, '& .MuiAccordionSummary-content': { my: 1.5 } }}
                   >
                     <Typography component="span" sx={{ display: 'block', fontSize: { xs: 17, md: 20 }, fontWeight: 500, lineHeight: 1.3, transition: 'color .3s' }}>
-                      {item.q}
+                      <VariableProximity text={item.q} />
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails sx={{ px: 0, pt: 0, pb: 3, maxWidth: 720 }}>
-                    <Typography sx={{ fontSize: 15, lineHeight: 1.7, color: colors.muted }}>{item.a}</Typography>
+                    <Typography sx={{ fontSize: 15, lineHeight: 1.7, color: colors.muted }}><VariableProximity text={item.a} /></Typography>
                   </AccordionDetails>
                 </Accordion>
               ))}

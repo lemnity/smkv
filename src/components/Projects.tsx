@@ -9,7 +9,7 @@ import { AnimatePresence, LayoutGroup, motion } from 'motion/react'
 import { visuallyHidden } from '@mui/utils'
 import { colors, contentSx, outlinedIconButtonSx, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
-import { Reveal } from './effects'
+import { Reveal, VariableProximity } from './effects'
 import ProjectCard from './ProjectCard'
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -55,7 +55,7 @@ export default function Projects() {
           >
             <Box>
               <Typography id="work-title" component="h2" sx={sectionTitleSx}>
-                {projects.title}
+                <VariableProximity text={projects.title} />
               </Typography>
             </Box>
             <Stack
@@ -64,7 +64,7 @@ export default function Projects() {
               sx={{ alignItems: 'center', justifyContent: 'space-between', pb: { md: 0.5 } }}
             >
               <Typography sx={{ fontSize: 13, lineHeight: 1.6, color: colors.muted, maxWidth: 300 }}>
-                {projects.text}
+                <VariableProximity text={projects.text} />
               </Typography>
               <Stack direction="row" spacing={1.5} sx={{ flexShrink: 0 }}>
                 <IconButton aria-label={projects.prevLabel} aria-controls="work-grid" onClick={prev} sx={outlinedIconButtonSx}>

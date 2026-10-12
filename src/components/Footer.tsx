@@ -7,6 +7,7 @@ import { useLang } from '../i18n'
 import Wordmark from './Wordmark'
 import GoldDot from './GoldDot'
 import { useFeedback } from './feedback/context'
+import { VariableProximity } from './effects'
 
 export default function Footer() {
   const { footer } = useLang().t
@@ -57,7 +58,7 @@ export default function Footer() {
                 ...hoverUnderlineSx,
               }}
             >
-              {l.label}
+              <VariableProximity text={l.label} />
             </Link>
           ))}
           <GoldDot />

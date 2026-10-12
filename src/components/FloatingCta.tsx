@@ -7,6 +7,7 @@ import { colors, fonts } from '../theme'
 import { useLang } from '../i18n'
 import { useFeedback } from './feedback/context'
 import { useIntroReady } from './intro'
+import { VariableProximity } from './effects'
 
 /** Show once the hero is mostly scrolled past… */
 const SHOW_AFTER = 0.6 // × viewport height
@@ -100,7 +101,7 @@ export default function FloatingCta() {
               '&.Mui-focusVisible': { outline: `2px solid ${colors.goldLight}`, outlineOffset: 4 },
             }}
           >
-            {t.floatingCta.label}
+            <VariableProximity text={t.floatingCta.label} />
             <Box component="span" className="cta-arrow" aria-hidden>
               <Favorite sx={{ fontSize: 18 }} />
             </Box>

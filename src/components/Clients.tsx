@@ -5,7 +5,7 @@ import { useReducedMotion } from 'motion/react'
 import { colors, contentSx, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
 import { clients, type Client } from '../data/clients'
-import { Reveal } from './effects'
+import { Reveal, VariableProximity } from './effects'
 
 /** Seconds for one marquee row to travel one full sequence. */
 const SPEED = 45
@@ -98,11 +98,11 @@ export default function Clients() {
           >
             <Box>
               <Typography id="clients-title" component="h2" sx={sectionTitleSx}>
-                {copy.title}
+                <VariableProximity text={copy.title} />
               </Typography>
             </Box>
             <Typography sx={{ fontSize: 13, lineHeight: 1.6, color: colors.muted, maxWidth: 300, pb: { md: 0.5 } }}>
-              {copy.text}
+              <VariableProximity text={copy.text} />
             </Typography>
           </Box>
         </Reveal>
