@@ -93,6 +93,13 @@ const projectBase = {
     image: { src: `${BASE}assets/sphagnum-concept.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.9, 0.45] },
     url: 'https://lemnity.github.io/sphgnm/',
   },
+  turdus: {
+    id: 'turdus',
+    number: '05',
+    title: 'TURDUS',
+    image: { src: `${BASE}assets/turdus-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.5, 0.3] },
+    url: 'https://lemnity.github.io/trds/',
+  },
 } satisfies Record<string, Omit<Project, 'description' | 'tags'>>
 
 /** Language-independent hero data. */
@@ -194,6 +201,12 @@ const ru = {
         ...projectBase.sphagnum,
         description: 'Живые субстраты для зелёных крыш, вертикальных садов и интерьеров',
         tags: ['Сайт', 'Эко', 'B2B'],
+      },
+      {
+        ...projectBase.turdus,
+        title: 'Модный театр TURDUS',
+        description: 'Иммерсивные спектакли в барах, ресторанах, квартире и на улицах Екатеринбурга',
+        tags: ['Сайт', 'Афиша', 'Театр'],
       },
     ] as Project[],
   },
@@ -420,6 +433,12 @@ const en: Content = {
         ...projectBase.sphagnum,
         description: 'Living substrates for green roofs, vertical gardens and interiors',
         tags: ['Website', 'Eco', 'B2B'],
+      },
+      {
+        ...projectBase.turdus,
+        title: 'TURDUS fashion theatre',
+        description: 'Immersive performances in bars, restaurants, an apartment and the streets of Yekaterinburg',
+        tags: ['Website', 'Playbill', 'Theatre'],
       },
     ],
   },
