@@ -97,7 +97,7 @@ const projectBase = {
     id: 'turdus',
     number: '05',
     title: 'TURDUS',
-    image: { src: `${BASE}assets/turdus-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.5, 0.3] },
+    image: { src: `${BASE}assets/turdus-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.3, 0.4] },
     url: 'https://lemnity.github.io/trds/',
   },
 } satisfies Record<string, Omit<Project, 'description' | 'tags'>>
