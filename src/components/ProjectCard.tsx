@@ -12,16 +12,22 @@ import type { Project, ProjectImage } from '../data/content'
 import { useLang } from '../i18n'
 import { VariableProximity } from './effects'
 
-export type CardSize = 'large' | 'small'
+/** large: tall vertical card; small: horizontal grid card; featured: the flagship banner (horizontal from md, vertical on phones). */
+export type CardSize = 'large' | 'small' | 'featured'
 
 const MAX_TILT = 4
+
+const BOTTOM_MASK = 'linear-gradient(to bottom, transparent 0%, #000 22%)'
+const RIGHT_MASK = 'linear-gradient(to right, transparent 0%, #000 28%)'
+/** Image fades in from the copy side: from the top on phones, from the left on wide screens. */
+const FEATURED_MASK = { xs: BOTTOM_MASK, md: RIGHT_MASK }
 const tiltSpring = { stiffness: 150, damping: 18, mass: 0.5 }
 
 /**
  * Shows only `image.crop` of the source file and scales it to cover its (absolutely positioned) parent,
  * like `object-fit: cover` on a cropped image. Uses container query units, so it adapts to any slot size.
  */
-function CroppedImage({ image, alt, rotate = 0 }: { image: ProjectImage; alt: string; rotate?: number }) {
+export function CroppedImage({ image, alt, rotate = 0 }: { image: ProjectImage; alt: string; rotate?: number }) {
   const { crop: c, width, height, focus } = image
   const ratio = c.w / c.h
   return (
@@ -70,7 +76,9 @@ interface Props {
 
 export default function ProjectCard({ project, size }: Props) {
   const { projects } = useLang().t
-  const large = size === 'large'
+  const featured = size === 'featured'
+  // Featured shares the large card's typography.
+  const large = size === 'large' || featured
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
   const rotateX = useSpring(0, tiltSpring)
@@ -113,7 +121,7 @@ export default function ProjectCard({ project, size }: Props) {
             borderRadius: 1,
             border: `1px solid ${colors.line}`,
             background: 'linear-gradient(160deg, #111111 0%, #070707 100%)',
-            minHeight: large ? { xs: 420, sm: 460, md: 0 } : { xs: 230, md: 0 },
+            minHeight: featured ? { xs: 460, md: 0 } : large ? { xs: 420, sm: 460, md: 0 } : { xs: 230, md: 0 },
             transition: 'border-color .5s ease, box-shadow .5s ease',
             // Pointer-following gold spotlight.
             '&::after': {
@@ -152,17 +160,37 @@ export default function ProjectCard({ project, size }: Props) {
               position: 'relative',
               zIndex: 2,
               width: large ? '100%' : undefined,
-              maxWidth: large ? 380 : undefined,
+              maxWidth: featured ? 470 : large ? 380 : undefined,
               pointerEvents: 'none',
             }}
           >
             <Box
               sx={{
-                p: large ? { xs: '22px', md: '28px 32px' } : { xs: '20px', md: '24px 24px' },
+                p: featured ? { xs: '22px', md: '44px 48px' } : large ? { xs: '22px', md: '28px 32px' } : { xs: '20px', md: '24px 24px' },
                 width: large ? 'auto' : { xs: '56%', md: '46%' },
                 minWidth: large ? undefined : { xs: 170, md: 190 },
               }}
             >
+              {featured && (
+                <Box
+                  component="span"
+                  sx={{
+                    display: 'inline-block',
+                    mb: 2.5,
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: 999,
+                    bgcolor: colors.gold,
+                    color: colors.bg,
+                    fontSize: 10,
+                    fontWeight: 600,
+                    letterSpacing: '0.2em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {projects.flagshipLabel}
+                </Box>
+              )}
               <Typography
                 component="h3"
                 sx={{
@@ -198,7 +226,7 @@ export default function ProjectCard({ project, size }: Props) {
                       display: 'block',
                       width: 'auto',
                       maxWidth: '100%',
-                      height: large ? { xs: 30, md: 38 } : { xs: 28, md: 34 },
+                      height: featured ? { xs: 34, md: 48 } : large ? { xs: 30, md: 38 } : { xs: 28, md: 34 },
                       my: large ? 0.75 : 0.5,
                     }}
                   />
@@ -208,10 +236,10 @@ export default function ProjectCard({ project, size }: Props) {
               </Typography>
               <Typography
                 sx={{
-                  fontSize: large ? { xs: 13, md: 14 } : { xs: 12, md: 12.5 },
+                  fontSize: featured ? { xs: 14, md: 16 } : large ? { xs: 13, md: 14 } : { xs: 12, md: 12.5 },
                   lineHeight: 1.55,
                   color: 'rgba(244,241,236,0.72)',
-                  maxWidth: large ? 290 : 220,
+                  maxWidth: featured ? 360 : large ? 290 : 220,
                 }}
               >
                 <VariableProximity text={project.description} />
@@ -274,9 +302,19 @@ export default function ProjectCard({ project, size }: Props) {
           {/* Image */}
           <Box
             sx={
-              large
-                ? { position: 'relative', flex: 1, minHeight: 160 }
-                : { position: 'absolute', top: 0, right: 0, bottom: 0, width: { xs: '50%', md: '58%' } }
+              featured
+                ? {
+                    position: { xs: 'relative', md: 'absolute' },
+                    flex: { xs: 1, md: 'none' },
+                    minHeight: { xs: 200, md: 0 },
+                    top: { md: 0 },
+                    right: { md: 0 },
+                    bottom: { md: 0 },
+                    width: { md: '64%' },
+                  }
+                : large
+                  ? { position: 'relative', flex: 1, minHeight: 160 }
+                  : { position: 'absolute', top: 0, right: 0, bottom: 0, width: { xs: '50%', md: '58%' } }
             }
           >
             <motion.div layout style={{ position: 'absolute', inset: 0 }}>
@@ -284,12 +322,8 @@ export default function ProjectCard({ project, size }: Props) {
                 sx={{
                   position: 'absolute',
                   inset: 0,
-                  maskImage: large
-                    ? 'linear-gradient(to bottom, transparent 0%, #000 22%)'
-                    : 'linear-gradient(to right, transparent 0%, #000 28%)',
-                  WebkitMaskImage: large
-                    ? 'linear-gradient(to bottom, transparent 0%, #000 22%)'
-                    : 'linear-gradient(to right, transparent 0%, #000 28%)',
+                  maskImage: featured ? FEATURED_MASK : large ? BOTTOM_MASK : RIGHT_MASK,
+                  WebkitMaskImage: featured ? FEATURED_MASK : large ? BOTTOM_MASK : RIGHT_MASK,
                 }}
               >
                 <Box

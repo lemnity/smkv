@@ -47,11 +47,11 @@ function Page() {
         <Box component="main">
           <Hero />
           <SectionDivider />
-          <Services />
-          <SectionDivider />
           <Projects />
           <SectionDivider />
           <Gallery />
+          <SectionDivider />
+          <Services />
           <SectionDivider />
           <Clients />
           <SectionDivider />

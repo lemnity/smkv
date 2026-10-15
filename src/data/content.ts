@@ -9,8 +9,8 @@ export type Lang = 'ru' | 'en'
 export const LANGS: readonly Lang[] = ['ru', 'en']
 
 export const contacts = {
-  email: 'CHANGE-ME@example.com',
-  telegram: 'https://t.me/',
+  email: 'thesimakov@gmail.com',
+  telegram: 'https://t.me/simakoov',
 }
 
 const mailto = `mailto:${contacts.email}`
@@ -131,9 +131,9 @@ const ru = {
     names: { ru: 'Русский', en: 'English' } as Record<Lang, string>,
   },
   nav: [
-    { label: 'УСЛУГИ', href: '#services' },
     { label: 'ПРОЕКТЫ', href: '#work' },
     { label: 'РАБОТЫ', href: '#gallery' },
+    { label: 'УСЛУГИ', href: '#services' },
     { label: 'ОБО МНЕ', href: '#about' },
     { label: 'КОНТАКТЫ', href: '#contact' },
   ],
@@ -168,9 +168,10 @@ const ru = {
   projects: {
     title: 'Избранные проекты',
     text: 'Продукты, бренды и цифровые решения, которые делают идеи реальностью.',
-    prevLabel: 'Предыдущий проект',
-    nextLabel: 'Следующий проект',
     openLabel: 'Открыть проект',
+    flagshipLabel: 'Главный проект',
+    showAll: 'Все проекты',
+    showLess: 'Свернуть',
     /** Shown instead of the arrow on projects without a public link yet. */
     soonLabel: 'Скоро',
     items: [
@@ -357,9 +358,9 @@ const en: Content = {
     names: { ru: 'Русский', en: 'English' },
   },
   nav: [
-    { label: 'SERVICES', href: '#services' },
     { label: 'PROJECTS', href: '#work' },
     { label: 'WORK', href: '#gallery' },
+    { label: 'SERVICES', href: '#services' },
     { label: 'ABOUT', href: '#about' },
     { label: 'CONTACT', href: '#contact' },
   ],
@@ -393,9 +394,10 @@ const en: Content = {
   projects: {
     title: 'Featured projects',
     text: 'Products, brands and digital solutions that turn ideas into reality.',
-    prevLabel: 'Previous project',
-    nextLabel: 'Next project',
     openLabel: 'Open project',
+    flagshipLabel: 'Flagship',
+    showAll: 'All projects',
+    showLess: 'Show less',
     soonLabel: 'Coming soon',
     items: [
       {
