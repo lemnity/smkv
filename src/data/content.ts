@@ -77,7 +77,7 @@ const projectBase = {
     title: 'Дом науки и техники',
     logo: { src: `${BASE}assets/dom-nauki-mark.webp`, width: 128, height: 160, mark: true },
     image: { src: `${BASE}assets/dom-nauki-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.72, 0.4] },
-    url: 'https://new.tumtipb.ru',
+    url: 'https://web.tumtipb.ru/',
   },
   prostyle: {
     id: 'prostyle',
@@ -85,6 +85,7 @@ const projectBase = {
     title: 'ProStyle',
     logo: { src: `${BASE}clients/prostyle.svg`, width: 340, height: 92 },
     image: { src: `${BASE}assets/prostyle-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.6, 0.45] },
+    url: 'https://prostyle.agency/',
   },
   sphagnum: {
     id: 'sphagnum',
