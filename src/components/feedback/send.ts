@@ -56,9 +56,6 @@ export function buildPayload(values: FeedbackValues, topics: string[], lang: Lan
   const contact = values.contact.trim()
   return {
     _subject: feedbackSubject(name),
-    _template: 'table',
-    _captcha: 'false',
-    ...(isEmail(contact) ? { _replyto: contact } : {}),
     name,
     contact,
     topic: topics.join(', ') || '—',
