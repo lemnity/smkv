@@ -9,6 +9,8 @@ ExecStart=/usr/bin/python3 /opt/simakoov-feedback/feedback.py
 Restart=always
 RestartSec=3
 DynamicUser=yes
+# Archive of all requests: /var/lib/simakoov-feedback/requests.jsonl
+StateDirectory=simakoov-feedback
 NoNewPrivileges=yes
 ProtectSystem=strict
 ProtectHome=yes

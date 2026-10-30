@@ -4,7 +4,7 @@ Feedback form backend for simakoov.ru (stdlib only, no pip installs).
 
 Listens on 127.0.0.1:8787, nginx proxies https://simakoov.ru/api/feedback here.
 Accepts the JSON the site's form already sends and delivers it to
-  - email, via SMTP (Gmail app password), and/or
+  - email, via the server's local Postfix (or an external SMTP), and/or
   - Telegram, via a bot.
 Answers {"success": true} when at least one channel delivered the letter.
 
@@ -28,10 +28,16 @@ HOST = os.environ.get("FEEDBACK_HOST", "127.0.0.1")
 PORT = int(os.environ.get("FEEDBACK_PORT", "8787"))
 
 MAIL_TO = os.environ.get("MAIL_TO", "thesimakov@gmail.com")
-SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+# Default: the server's own send-only Postfix (loopback, no auth, DKIM-signed as simakoov.ru).
+# Set SMTP_PASSWORD (+ host/port/user) to relay through an external provider instead.
+SMTP_HOST = os.environ.get("SMTP_HOST", "127.0.0.1")
+SMTP_PORT = int(os.environ.get("SMTP_PORT", "25"))
 SMTP_USER = os.environ.get("SMTP_USER", "")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "").replace(" ", "")
+MAIL_FROM = os.environ.get("MAIL_FROM", SMTP_USER or "noreply@simakoov.ru")
+
+# systemd StateDirectory= sets STATE_DIRECTORY (/var/lib/simakoov-feedback).
+ARCHIVE_DIR = os.environ.get("ARCHIVE_DIR") or os.environ.get("STATE_DIRECTORY", "")
 
 TG_BOT_TOKEN = os.environ.get("TG_BOT_TOKEN", "")
 TG_CHAT_ID = os.environ.get("TG_CHAT_ID", "")
@@ -80,11 +86,11 @@ def clean(data: dict) -> dict:
 
 
 def send_email(f: dict) -> None:
-    if not (SMTP_USER and SMTP_PASSWORD):
+    if not MAIL_FROM:
         raise RuntimeError("SMTP is not configured")
     msg = EmailMessage()
     msg["Subject"] = " ".join((f["_subject"] or f"Заявка с сайта SIMAKOOV — {f['name']}").split())
-    msg["From"] = formataddr(("Сайт SIMAKOOV", SMTP_USER))
+    msg["From"] = formataddr(("Сайт SIMAKOOV", MAIL_FROM))
     msg["To"] = MAIL_TO
     contact = f["contact"]
     if "@" in contact and not any(c.isspace() for c in contact) and not contact.startswith("@"):
@@ -98,7 +104,11 @@ def send_email(f: dict) -> None:
     )
     msg.add_alternative(f"<table style='font:14px sans-serif;border-collapse:collapse'>{rows}</table>", subtype="html")
     ctx = ssl.create_default_context()
-    if SMTP_PORT == 465:
+    if not SMTP_PASSWORD:
+        # Local Postfix on the same server: plain SMTP on loopback, no auth.
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=10) as s:
+            s.send_message(msg)
+    elif SMTP_PORT == 465:
         with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, context=ctx, timeout=10) as s:
             s.login(SMTP_USER, SMTP_PASSWORD)
             s.send_message(msg)
@@ -122,6 +132,18 @@ def send_telegram(f: dict) -> None:
     with urllib.request.urlopen(req, timeout=10) as res:
         if not json.load(res).get("ok"):
             raise RuntimeError("Telegram answered ok=false")
+
+
+def archive(f: dict, ip: str) -> None:
+    """Keep a copy of every request on disk, so none is lost if mail delivery fails later (bounce)."""
+    if not ARCHIVE_DIR:
+        return
+    try:
+        record = {"time": time.strftime("%Y-%m-%d %H:%M:%S %z"), "ip": ip, **{k: f[k] for k in LABELS}}
+        with open(os.path.join(ARCHIVE_DIR, "requests.jsonl"), "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+    except OSError as e:
+        log(f"[feedback] archive failed: {e!r}")
 
 
 def deliver(f: dict) -> bool:
@@ -185,6 +207,7 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(400, {"success": False, "error": "invalid"})
         if rate_limited(ip):
             return self._json(429, {"success": False, "error": "rate_limited"})
+        archive(f, ip)
         if deliver(f):
             log(f"[feedback] delivered from {ip}")
             return self._json(200, {"success": True})
@@ -195,5 +218,5 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    log(f"[feedback] listening on {HOST}:{PORT}, email={'on' if SMTP_USER else 'off'}, telegram={'on' if TG_BOT_TOKEN else 'off'}")
+    log(f"[feedback] listening on {HOST}:{PORT}, email={MAIL_FROM} via {SMTP_HOST}:{SMTP_PORT}, telegram={'on' if TG_BOT_TOKEN else 'off'}")
     ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
