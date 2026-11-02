@@ -201,6 +201,7 @@ const ru = {
     /** Shown instead of the arrow on projects without a public link yet. */
     soonLabel: 'Скоро',
     inDevLabel: 'В доработке',
+    caseLabel: 'Кейс',
     gameLabel: 'Игра',
     items: [
       {
@@ -268,32 +269,32 @@ const ru = {
     items: [
       {
         title: 'Разработка сайтов и веб-приложений',
-        text: 'Делаю сайты и веб-приложения, которые быстро загружаются и понятны с первого экрана. Беру на себя и дизайн, и код, поэтому в проекте нет разрыва между макетом и тем, что получилось. Подходит для компаний, сервисов и образовательных платформ.',
+        text: 'Делаю сайты и веб-приложения, которые быстро загружаются и понятны с первого экрана. Дизайн и код веду сам, поэтому между макетом и готовым сайтом ничего не теряется. Подходит компаниям, сервисам и образовательным платформам — например, «Дому науки и техники».',
         deliverables: ['корпоративный сайт или сервис', 'адаптивная вёрстка для телефона и компьютера', 'личные кабинеты и формы'],
       },
       {
         title: 'UI/UX-дизайн интерфейсов',
-        text: 'Проектирую интерфейсы, в которых пользователь не думает, куда нажать. Начинаю со сценариев и структуры, затем рисую макеты и прототип. Результат передаю в виде, удобном для разработки.',
+        text: 'Проектирую интерфейсы, в которых человек не думает, куда нажать. Начинаю со сценариев и структуры, потом рисую макеты и прототип. Результат отдаю в виде, с которым удобно работать разработчикам.',
         deliverables: ['структура и пользовательские сценарии', 'прототип', 'макеты экранов', 'дизайн-система и UI-кит', 'передача макетов в разработку'],
       },
       {
         title: 'Лендинги и интернет-магазины',
-        text: 'Делаю страницы, которые ведут посетителя к одному действию, и магазины, где удобно выбирать и покупать. Работаю над текстовой структурой, визуалом и скоростью. Примеры из практики: сайт ProStyle (корпоративные подарки и сувениры, Тюмень).',
+        text: 'Делаю страницы, которые ведут посетителя к одному действию, и магазины, где удобно выбирать и покупать. Работаю над структурой текста, визуалом и скоростью. Пример из практики: каталог ProStyle на ~60 000 корпоративных подарков с остатками со складов.',
         deliverables: ['лендинг или многостраничный сайт', 'интернет-магазин с каталогом и корзиной', 'форма заявки', 'адаптивная версия'],
       },
       {
         title: 'Брендинг и айдентика',
-        text: 'Помогаю бренду выглядеть цельно: от логотипа до сайта и мерча. Сначала формулируем, чем вы отличаетесь, потом превращаем это в визуальный язык. Всё собирается в правила, которыми удобно пользоваться команде.',
+        text: 'Помогаю бренду выглядеть цельно: от логотипа до сайта и мерча. Сначала формулируем, чем вы отличаетесь, потом превращаю это в визуальный язык и собираю правила, которыми удобно пользоваться команде.',
         deliverables: ['логотип и знак', 'цвета, шрифты, стиль', 'фирменные носители и мерч', 'гайд по использованию', 'оформление сайта в стиле бренда'],
       },
       {
         title: 'Цифровой продукт и MVP',
-        text: 'Помогаю превратить идею в работающий продукт: от гипотезы и прототипа до первой версии. Как продюсер я знаю, что на старте важно, а что можно отложить. Среди моих проектов — Lemnity, платформа для создания сайтов, чат-ботов и цифровых продуктов.',
+        text: 'Помогаю превратить идею в работающий продукт: от гипотезы и прототипа до первой версии. Я сам запустил платформу Lemnity и знаю, что на старте важно, а что можно отложить.',
         deliverables: ['уточнение идеи и состава первой версии', 'кликабельный прототип', 'дизайн и разработка MVP', 'план развития продукта', 'запуск и первые доработки'],
       },
       {
         title: 'Разработка игр',
-        text: 'Делаю казуальные и мини-игры для браузера, Telegram и промо-акций, а также коммерческие игры под задачи бизнеса. Придумываю игровой цикл, рисую графику и довожу до релиза. Попробуйте: игра в этой карточке живая.',
+        text: 'Делаю казуальные и мини-игры для браузера, Telegram и промо-акций, а также коммерческие игры под задачи бизнеса. Придумываю игровой цикл, рисую графику и довожу до релиза — как «Крути и знакомься» и «Камень, ножницы, бумага» для Lemnity. Попробуйте: игра в карточке живая.',
         deliverables: ['казуальные игры для браузера и телефона', 'мини-игры для Telegram, сайтов и акций', 'коммерческие игры с монетизацией', 'геймдизайн, графика и анимация', 'релиз и поддержка'],
         game: true,
       },
@@ -453,6 +454,7 @@ const en: Content = {
     flagshipLabel: 'Flagship',
     soonLabel: 'Coming soon',
     inDevLabel: 'In development',
+    caseLabel: 'Case',
     gameLabel: 'Game',
     items: [
       {
@@ -522,7 +524,7 @@ const en: Content = {
     items: [
       {
         title: 'Websites and web apps',
-        text: 'I build websites and web apps that load fast and make sense from the first screen. I handle both design and code, so nothing gets lost between the mockup and the result. Suitable for companies, services and educational platforms.',
+        text: 'I build websites and web apps that load fast and make sense from the first screen. I run both design and code, so nothing gets lost between the mockup and the finished site. A fit for companies, services and educational platforms — like the House of Science and Technology.',
         deliverables: ['a company site or service', 'responsive layout for phone and desktop', 'accounts and forms'],
       },
       {
@@ -532,7 +534,7 @@ const en: Content = {
       },
       {
         title: 'Landing pages and online stores',
-        text: 'I make pages that lead a visitor to one action, and stores that are easy to browse and buy from. I work on content structure, visuals and speed. From my work: the ProStyle site (corporate gifts and souvenirs, Tyumen).',
+        text: 'I make pages that lead a visitor to one action, and stores that are easy to browse and buy from. I work on content structure, visuals and speed. From my work: the ProStyle catalogue of ~60,000 corporate gifts with live warehouse stock.',
         deliverables: ['a landing page or multi-page site', 'an online store with catalog and cart', 'a request form', 'a responsive version'],
       },
       {
@@ -542,12 +544,12 @@ const en: Content = {
       },
       {
         title: 'Digital product and MVP',
-        text: 'I help turn an idea into a working product, from hypothesis and prototype to a first version. As a producer I know what matters at the start and what can wait. Among my projects is Lemnity, a platform for building sites, chatbots and digital products.',
+        text: 'I help turn an idea into a working product, from hypothesis and prototype to a first version. I launched the Lemnity platform myself and know what matters at the start and what can wait.',
         deliverables: ['clarifying the idea and the scope of version one', 'a clickable prototype', 'MVP design and development', 'a product roadmap', 'launch and first improvements'],
       },
       {
         title: 'Game development',
-        text: 'I make casual and mini games for the browser, Telegram and promo campaigns, as well as commercial games built around business goals. I design the game loop, draw the graphics and take it all the way to release. Try it: the game in this card is live.',
+        text: 'I make casual and mini games for the browser, Telegram and promo campaigns, as well as commercial games built around business goals. I design the game loop, draw the graphics and take it all the way to release — like Spin & Meet and Rock, Paper, Scissors for Lemnity. Try it: the game in this card is live.',
         deliverables: ['casual games for browser and mobile', 'mini games for Telegram, websites and campaigns', 'commercial games with monetisation', 'game design, graphics and animation', 'release and support'],
         game: true,
       },

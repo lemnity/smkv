@@ -14,6 +14,7 @@ import Projects from './components/Projects'
 import Gallery from './components/Gallery'
 import Clients from './components/Clients'
 import FloatingCta from './components/FloatingCta'
+import CaseDialog from './components/CaseDialog'
 import About from './components/About'
 import Loader from './components/Loader'
 import { IntroContext } from './components/intro'
@@ -63,6 +64,7 @@ function Page() {
         <Footer />
       </motion.div>
       <FloatingCta />
+      <CaseDialog />
       <GrainOverlay />
       <CustomCursor />
       <Loader label={t.loader.label} onDone={handleLoaderDone} />

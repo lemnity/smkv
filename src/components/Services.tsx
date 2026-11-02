@@ -21,6 +21,61 @@ const cardSx = {
   },
 }
 
+/** The studio site's Tailwind `lg` (1024px): the six-column services layout starts there. */
+const STUDIO_LG = '@media (min-width: 1024px)'
+
+/**
+ * Gap-free layout, as on the studio site: three cards, then two wider ones, then the game across
+ * the whole row (copy on the left, the live game on the right). Tablets: 2×2, then MVP and the game full width.
+ */
+function serviceSpan(i: number, game: boolean) {
+  if (game) return { gridColumn: { md: 'span 2' }, [STUDIO_LG]: { gridColumn: 'span 6' } }
+  if (i < 3) return { [STUDIO_LG]: { gridColumn: 'span 2' } }
+  if (i === 4) return { gridColumn: { md: 'span 2' }, [STUDIO_LG]: { gridColumn: 'span 3' } }
+  return { [STUDIO_LG]: { gridColumn: 'span 3' } }
+}
+
+type ServiceItem = { title: string; text: string; deliverables: readonly string[] }
+
+function ServiceBody({ item, label }: { item: ServiceItem; label: string }) {
+  return (
+    <>
+      <Typography component="h3" sx={{ fontSize: { xs: 20, md: 22 }, fontWeight: 500, lineHeight: 1.25, letterSpacing: '-0.01em' }}>
+        <VariableProximity text={item.title} />
+      </Typography>
+      <Typography sx={{ fontSize: 16, lineHeight: 1.65, color: 'rgba(244,241,236,0.72)' }}>
+        <VariableProximity text={item.text} />
+      </Typography>
+      <Box component="ul" aria-label={label} sx={{ m: 0, p: 0, mt: 'auto', pt: 1, listStyle: 'none', display: 'grid', gap: 0.75 }}>
+        {item.deliverables.map((d) => (
+          <Box
+            component="li"
+            key={d}
+            sx={{
+              position: 'relative',
+              pl: 2.25,
+              fontSize: 16,
+              lineHeight: 1.5,
+              color: colors.text,
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                left: 0,
+                top: '0.6em',
+                width: 8,
+                height: '1px',
+                bgcolor: colors.gold,
+              },
+            }}
+          >
+            <VariableProximity text={d} />
+          </Box>
+        ))}
+      </Box>
+    </>
+  )
+}
+
 export default function Services() {
   const { services: copy } = useLang().t
 
@@ -41,7 +96,7 @@ export default function Services() {
             <Typography id="services-title" component="h2" sx={sectionTitleSx}>
               <VariableProximity text={copy.title} />
             </Typography>
-            <Typography sx={{ fontSize: 13, lineHeight: 1.6, color: colors.muted, maxWidth: 300, pb: { md: 0.5 } }}>
+            <Typography sx={{ fontSize: 16, lineHeight: 1.6, color: colors.muted, maxWidth: 300, pb: { md: 0.5 } }}>
               <VariableProximity text={copy.text} />
             </Typography>
           </Box>
@@ -50,47 +105,42 @@ export default function Services() {
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' },
+            gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: 'repeat(2, minmax(0, 1fr))' },
+            [STUDIO_LG]: { gridTemplateColumns: 'repeat(6, minmax(0, 1fr))' },
             gap: { xs: 1.5, md: 2 },
           }}
         >
-          {copy.items.map((item, i) => (
-            <Reveal key={item.title} delay={(i % 3) * 0.08}>
-              <Box component="article" sx={cardSx}>
-                <Typography component="h3" sx={{ fontSize: { xs: 20, md: 22 }, fontWeight: 500, lineHeight: 1.25, letterSpacing: '-0.01em' }}>
-                  <VariableProximity text={item.title} />
-                </Typography>
-                <Typography sx={{ fontSize: 14, lineHeight: 1.65, color: colors.muted }}><VariableProximity text={item.text} /></Typography>
-                {'game' in item && item.game && <HexGame />}
-                <Box component="ul" aria-label={copy.deliverablesLabel} sx={{ m: 0, p: 0, mt: 'auto', pt: 1, listStyle: 'none', display: 'grid', gap: 0.75 }}>
-                  {item.deliverables.map((d) => (
+          {copy.items.map((item, i) => {
+            const game = 'game' in item && item.game
+            return (
+              // The Reveal wrapper sits between the grid cell and the card: stretch it so cards in a row match.
+              <Box key={item.title} sx={{ ...serviceSpan(i, !!game), display: 'flex', '& > div': { display: 'flex', flex: 1, minWidth: 0 } }}>
+                <Reveal delay={(i % 3) * 0.08}>
+                  {game ? (
                     <Box
-                      component="li"
-                      key={d}
+                      component="article"
                       sx={{
-                        position: 'relative',
-                        pl: 2.25,
-                        fontSize: 13,
-                        lineHeight: 1.5,
-                        color: colors.text,
-                        '&::before': {
-                          content: '""',
-                          position: 'absolute',
-                          left: 0,
-                          top: '0.6em',
-                          width: 8,
-                          height: '1px',
-                          bgcolor: colors.gold,
-                        },
+                        ...cardSx,
+                        flex: 1,
+                        display: { xs: 'flex', md: 'grid' },
+                        gridTemplateColumns: { md: 'minmax(0, 1fr) minmax(0, 1.4fr)' },
+                        columnGap: { md: 4 },
                       }}
                     >
-                      <VariableProximity text={d} />
+                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <ServiceBody item={item} label={copy.deliverablesLabel} />
+                      </Box>
+                      <HexGame sx={{ order: { xs: -1, md: 0 }, aspectRatio: 'auto', height: { xs: 200, md: '100%' }, minHeight: { md: 320 } }} />
                     </Box>
-                  ))}
-                </Box>
+                  ) : (
+                    <Box component="article" sx={{ ...cardSx, flex: 1 }}>
+                      <ServiceBody item={item} label={copy.deliverablesLabel} />
+                    </Box>
+                  )}
+                </Reveal>
               </Box>
-            </Reveal>
-          ))}
+            )
+          })}
         </Box>
 
         <Box sx={{ mt: { xs: 7, md: 9 } }}>
@@ -116,13 +166,13 @@ export default function Services() {
               <Box component="li" key={step.title} sx={{ display: 'flex', '& > div': { display: 'flex', flex: 1, minWidth: 0 } }}>
                 <Reveal delay={i * 0.06}>
                   <Box sx={{ ...cardSx, flex: 1, gap: 1.25 }}>
-                    <Typography aria-hidden sx={{ fontSize: 13, letterSpacing: '0.2em', color: colors.gold }}>
+                    <Typography aria-hidden sx={{ fontSize: 16, letterSpacing: '0.12em', color: colors.gold }}>
                       {String(i + 1).padStart(2, '0')}
                     </Typography>
                     <Typography component="h4" sx={{ fontSize: 17, fontWeight: 500, lineHeight: 1.3 }}>
                       <VariableProximity text={step.title} />
                     </Typography>
-                    <Typography sx={{ fontSize: 13, lineHeight: 1.6, color: colors.muted }}><VariableProximity text={step.text} /></Typography>
+                    <Typography sx={{ fontSize: 16, lineHeight: 1.6, color: colors.muted }}><VariableProximity text={step.text} /></Typography>
                   </Box>
                 </Reveal>
               </Box>

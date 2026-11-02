@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } 
 import { colors, contentSx, microLabel, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
 import type { Project } from '../data/content'
+import { caseByProject, caseHref } from '../data/cases'
 import { VariableProximity } from './effects'
 import { CroppedImage } from './ProjectCard'
 
@@ -228,10 +229,15 @@ function GameCard({ project, index }: { project: Project; index: number }) {
 
 /** Index row: fills with the accent from the bottom on hover, text and arrow turn dark. */
 function Row({ project, number, onHover }: { project: Project; number: string; onHover: (p: Project | null) => void }) {
-  const { projects } = useLang().t
-  const linkProps = project.url
-    ? { component: 'a' as const, href: project.url, target: '_blank', rel: 'noopener noreferrer', 'aria-label': `${projects.openLabel} ${project.title}` }
-    : {}
+  const { lang, t } = useLang()
+  const { projects } = t
+  // A row opens its case study (Russian only for now), otherwise the project site.
+  const study = lang === 'ru' ? caseByProject(project.id) : undefined
+  const linkProps = study
+    ? { component: 'a' as const, href: caseHref(study.slug), 'aria-label': `${projects.caseLabel}: ${project.title}` }
+    : project.url
+      ? { component: 'a' as const, href: project.url, target: '_blank', rel: 'noopener noreferrer', 'aria-label': `${projects.openLabel} ${project.title}` }
+      : {}
 
   return (
     <Box
@@ -314,7 +320,7 @@ function Row({ project, number, onHover }: { project: Project; number: string; o
           <CroppedImage image={project.image} alt="" />
         </Box>
         <Box sx={{ gridArea: 'end', justifySelf: 'end' }}>
-          {project.url ? (
+          {study || project.url ? (
             <Box className="row-arrow" aria-hidden sx={{ ...arrowSx, width: 44, height: 44 }}>
               <ArrowForward sx={{ fontSize: 18 }} />
             </Box>
