@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography'
 import { colors, contentSx, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
 import { Reveal, VariableProximity } from './effects'
+import HexGame from './game/HexGame'
 
 const cardSx = {
   height: '100%',
@@ -60,6 +61,7 @@ export default function Services() {
                   <VariableProximity text={item.title} />
                 </Typography>
                 <Typography sx={{ fontSize: 14, lineHeight: 1.65, color: colors.muted }}><VariableProximity text={item.text} /></Typography>
+                {'game' in item && item.game && <HexGame />}
                 <Box component="ul" aria-label={copy.deliverablesLabel} sx={{ m: 0, p: 0, mt: 'auto', pt: 1, listStyle: 'none', display: 'grid', gap: 0.75 }}>
                   {item.deliverables.map((d) => (
                     <Box

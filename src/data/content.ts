@@ -49,6 +49,8 @@ export interface Project {
    * lettering) is shown in its own colours next to the title instead.
    */
   logo?: { src: string; width: number; height: number; mark?: boolean }
+  /** Still being polished (Lemnity games): shows an "in development" pill instead of "soon". */
+  inDevelopment?: boolean
 }
 
 export type FeedbackTopicId = 'website' | 'brand' | 'product' | 'other'
@@ -100,6 +102,20 @@ const projectBase = {
     title: 'TURDUS',
     image: { src: `${BASE}assets/turdus-site.webp`, width: 1200, height: 750, crop: { x: 0, y: 0, w: 1200, h: 750 }, focus: [0.3, 0.4] },
     url: 'https://lemnity.github.io/trds/',
+  },
+  spinMeet: {
+    id: 'spin-meet',
+    number: '',
+    title: 'Крути и знакомься',
+    image: { src: `${BASE}assets/game-spin-meet.webp`, width: 1207, height: 734, crop: { x: 0, y: 0, w: 1207, h: 734 }, focus: [0.5, 0.5] },
+    inDevelopment: true,
+  },
+  rps: {
+    id: 'rps',
+    number: '',
+    title: 'Камень, ножницы, бумага',
+    image: { src: `${BASE}assets/game-rps.webp`, width: 720, height: 800, crop: { x: 0, y: 0, w: 720, h: 800 }, focus: [0.5, 0.66] },
+    inDevelopment: true,
   },
 } satisfies Record<string, Omit<Project, 'description' | 'tags'>>
 
@@ -182,11 +198,22 @@ const ru = {
     showLess: 'Свернуть',
     /** Shown instead of the arrow on projects without a public link yet. */
     soonLabel: 'Скоро',
+    inDevLabel: 'В доработке',
     items: [
       {
         ...projectBase.lemnity,
         description: 'Платформа для создания сайтов, чат-ботов и цифровых продуктов',
         tags: ['SaaS', 'Конструктор', 'AI', 'Продукт'],
+      },
+      {
+        ...projectBase.spinMeet,
+        description: 'Казуальная игра для знакомств',
+        tags: ['Игра', 'Казуальная', 'Lemnity'],
+      },
+      {
+        ...projectBase.rps,
+        description: 'Карточная версия классики в фэнтези-стиле',
+        tags: ['Игра', 'Карточная', 'Lemnity'],
       },
       {
         ...projectBase.tumtipb,
@@ -228,8 +255,13 @@ const ru = {
   },
   services: {
     title: 'Чем я занимаюсь',
-    text: 'Сайты, интерфейсы, бренды и цифровые продукты — от идеи до запуска.',
+    text: 'Сайты, интерфейсы, бренды, цифровые продукты и игры — от идеи до запуска.',
     deliverablesLabel: 'Что входит',
+    game: {
+      aria: 'Мини-игра «Лопай соты»: нажимайте на группы сот одного цвета',
+      hint: '👆 Нажмите на соты',
+      praise: ['Супер!', 'Вау!', 'Отлично!', 'Комбо!'] as readonly string[],
+    },
     items: [
       {
         title: 'Разработка сайтов и веб-приложений',
@@ -255,6 +287,12 @@ const ru = {
         title: 'Цифровой продукт и MVP',
         text: 'Помогаю превратить идею в работающий продукт: от гипотезы и прототипа до первой версии. Как продюсер я знаю, что на старте важно, а что можно отложить. Среди моих проектов — Lemnity, платформа для создания сайтов, чат-ботов и цифровых продуктов.',
         deliverables: ['уточнение идеи и состава первой версии', 'кликабельный прототип', 'дизайн и разработка MVP', 'план развития продукта', 'запуск и первые доработки'],
+      },
+      {
+        title: 'Разработка игр',
+        text: 'Делаю казуальные и мини-игры для браузера, Telegram и промо-акций, а также коммерческие игры под задачи бизнеса. Придумываю игровой цикл, рисую графику и довожу до релиза. Попробуйте: игра в этой карточке живая.',
+        deliverables: ['казуальные игры для браузера и телефона', 'мини-игры для Telegram, сайтов и акций', 'коммерческие игры с монетизацией', 'геймдизайн, графика и анимация', 'релиз и поддержка'],
+        game: true,
       },
     ],
     process: {
@@ -413,11 +451,24 @@ const en: Content = {
     showAll: 'All projects',
     showLess: 'Show less',
     soonLabel: 'Coming soon',
+    inDevLabel: 'In development',
     items: [
       {
         ...projectBase.lemnity,
         description: 'A platform for building websites, chatbots and digital products',
         tags: ['SaaS', 'Site builder', 'AI', 'Product'],
+      },
+      {
+        ...projectBase.spinMeet,
+        title: 'Spin & Meet',
+        description: 'A casual game for meeting new people',
+        tags: ['Game', 'Casual', 'Lemnity'],
+      },
+      {
+        ...projectBase.rps,
+        title: 'Rock, Paper, Scissors',
+        description: 'A fantasy card take on the classic',
+        tags: ['Game', 'Card game', 'Lemnity'],
       },
       {
         ...projectBase.tumtipb,
@@ -459,8 +510,13 @@ const en: Content = {
   },
   services: {
     title: 'What I do',
-    text: 'Websites, interfaces, brands and digital products — from idea to launch.',
+    text: 'Websites, interfaces, brands, digital products and games — from idea to launch.',
     deliverablesLabel: 'What is included',
+    game: {
+      aria: 'Mini-game “Pop the hexes”: tap groups of same-coloured hexes',
+      hint: '👆 Tap the hexes',
+      praise: ['Super!', 'Wow!', 'Great!', 'Combo!'] as readonly string[],
+    },
     items: [
       {
         title: 'Websites and web apps',
@@ -486,6 +542,12 @@ const en: Content = {
         title: 'Digital product and MVP',
         text: 'I help turn an idea into a working product, from hypothesis and prototype to a first version. As a producer I know what matters at the start and what can wait. Among my projects is Lemnity, a platform for building sites, chatbots and digital products.',
         deliverables: ['clarifying the idea and the scope of version one', 'a clickable prototype', 'MVP design and development', 'a product roadmap', 'launch and first improvements'],
+      },
+      {
+        title: 'Game development',
+        text: 'I make casual and mini games for the browser, Telegram and promo campaigns, as well as commercial games built around business goals. I design the game loop, draw the graphics and take it all the way to release. Try it: the game in this card is live.',
+        deliverables: ['casual games for browser and mobile', 'mini games for Telegram, websites and campaigns', 'commercial games with monetisation', 'game design, graphics and animation', 'release and support'],
+        game: true,
       },
     ],
     process: {

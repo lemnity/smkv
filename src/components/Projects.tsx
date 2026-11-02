@@ -144,7 +144,7 @@ function Row({ project, number, delay, onHover }: { project: Project; number: nu
                 '&::before': { content: '""', width: 6, height: 6, borderRadius: '50%', bgcolor: colors.gold },
               }}
             >
-              {projects.soonLabel}
+              {project.inDevelopment ? projects.inDevLabel : projects.soonLabel}
             </Box>
           )}
         </Box>
