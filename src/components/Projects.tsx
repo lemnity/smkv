@@ -47,11 +47,15 @@ const revealProps = (delay = 0) => ({
   transition: { duration: 0.7, delay, ease },
 })
 
+/** The studio site's Tailwind breakpoints (lg 1024, xl 1280), so the first row matches its proportions. */
+const STUDIO_LG = '@media (min-width: 1024px)'
+const STUDIO_XL = '@media (min-width: 1280px)'
+
 /** Lemnity: dark card, copy on the left, the platform screenshot on the right fading into the card. */
 function FlagshipCard({ project, number }: { project: Project; number: string }) {
   const { projects } = useLang().t
   return (
-    <Box component={motion.div} {...revealProps()} sx={{ gridColumn: { md: 'span 2', xl: 'auto' }, minWidth: 0 }}>
+    <Box component={motion.div} {...revealProps()} sx={{ gridColumn: { md: 'span 2' }, [STUDIO_XL]: { gridColumn: 'auto' }, minWidth: 0 }}>
       <Box
         component="a"
         href={project.url}
@@ -61,7 +65,7 @@ function FlagshipCard({ project, number }: { project: Project; number: string })
         sx={{
           ...cardSx,
           display: 'grid',
-          gridTemplateColumns: { lg: 'minmax(0, 1fr) minmax(0, 1.1fr)' },
+          [STUDIO_LG]: { gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.1fr)' },
           minHeight: { md: 440 },
           '&:hover .flag-media': { transform: 'scale(1.04)' },
           '&:hover .row-arrow, &:focus-visible .row-arrow': {
@@ -74,7 +78,7 @@ function FlagshipCard({ project, number }: { project: Project; number: string })
         }}
       >
         <Typography
-          sx={{ display: { xs: 'none', lg: 'block' }, position: 'absolute', left: 24, top: 24, zIndex: 2, fontSize: 16, letterSpacing: '0.12em', color: colors.gold }}
+          sx={{ display: 'none', [STUDIO_LG]: { display: 'block' }, position: 'absolute', left: 24, top: 24, zIndex: 2, fontSize: 16, letterSpacing: '0.12em', color: colors.gold }}
         >
           {number}
         </Typography>
@@ -88,9 +92,7 @@ function FlagshipCard({ project, number }: { project: Project; number: string })
             justifyContent: 'center',
             gap: { xs: 2.5, md: 3 },
             p: { xs: 3, md: 5 },
-            py: { lg: 6 },
-            pl: { lg: 6 },
-            pr: { lg: 3 },
+            [STUDIO_LG]: { py: 6, pl: 6, pr: 3 },
           }}
         >
           <Box
@@ -137,7 +139,7 @@ function FlagshipCard({ project, number }: { project: Project; number: string })
           </Box>
         </Box>
         {/* Screenshot: on top on phones, right of the copy on desktop; fades into the card. */}
-        <Box sx={{ position: 'relative', order: { xs: -1, lg: 0 }, alignSelf: { lg: 'center' }, aspectRatio: '466 / 216', overflow: 'hidden' }}>
+        <Box sx={{ position: 'relative', order: -1, [STUDIO_LG]: { order: 0, alignSelf: 'center' }, aspectRatio: '466 / 216', overflow: 'hidden' }}>
           <Box className="flag-media" sx={{ position: 'absolute', inset: 0, transition: 'transform 1s cubic-bezier(0.22,1,0.36,1)' }}>
             <CroppedImage image={project.image} alt="" />
           </Box>
@@ -146,10 +148,8 @@ function FlagshipCard({ project, number }: { project: Project; number: string })
             sx={{
               position: 'absolute',
               inset: 0,
-              background: {
-                xs: `linear-gradient(to top, ${colors.surface}, transparent 35%)`,
-                lg: `linear-gradient(to right, ${colors.surface}, transparent 25%)`,
-              },
+              background: `linear-gradient(to top, ${colors.surface}, transparent 35%)`,
+              [STUDIO_LG]: { background: `linear-gradient(to right, ${colors.surface}, transparent 25%)` },
             }}
           />
         </Box>
@@ -387,7 +387,8 @@ export default function Projects() {
               gap: 2,
               py: { xs: 3, md: 4 },
               borderBottom: `1px solid ${colors.line}`,
-              gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: 'repeat(2, minmax(0, 1fr))', xl: '3fr 1fr 1fr' },
+              gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: 'repeat(2, minmax(0, 1fr))' },
+              [STUDIO_XL]: { gridTemplateColumns: 'minmax(0, 3fr) minmax(0, 1fr) minmax(0, 1fr)' },
             }}
           >
             <FlagshipCard project={flagship} number="01" />
