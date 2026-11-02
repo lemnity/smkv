@@ -1,30 +1,21 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import ButtonBase from '@mui/material/ButtonBase'
-import Dialog from '@mui/material/Dialog'
-import Fade from '@mui/material/Fade'
-import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import ArrowForward from '@mui/icons-material/ArrowForward'
-import Close from '@mui/icons-material/Close'
-import { useReducedMotion } from 'motion/react'
-import { colors, contentSx, microLabel, outlinedIconButtonSx } from '../theme'
-import { CASES, caseBySlug, caseHref, type Case } from '../data/cases'
+import { colors, contentSx, HEADER_HEIGHT, microLabel } from '../theme'
+import { BASE } from '../utils/base'
+import { CASES, casePath, type Case } from '../data/cases'
 import { useFeedback } from './feedback/context'
+import { Reveal } from './effects'
 
 /*
- * Project case study, laid out like the case pages of the Lemnity Studio site.
- * The site has no router, so a case is a full-screen dialog bound to the `#case/<slug>` hash:
- * links work, back closes it, and the page underneath keeps its scroll position.
+ * Project case study page (/cases/<slug>/), laid out like the case pages of the Lemnity Studio site.
+ * App renders it instead of the home sections when the path names a case; the site header and footer stay.
  */
 
 const pad = (n: number) => String(n).padStart(2, '0')
-const fromHash = () => {
-  const m = window.location.hash.match(/^#case\/([\w-]+)$/)
-  return m ? (caseBySlug(m[1]) ?? null) : null
-}
 const lead = { fontSize: { xs: 18, md: 20 }, lineHeight: 1.6, maxWidth: '60ch' }
 const mutedLabel = { ...microLabel, color: colors.muted }
 
@@ -44,7 +35,7 @@ function BrowserShot({ src, url, alt, eager }: { src: string; url?: string; alt:
           </Typography>
         )}
       </Box>
-      <img src={src} alt={alt} width={1440} height={900} loading={eager ? 'eager' : 'lazy'} decoding="async" style={{ display: 'block', width: '100%', height: 'auto' }} />
+      <img src={BASE + src} alt={alt} width={1440} height={900} loading={eager ? 'eager' : 'lazy'} decoding="async" style={{ display: 'block', width: '100%', height: 'auto' }} />
     </Box>
   )
 }
@@ -52,21 +43,23 @@ function BrowserShot({ src, url, alt, eager }: { src: string; url?: string; alt:
 /** Labelled block: a small label on the left third, content on the right. */
 function CaseSection({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <Box
-      component="section"
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: { md: 'minmax(0, 1fr) minmax(0, 2fr)' },
-        gap: { xs: 3, md: 6 },
-        py: { xs: 6, md: 8 },
-        borderTop: `1px solid ${colors.line}`,
-      }}
-    >
-      <Typography component="h2" sx={mutedLabel}>
-        {label}
-      </Typography>
-      <Box sx={{ minWidth: 0 }}>{children}</Box>
-    </Box>
+    <Reveal>
+      <Box
+        component="section"
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { md: 'minmax(0, 1fr) minmax(0, 2fr)' },
+          gap: { xs: 3, md: 6 },
+          py: { xs: 6, md: 8 },
+          borderTop: `1px solid ${colors.line}`,
+        }}
+      >
+        <Typography component="h2" sx={mutedLabel}>
+          {label}
+        </Typography>
+        <Box sx={{ minWidth: 0 }}>{children}</Box>
+      </Box>
+    </Reveal>
   )
 }
 
@@ -83,17 +76,29 @@ function Meta({ label, children }: { label: string; children: ReactNode }) {
   )
 }
 
-function CaseBody({ study, onBack, onContact }: { study: Case; onBack: () => void; onContact: () => void }) {
+/** Link back to the projects list on the home page. */
+function BackLink() {
+  return (
+    <Box component="a" href={`${BASE}#work`} sx={{ ...mutedLabel, display: 'inline-flex', alignItems: 'center', gap: 1, textDecoration: 'none', transition: 'color .3s', '&:hover': { color: colors.text } }}>
+      <ArrowBack sx={{ fontSize: 16 }} /> Все проекты
+    </Box>
+  )
+}
+
+export default function CasePage({ study }: { study: Case }) {
+  const { openFeedback } = useFeedback()
   const index = CASES.indexOf(study)
   const next = CASES[(index + 1) % CASES.length]
 
   return (
-    <>
-      <Box component="header" sx={{ ...contentSx, pt: { xs: 5, md: 8 }, pb: { xs: 6, md: 8 } }}>
+    <Box component="main">
+      <Box component="header" sx={{ ...contentSx, pt: { xs: `${HEADER_HEIGHT.xs + 40}px`, md: `${HEADER_HEIGHT.md + 72}px` }, pb: { xs: 6, md: 8 } }}>
+        <BackLink />
         <Box
           sx={{
             display: 'grid',
             gap: 5,
+            mt: { xs: 4, md: 5 },
             alignItems: { lg: 'end' },
             gridTemplateColumns: { lg: 'minmax(0, 1.4fr) minmax(0, 1fr)' },
           }}
@@ -235,7 +240,7 @@ function CaseBody({ study, onBack, onContact }: { study: Case; onBack: () => voi
             sx={{ m: 0, mx: 'auto', width: { xs: '60%', md: '100%' }, maxWidth: 260, overflow: 'hidden', borderRadius: '28px', border: `1px solid ${colors.line}`, bgcolor: colors.surface, p: 1 }}
           >
             <img
-              src={study.shots.mobile}
+              src={BASE + study.shots.mobile}
               alt={`${study.title}: версия для телефона`}
               width={390}
               height={844}
@@ -289,7 +294,7 @@ function CaseBody({ study, onBack, onContact }: { study: Case; onBack: () => voi
             '& .case-cta:hover .case-big': { color: colors.goldLight, '& svg': { transform: 'translateX(8px)' } },
           }}
         >
-          <ButtonBase className="case-cta" onClick={onContact} sx={{ display: 'block', textAlign: 'left', color: 'inherit', font: 'inherit' }}>
+          <ButtonBase className="case-cta" onClick={() => openFeedback()} sx={{ display: 'block', textAlign: 'left', color: 'inherit', font: 'inherit' }}>
             <Typography component="span" sx={mutedLabel}>
               Похожая задача?
             </Typography>
@@ -300,12 +305,7 @@ function CaseBody({ study, onBack, onContact }: { study: Case; onBack: () => voi
           <Box
             component="a"
             className="case-cta"
-            href={caseHref(next.slug)}
-            onClick={(e: React.MouseEvent) => {
-              // Swap the case in place: "back" should still lead to the page, not through every case.
-              e.preventDefault()
-              window.location.replace(caseHref(next.slug))
-            }}
+            href={BASE + casePath(next.slug)}
             sx={{ display: 'block', color: 'inherit', textDecoration: 'none', textAlign: { md: 'right' }, '& .case-big': { justifyContent: { md: 'flex-end' } } }}
           >
             <Typography component="span" sx={mutedLabel}>
@@ -317,86 +317,9 @@ function CaseBody({ study, onBack, onContact }: { study: Case; onBack: () => voi
           </Box>
         </Box>
         <Box sx={{ pb: { xs: 6, md: 8 } }}>
-          <ButtonBase onClick={onBack} sx={{ ...mutedLabel, gap: 1, '&:hover': { color: colors.text } }}>
-            <ArrowBack sx={{ fontSize: 16 }} /> Все проекты
-          </ButtonBase>
+          <BackLink />
         </Box>
       </Box>
-    </>
-  )
-}
-
-/** Mounted once in App: shows the case named by the `#case/<slug>` hash. */
-export default function CaseDialog() {
-  const reduce = useReducedMotion()
-  const { openFeedback } = useFeedback()
-  const [study, setStudy] = useState<Case | null>(() => fromHash())
-  // Last shown case, kept while the dialog fades out.
-  const [shown, setShown] = useState<Case | null>(study)
-  // True when the case was opened from the page (so "back" returns to it) rather than by a direct link.
-  const openedInPage = useRef(false)
-  const paperRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const onHash = () => {
-      const next = fromHash()
-      setStudy((prev) => {
-        if (next && !prev) openedInPage.current = true
-        return next
-      })
-    }
-    window.addEventListener('hashchange', onHash)
-    return () => window.removeEventListener('hashchange', onHash)
-  }, [])
-
-  useEffect(() => {
-    if (!study) return
-    setShown(study)
-    paperRef.current?.scrollTo({ top: 0 })
-  }, [study])
-
-  const close = useCallback(() => {
-    if (openedInPage.current) {
-      openedInPage.current = false
-      window.history.back()
-      return
-    }
-    // Opened by a direct link: drop the hash and land on the projects list.
-    window.history.replaceState(null, '', window.location.pathname + window.location.search)
-    setStudy(null)
-    requestAnimationFrame(() => document.getElementById('work')?.scrollIntoView())
-  }, [])
-
-  return (
-    <Dialog
-      open={!!study}
-      onClose={close}
-      fullScreen
-      aria-labelledby="case-title"
-      slots={{ transition: Fade }}
-      transitionDuration={reduce ? 0 : { enter: 320, exit: 220 }}
-      slotProps={{ paper: { ref: paperRef, sx: { bgcolor: colors.bg, backgroundImage: 'none', overflowY: 'auto' } } }}
-    >
-      <Box
-        sx={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 2,
-          borderBottom: `1px solid ${colors.line}`,
-          bgcolor: 'rgba(3,3,3,0.82)',
-          backdropFilter: 'blur(12px)',
-        }}
-      >
-        <Box sx={{ ...contentSx, height: { xs: 64, md: 76 }, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <ButtonBase onClick={close} sx={{ ...mutedLabel, gap: 1, '&:hover': { color: colors.text } }}>
-            <ArrowBack sx={{ fontSize: 16 }} /> Все проекты
-          </ButtonBase>
-          <IconButton aria-label="Закрыть кейс" onClick={close} sx={{ ...outlinedIconButtonSx, width: 44, height: 44 }}>
-            <Close sx={{ fontSize: 20 }} />
-          </IconButton>
-        </Box>
-      </Box>
-      {shown && <CaseBody study={shown} onBack={close} onContact={() => openFeedback()} />}
-    </Dialog>
+    </Box>
   )
 }

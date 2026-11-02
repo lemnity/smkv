@@ -2,7 +2,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { MotionConfig, motion } from 'motion/react'
 import theme, { contentSx } from './theme'
 import Header from './components/Header'
@@ -14,13 +14,19 @@ import Projects from './components/Projects'
 import Gallery from './components/Gallery'
 import Clients from './components/Clients'
 import FloatingCta from './components/FloatingCta'
-import CaseDialog from './components/CaseDialog'
+import CasePage from './components/CasePage'
+import Manifesto from './components/Manifesto'
 import About from './components/About'
 import Loader from './components/Loader'
 import { IntroContext } from './components/intro'
 import { LANG_FADE, LanguageProvider, useLang } from './i18n'
 import { CustomCursor, GrainOverlay, ScrollProgress } from './components/effects'
 import { FeedbackProvider } from './components/feedback/FeedbackProvider'
+import { caseBySlug, caseSlugFromPath, caseTitle } from './data/cases'
+import { BASE } from './utils/base'
+
+/** Case study named by the URL (/cases/<slug>/), if this is a case page. */
+const caseStudy = caseBySlug(caseSlugFromPath(window.location.pathname.slice(BASE.length)) ?? '')
 
 function SectionDivider() {
   return (
@@ -36,6 +42,13 @@ function Page() {
   const handleLoaderDone = useCallback(() => setIntroReady(true), [])
   const { t, fading } = useLang()
 
+  // Arriving from a case page with `#work` etc.: the browser jumps before the content settles,
+  // so land on the section again once the loader is gone.
+  useEffect(() => {
+    if (!introReady || !window.location.hash) return
+    document.querySelector(window.location.hash)?.scrollIntoView({ behavior: 'instant', block: 'start' })
+  }, [introReady])
+
   return (
     <IntroContext.Provider value={introReady}>
       <ScrollProgress />
@@ -47,6 +60,7 @@ function Page() {
       >
         <Box component="main">
           <Hero />
+          <Manifesto />
           <SectionDivider />
           <Projects />
           <SectionDivider />
@@ -64,10 +78,31 @@ function Page() {
         <Footer />
       </motion.div>
       <FloatingCta />
-      <CaseDialog />
       <GrainOverlay />
       <CustomCursor />
       <Loader label={t.loader.label} onDone={handleLoaderDone} />
+    </IntroContext.Provider>
+  )
+}
+
+/** A case study page: the site header, the case, the footer — no loader. */
+function CaseStudyPage({ study }: { study: NonNullable<typeof caseStudy> }) {
+  // Runs before LanguageProvider's effect, which then leaves this page's title and meta alone.
+  // (Built case pages already have both in their HTML; this covers the dev server.)
+  useEffect(() => {
+    document.documentElement.dataset.page = 'case'
+    document.title = caseTitle(study)
+  }, [study])
+
+  return (
+    <IntroContext.Provider value={true}>
+      <ScrollProgress />
+      <Header home={BASE} />
+      <CasePage study={study} />
+      <Footer />
+      <FloatingCta />
+      <GrainOverlay />
+      <CustomCursor />
     </IntroContext.Provider>
   )
 }
@@ -79,7 +114,7 @@ export default function App() {
       <LanguageProvider>
         <MotionConfig reducedMotion="user">
           <FeedbackProvider>
-            <Page />
+            {caseStudy ? <CaseStudyPage study={caseStudy} /> : <Page />}
           </FeedbackProvider>
         </MotionConfig>
       </LanguageProvider>

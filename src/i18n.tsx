@@ -38,6 +38,8 @@ function setMeta(selector: string, value: string) {
 }
 
 function applyDocument(lang: Lang) {
+  // A case page carries its own title and meta (written into its HTML at build time).
+  if (document.documentElement.dataset.page === 'case') return
   const { meta } = content[lang]
   document.documentElement.lang = lang
   document.title = meta.title

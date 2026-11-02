@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import type { ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import Link from '@mui/material/Link'
@@ -30,7 +31,8 @@ const BLUR = 4
  */
 const staggerFor = (total: number) => Math.max(0.05, 2.5 / total)
 
-function Word({ children, progress, index, total }: { children: string; progress: MotionValue<number>; index: number; total: number }) {
+/** One word of a scroll-revealed text (also used by Manifesto). */
+export function Word({ children, progress, index, total }: { children: ReactNode; progress: MotionValue<number>; index: number; total: number }) {
   // Timeline like GSAP's: each word tweens for 1 unit, starting `index * STAGGER` in.
   const stagger = staggerFor(total)
   const span = 1 + (total - 1) * stagger

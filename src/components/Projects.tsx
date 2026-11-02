@@ -7,7 +7,8 @@ import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } 
 import { colors, contentSx, microLabel, sectionTitleSx } from '../theme'
 import { useLang } from '../i18n'
 import type { Project } from '../data/content'
-import { caseByProject, caseHref } from '../data/cases'
+import { caseByProject, casePath } from '../data/cases'
+import { BASE } from '../utils/base'
 import { VariableProximity } from './effects'
 import { CroppedImage } from './ProjectCard'
 
@@ -234,7 +235,7 @@ function Row({ project, number, onHover }: { project: Project; number: string; o
   // A row opens its case study (Russian only for now), otherwise the project site.
   const study = lang === 'ru' ? caseByProject(project.id) : undefined
   const linkProps = study
-    ? { component: 'a' as const, href: caseHref(study.slug), 'aria-label': `${projects.caseLabel}: ${project.title}` }
+    ? { component: 'a' as const, href: BASE + casePath(study.slug), 'aria-label': `${projects.caseLabel}: ${project.title}` }
     : project.url
       ? { component: 'a' as const, href: project.url, target: '_blank', rel: 'noopener noreferrer', 'aria-label': `${projects.openLabel} ${project.title}` }
       : {}

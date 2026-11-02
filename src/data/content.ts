@@ -193,6 +193,9 @@ const ru = {
     write: 'Написать мне',
     portraitAlt: 'Александр Симаков',
   },
+  /** Big "who I am" text after the first screen (as on the studio site); [brackets] are accented. */
+  manifesto:
+    'Я соединяю дизайн и технологии, чтобы создавать сайты, игры и [цифровые продукты]. От идеи до [UX], [UI], [кода] и запуска. За мной — [12+ лет опыта], [50+ проектов] и собственная платформа [Lemnity]. Дизайнер, который думает как инженер. Инженер, который проектирует с чувством. Я превращаю [сложное] в [простое], которое работает.',
   projects: {
     title: 'Избранные проекты',
     text: 'Продукты, бренды и цифровые решения, которые делают идеи реальностью.',
@@ -447,6 +450,8 @@ const en: Content = {
     write: 'Get in touch',
     portraitAlt: 'Alexander Simakov',
   },
+  manifesto:
+    'I bring design and technology together to create websites, games and [digital products]. From idea to [UX], [UI], [code] and launch. Behind me are [12+ years of experience], [50+ projects] and my own platform, [Lemnity]. A designer who thinks like an engineer. An engineer who designs with feeling. I turn [complexity] into [simplicity] that works.',
   projects: {
     title: 'Featured projects',
     text: 'Products, brands and digital solutions that turn ideas into reality.',

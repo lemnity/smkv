@@ -30,7 +30,8 @@ const contactIcons: Record<string, typeof Telegram> = {
   email: MailOutline,
 }
 
-export default function Header() {
+/** `home` — prefix for the menu anchors: on a case page the sections live on the home page (`/#work`). */
+export default function Header({ home }: { home?: string } = {}) {
   const ready = useIntroReady()
   const { t } = useLang()
   const { header, nav } = t
@@ -42,9 +43,12 @@ export default function Header() {
 
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 40))
 
+  // On the home page anchors scroll in place; elsewhere they are plain links to the home page.
+  const hrefOf = (hash: string) => (home === undefined ? hash : `${home}${hash}`)
   const go = (href: string) => (e: React.MouseEvent) => {
-    e.preventDefault()
     setOpen(false)
+    if (home !== undefined) return
+    e.preventDefault()
     scrollToHash(href)
   }
 
@@ -79,7 +83,7 @@ export default function Header() {
               alignItems: 'center',
             }}
           >
-            <Link href="#home" onClick={go('#home')} aria-label={header.homeLabel} sx={{ justifySelf: 'start' }}>
+            <Link href={hrefOf('#home')} onClick={go('#home')} aria-label={header.homeLabel} sx={{ justifySelf: 'start' }}>
               <Wordmark text={header.wordmark} />
             </Link>
 
@@ -92,7 +96,7 @@ export default function Header() {
               {nav.map((item) => (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={hrefOf(item.href)}
                   onClick={go(item.href)}
                   sx={{ ...microLabel, color: colors.text, ...hoverUnderlineSx, '&:hover': { color: colors.goldLight } }}
                 >
@@ -160,7 +164,7 @@ export default function Header() {
               transition={{ duration: 0.6, delay: 0.1 + i * 0.08, ease }}
             >
               <Link
-                href={item.href}
+                href={hrefOf(item.href)}
                 onClick={go(item.href)}
                 sx={{
                   display: 'inline-block',

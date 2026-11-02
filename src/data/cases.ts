@@ -1,9 +1,8 @@
-import { BASE } from '../utils/base'
-
 /**
- * Project case studies, opened from the featured projects list (`#case/<slug>`).
+ * Project case studies: each is its own page, /cases/<slug>/ (built by the `casePages` plugin in vite.config.ts).
  * Facts come from the Lemnity Studio site (repo `studio`, studio-cases.ts), rewritten in first person.
- * Screenshots live in public/assets/cases/<projectId>/ (d0–d2 desktop, m0 phone).
+ * Screenshots live in public/assets/cases/<projectId>/ (d0–d2 desktop, m0 phone); paths are relative to the
+ * site base, so vite.config.ts can import this file too.
  *
  * Russian only for now: the English list links straight to the project sites.
  */
@@ -30,9 +29,9 @@ export interface Case {
 }
 
 const shots = (id: string) => ({
-  hero: `${BASE}assets/cases/${id}/d0.webp`,
-  desktop: [`${BASE}assets/cases/${id}/d1.webp`, `${BASE}assets/cases/${id}/d2.webp`],
-  mobile: `${BASE}assets/cases/${id}/m0.webp`,
+  hero: `assets/cases/${id}/d0.webp`,
+  desktop: [`assets/cases/${id}/d1.webp`, `assets/cases/${id}/d2.webp`],
+  mobile: `assets/cases/${id}/m0.webp`,
 })
 
 export const CASES: readonly Case[] = [
@@ -183,5 +182,11 @@ export const CASES: readonly Case[] = [
 
 export const caseByProject = (projectId: string) => CASES.find((c) => c.projectId === projectId)
 export const caseBySlug = (slug: string) => CASES.find((c) => c.slug === slug)
-/** In-page address of a case: opens the case dialog over the page. */
-export const caseHref = (slug: string) => `#case/${slug}`
+/** Path of a case page relative to the site base (prefix with BASE). */
+export const casePath = (slug: string) => `cases/${slug}/`
+
+/** Slug of the case page at `pathname` (with the site base already stripped), if any. */
+export const caseSlugFromPath = (path: string) => path.match(/^cases\/([\w-]+)\/?$/)?.[1]
+
+/** Browser tab and search title of a case page. */
+export const caseTitle = (c: Case) => `${c.title} — кейс | SIMAKOOV`
