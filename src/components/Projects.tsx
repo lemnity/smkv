@@ -66,7 +66,6 @@ function FlagshipCard({ project, number }: { project: Project; number: string })
           ...cardSx,
           display: 'grid',
           [STUDIO_LG]: { gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.1fr)' },
-          minHeight: { md: 440 },
           '&:hover .flag-media': { transform: 'scale(1.04)' },
           '&:hover .row-arrow, &:focus-visible .row-arrow': {
             transform: 'rotate(-45deg)',
@@ -92,7 +91,7 @@ function FlagshipCard({ project, number }: { project: Project; number: string })
             justifyContent: 'center',
             gap: { xs: 2.5, md: 3 },
             p: { xs: 3, md: 5 },
-            [STUDIO_LG]: { py: 6, pl: 6, pr: 3 },
+            [STUDIO_LG]: { py: 5, pl: 6, pr: 3 },
           }}
         >
           <Box
