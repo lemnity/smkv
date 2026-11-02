@@ -51,6 +51,8 @@ export interface Project {
   logo?: { src: string; width: number; height: number; mark?: boolean }
   /** Still being polished (Lemnity games): shows an "in development" pill instead of "soon". */
   inDevelopment?: boolean
+  /** A Lemnity game: shown as a card next to Lemnity in the first row of projects. */
+  game?: boolean
 }
 
 export type FeedbackTopicId = 'website' | 'brand' | 'product' | 'other'
@@ -109,6 +111,7 @@ const projectBase = {
     title: 'Крути и знакомься',
     image: { src: `${BASE}assets/game-spin-meet.webp`, width: 1207, height: 734, crop: { x: 0, y: 0, w: 1207, h: 734 }, focus: [0.5, 0.5] },
     inDevelopment: true,
+    game: true,
   },
   rps: {
     id: 'rps',
@@ -116,6 +119,7 @@ const projectBase = {
     title: 'Камень, ножницы, бумага',
     image: { src: `${BASE}assets/game-rps.webp`, width: 720, height: 800, crop: { x: 0, y: 0, w: 720, h: 800 }, focus: [0.5, 0.66] },
     inDevelopment: true,
+    game: true,
   },
 } satisfies Record<string, Omit<Project, 'description' | 'tags'>>
 
@@ -194,11 +198,10 @@ const ru = {
     text: 'Продукты, бренды и цифровые решения, которые делают идеи реальностью.',
     openLabel: 'Открыть проект',
     flagshipLabel: 'Главный проект',
-    showAll: 'Все проекты',
-    showLess: 'Свернуть',
     /** Shown instead of the arrow on projects without a public link yet. */
     soonLabel: 'Скоро',
     inDevLabel: 'В доработке',
+    gameLabel: 'Игра',
     items: [
       {
         ...projectBase.lemnity,
@@ -448,10 +451,9 @@ const en: Content = {
     text: 'Products, brands and digital solutions that turn ideas into reality.',
     openLabel: 'Open project',
     flagshipLabel: 'Flagship',
-    showAll: 'All projects',
-    showLess: 'Show less',
     soonLabel: 'Coming soon',
     inDevLabel: 'In development',
+    gameLabel: 'Game',
     items: [
       {
         ...projectBase.lemnity,
