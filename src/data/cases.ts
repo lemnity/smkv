@@ -28,10 +28,16 @@ export interface Case {
   shots: { hero: string; desktop: readonly string[]; mobile: string }
 }
 
+/**
+ * Bump when the screenshots are replaced: /assets/ is served as `immutable` for a year,
+ * so browsers only fetch new files under a new URL.
+ */
+const SHOTS_VERSION = 2
+const shot = (id: string, name: string) => `assets/cases/${id}/${name}.webp?v=${SHOTS_VERSION}`
 const shots = (id: string) => ({
-  hero: `assets/cases/${id}/d0.webp`,
-  desktop: [`assets/cases/${id}/d1.webp`, `assets/cases/${id}/d2.webp`],
-  mobile: `assets/cases/${id}/m0.webp`,
+  hero: shot(id, 'd0'),
+  desktop: [shot(id, 'd1'), shot(id, 'd2')],
+  mobile: shot(id, 'm0'),
 })
 
 export const CASES: readonly Case[] = [
