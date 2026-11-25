@@ -9,6 +9,7 @@
   const fmt = (n) => n.toLocaleString('ru-RU');
   const MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
   const date = (iso) => { const [, m, d] = iso.split('-').map(Number); return `${d} ${MONTHS[m - 1]}`; };
+  const goal = (name) => { try { if (window.ym) ym(106950026, 'reachGoal', name); } catch (e) { /* metrika blocked */ } };
   document.documentElement.classList.remove('no-js');
 
   /* ---------- header ---------- */
@@ -230,9 +231,18 @@
       picked.length ? `Станции: ${picked.join(', ')}` : '',
       data.get('message') ? `\n${data.get('message')}` : '',
     ].filter(Boolean).join('\n');
+    goal('rzs_lead');
     location.href = `mailto:reklama@rzs.ru?subject=${encodeURIComponent('Заявка на рекламу с сайта rzs.ru')}&body=${encodeURIComponent(body)}`;
     status.className = 'form-status is-ok';
     status.textContent = 'Заявка открылась в вашей почтовой программе — осталось нажать «Отправить». Если почта не открылась, позвоните: +7 (3452) 68-82-12.';
+  });
+
+  /* ---------- Metrika goals: what the visitor actually did ---------- */
+  let played = false;
+  RZS.Radio.on((s) => { if (s.playing && !played) { played = true; goal('rzs_play'); } });
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="tel:"], a[href^="mailto:"]');
+    if (a) goal(a.href.startsWith('tel:') ? 'rzs_call' : 'rzs_email');
   });
 
   $('#year').textContent = new Date().getFullYear();
