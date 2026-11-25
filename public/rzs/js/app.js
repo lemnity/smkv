@@ -118,26 +118,6 @@
   RZS.Tuner.onChange((i) => { if (i >= 0) openPanel(i, true); });
   openPanel(1, true);
 
-  /* ---------- advertisers: rotating word ---------- */
-  const rot = $('#rotate');
-  if (rot && !reduce) {
-    const words = ['клиентов', 'продаж', 'узнаваемости'];
-    rot.innerHTML = `<span>${rot.textContent}</span>`;
-    const inner = rot.firstElementChild;
-    let w = 0;
-    setInterval(() => {
-      rot.style.width = rot.getBoundingClientRect().width + 'px';      // freeze the current width
-      rot.classList.add('out');
-      setTimeout(() => {
-        w = (w + 1) % words.length;
-        inner.textContent = words[w];
-        rot.style.width = inner.getBoundingClientRect().width + 'px';   // glide to the new word's width
-        rot.classList.remove('out');
-      }, 300);
-    }, 2600);
-    addEventListener('resize', () => { rot.style.width = ''; });
-  }
-
   /* ---------- CTA screen: equalizer bars, each with its own height and tempo ---------- */
   const eq = $('#ctaEq');
   if (eq) {
