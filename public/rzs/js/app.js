@@ -8,7 +8,7 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const fmt = (n) => n.toLocaleString('ru-RU');
   const MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-  const date = (iso) => { const [y, m, d] = iso.split('-').map(Number); return `${d} ${MONTHS[m - 1]}`; };
+  const date = (iso) => { const [, m, d] = iso.split('-').map(Number); return `${d} ${MONTHS[m - 1]}`; };
   document.documentElement.classList.remove('no-js');
 
   /* ---------- header ---------- */
@@ -43,6 +43,20 @@
     io.unobserve(e.target);
   }), { rootMargin: '0px 0px -10% 0px' });
   const observe = (root = document) => $$('[data-reveal]', root).forEach((el) => io.observe(el));
+  /* failsafe: anything already reached is shown even if a browser skipped the observer callback */
+  let sweepQueued = false;
+  const sweep = () => {
+    sweepQueued = false;
+    $$('[data-reveal]:not(.in)').forEach((el) => {
+      if (el.getBoundingClientRect().top < innerHeight * .92) {
+        el.classList.add('in');
+        $$('[data-count]', el).forEach(countUp);
+        io.unobserve(el);
+      }
+    });
+  };
+  addEventListener('scroll', () => { if (!sweepQueued) { sweepQueued = true; requestAnimationFrame(sweep); } }, { passive: true });
+  addEventListener('load', sweep);
 
   /* ---------- facts ---------- */
   $('#facts').innerHTML = FACTS.map((f, i) => `
@@ -108,11 +122,31 @@
   const rot = $('#rotate');
   if (rot && !reduce) {
     const words = ['клиентов', 'продаж', 'узнаваемости'];
+    rot.innerHTML = `<span>${rot.textContent}</span>`;
+    const inner = rot.firstElementChild;
     let w = 0;
     setInterval(() => {
+      rot.style.width = rot.getBoundingClientRect().width + 'px';      // freeze the current width
       rot.classList.add('out');
-      setTimeout(() => { w = (w + 1) % words.length; rot.textContent = words[w]; rot.classList.remove('out'); }, 320);
+      setTimeout(() => {
+        w = (w + 1) % words.length;
+        inner.textContent = words[w];
+        rot.style.width = inner.getBoundingClientRect().width + 'px';   // glide to the new word's width
+        rot.classList.remove('out');
+      }, 300);
     }, 2600);
+    addEventListener('resize', () => { rot.style.width = ''; });
+  }
+
+  /* ---------- CTA screen: equalizer bars, each with its own height and tempo ---------- */
+  const eq = $('#ctaEq');
+  if (eq) {
+    const n = innerWidth < 600 ? 22 : 34;
+    eq.innerHTML = Array.from({ length: n }, (_, i) => {
+      const shape = .35 + .65 * Math.sin((i / n) * Math.PI);            // louder in the middle
+      const h = Math.round((.3 + .7 * Math.random()) * shape * 100);
+      return `<i style="--h:${Math.max(14, h)}%;--lo:${(.15 + Math.random() * .3).toFixed(2)};--dur:${(.45 + Math.random() * .7).toFixed(2)}s;--delay:${(-Math.random()).toFixed(2)}s"></i>`;
+    }).join('');
   }
 
   /* ---------- news ---------- */
@@ -136,7 +170,6 @@
     </a></li>`).join('');
 
   /* ---------- geography map ---------- */
-  const svgNS = 'http://www.w3.org/2000/svg';
   const map = $('#mapSvg');
   map.setAttribute('viewBox', MAP.viewBox);
   const hq = CITIES.find((c) => c.hq);
