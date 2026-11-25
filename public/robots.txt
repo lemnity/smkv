@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /rzs/
 
 Sitemap: https://simakoov.ru/sitemap.xml

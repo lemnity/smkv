@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ru" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Радио Западной Сибири — медиахолдинг, реклама на радио в Тюмени</title>
+<meta name="description" content="Медиахолдинг «Радио Западной Сибири»: Европа Плюс, Ретро FM, Дорожное радио, Красная Армия и Новое радио. 10 городов вещания, реклама на радио и продакшн-студия в Тюмени.">
+<meta name="theme-color" content="#080B10">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Радио Западной Сибири — звучим ближе. Громче.">
+<meta property="og:description" content="Пять радиостанций, 10 городов вещания, реклама на радио и продакшн в Тюмени.">
+<meta property="og:locale" content="ru_RU">
+<link rel="icon" href="assets/logos/rzs.png" type="image/png">
+<link rel="preload" href="../fonts/gilroy-heavy.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/gilroy-medium.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Медиахолдинг «Радио Западной Сибири»",
+  "url": "https://rzs.ru",
+  "email": "reklama@rzs.ru",
+  "telephone": "+7 3452 68-82-12",
+  "address": { "@type": "PostalAddress", "streetAddress": "ул. Республики, 211а, 7-й этаж", "addressLocality": "Тюмень", "addressCountry": "RU" },
+  "subOrganization": [
+    { "@type": "RadioStation", "name": "Новое радио Тюмень", "broadcastFrequency": "87.9 FM" },
+    { "@type": "RadioStation", "name": "Европа Плюс Тюмень", "broadcastFrequency": "101.8 FM" },
+    { "@type": "RadioStation", "name": "Красная Армия", "broadcastFrequency": "104.6 FM" },
+    { "@type": "RadioStation", "name": "Ретро FM Тюмень", "broadcastFrequency": "105.1 FM" },
+    { "@type": "RadioStation", "name": "Дорожное радио Тюмень", "broadcastFrequency": "107.0 FM" }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<header class="header" id="header">
+  <div class="container header-row">
+    <a class="logo" href="#top" aria-label="Радио Западной Сибири, в начало">
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="logo-text">Радио<br>Западной Сибири</span>
+    </a>
+    <nav class="menu" id="menu" aria-label="Основная навигация">
+      <a href="#tuner" data-go-tuner>Тюнер</a>
+      <a href="#stations">Станции</a>
+      <a href="#ads">Рекламодателям</a>
+      <a href="#news">Новости</a>
+      <a href="#geo">География</a>
+      <a href="#contacts">Контакты</a>
+      <a class="menu-phone" href="tel:+73452688212">+7 (3452) 68-82-12</a>
+    </nav>
+    <a class="header-phone" href="tel:+73452688212">+7 (3452) 68-82-12</a>
+    <a class="btn btn--accent btn--sm header-cta" href="#contacts">Заказать рекламу</a>
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Меню"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 01 · Hero -->
+  <section class="hx" id="top" aria-labelledby="hero-title">
+    <canvas class="hx-snow" id="hxSnow" aria-hidden="true"></canvas>
+
+    <button class="hx-sound" id="hxSound" type="button" aria-pressed="false">
+      <span class="hx-eq" aria-hidden="true"><i></i><i></i><i></i></span><span class="hx-sound-label">Включить звук</span>
+    </button>
+
+    <div class="hx-stage container">
+      <h1 class="hx-slogan" id="hero-title">Звучим ближе. <em>Громче.</em></h1>
+      <p class="hx-freq" id="hxFreq" aria-hidden="true"><span class="hx-digits" id="hxDigits"></span><span class="hx-unit">FM</span></p>
+      <div class="hx-copy" aria-live="polite">
+        <p class="hx-name is-search" id="hxName">Поиск станции…</p>
+        <p class="hx-fact" id="hxFact">Объединяем людей, музыку и события. Радио, которое становится частью жизни региона.</p>
+      </div>
+      <div class="hx-presets" id="hxPresets" role="group" aria-label="Станции холдинга"></div>
+    </div>
+
+    <div class="hx-bottom">
+      <canvas class="hx-wave" id="hxWave" aria-hidden="true"></canvas>
+      <div class="hx-scale" id="hxScale" role="slider" tabindex="0" aria-label="Частота, МГц" aria-valuemin="87.5" aria-valuemax="108" aria-valuenow="87.5">
+        <div class="hx-strip" id="hxStrip"></div>
+        <div class="hx-needle" aria-hidden="true"></div>
+      </div>
+      <div class="hx-foot container">
+        <span>5 станций, 10 городов, ≈2 млн слушателей</span>
+        <span class="hx-hint" id="hxHint">тяните шкалу</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
+
+  <!-- 02 · FM tuner -->
+  <section class="section tuner-sec" id="tuner" aria-labelledby="tuner-title">
+    <div class="container">
+      <div class="sec-head">
+        <h2 class="h2" id="tuner-title">Пять станций на одной шкале</h2>
+        <p class="lede">Переключайте станции, тяните шкалу и слушайте, как меняется эфир.</p>
+      </div>
+
+      <div class="device" id="device">
+        <div class="device-bar">
+          <span class="device-brand">РЗС FM</span>
+          <span class="onair" id="onair" data-state="idle"><i aria-hidden="true"></i><span id="onairText">Демо-режим</span></span>
+          <span class="device-loc">Тюмень</span>
+        </div>
+
+        <div class="device-screen">
+          <div class="readout">
+            <p class="t-freq" aria-hidden="true"><span class="t-digits" id="tDigits"></span><span class="t-unit">FM</span></p>
+            <div class="t-copy searching" id="tCopy" aria-live="polite">
+              <div class="t-id">
+                <span class="logo-plate logo-plate--sm"><img id="tLogo" alt="" hidden></span>
+                <div>
+                  <p class="t-name" id="tName">Поиск станции…</p>
+                  <p class="t-format" id="tFormat">Эфир между станциями</p>
+                </div>
+              </div>
+              <p class="t-tagline" id="tTagline">Тяните шкалу или выберите станцию кнопками ниже.</p>
+            </div>
+          </div>
+          <canvas class="t-spectrum" id="tSpectrum" aria-hidden="true"></canvas>
+        </div>
+
+        <div class="scale" id="scale" role="slider" tabindex="0" aria-label="Частота, МГц"
+             aria-valuemin="87.5" aria-valuemax="108" aria-valuenow="87.5">
+          <div class="scale-strip" id="scaleStrip"></div>
+          <div class="needle" aria-hidden="true"></div>
+        </div>
+
+        <div class="device-controls">
+          <div class="transport">
+            <button class="round" id="tPrev" type="button" aria-label="Предыдущая станция">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5v14M19 5l-9 7 9 7z"/></svg>
+            </button>
+            <button class="play" id="tPlay" type="button" aria-pressed="false" aria-label="Включить демо-звук">
+              <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
+              <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h3.5v16H7zM13.5 4H17v16h-3.5z"/></svg>
+              <span class="play-label">Слушать</span>
+            </button>
+            <button class="round" id="tNext" type="button" aria-label="Следующая станция">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 5v14M5 5l9 7-9 7z"/></svg>
+            </button>
+          </div>
+          <div class="presets" id="tPresets" role="group" aria-label="Станции"></div>
+        </div>
+
+        <p class="device-note" id="tNote" role="status"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · About -->
+  <section class="section about" id="about" aria-labelledby="about-title">
+    <div class="container about-grid">
+      <div>
+        <h2 class="h2" id="about-title" data-reveal>Медиахолдинг, который слышно во всём регионе</h2>
+        <p class="lede" data-reveal style="--d:.08s">«Радио Западной Сибири» объединяет пять радиостанций, собственную продакшн-студию и рекламную службу. Вещаем в десяти городах Тюменской области, ХМАО и ЯНАО.</p>
+      </div>
+      <p class="about-chain" data-reveal style="--d:.12s">
+        Станции холдинга выстроены так, чтобы закрыть весь круг слушателей. Молодую аудиторию собирают <em style="--c:#2FE3B0">Новое радио</em> и&nbsp;<em style="--c:#FF4A3D">Красная Армия</em>, следом идёт <em style="--c:#4C82FF">Европа Плюс</em>, цепочку продолжают <em style="--c:#FF4FA3">Ретро&nbsp;FM</em> (30+) и&nbsp;<em style="--c:#FFC23D">Дорожное радио</em> (40+).
+      </p>
+      <div class="facts" id="facts"></div>
+    </div>
+  </section>
+
+  <!-- 04 · Stations -->
+  <section class="section stations" id="stations" aria-labelledby="stations-title">
+    <div class="container">
+      <div class="sec-head">
+        <h2 class="h2" id="stations-title" data-reveal>Наши радиостанции</h2>
+        <p class="lede" data-reveal style="--d:.08s">Выберите станцию: откроется её портрет, а тюнер переключится на её волну.</p>
+      </div>
+      <div class="shelf" id="shelf"></div>
+      <p class="source">Цифры аудитории: Mediascope Radio Index, Тюмень, 12+, по материалам rzs.ru.</p>
+    </div>
+  </section>
+
+  <!-- 05 · Advertisers -->
+  <section class="section ads" id="ads" aria-labelledby="ads-title">
+    <div class="container">
+      <h2 class="ads-title" id="ads-title" data-reveal>Хотите больше <span class="rotate" id="rotate">клиентов</span>?</h2>
+      <p class="lede" data-reveal style="--d:.08s">Реклама на радио в Тюмени и Тюменской области: пять станций, собственный продакшн и менеджер, который ведёт кампанию от медиаплана до документов.</p>
+
+      <div class="offers">
+        <article class="offer" data-reveal><h3>Размещение в эфире</h3><p>Прямые трансляции аудиороликов на пяти станциях. Медиаплан под вашу целевую аудиторию и бюджет.</p></article>
+        <article class="offer" data-reveal><h3>Производство аудиороликов</h3><p>Сценарий, голоса профессиональных дикторов и актёров, музыка и сведение. Ролик — не дольше трёх дней.</p></article>
+        <article class="offer" data-reveal><h3>Спецпроекты</h3><p>Индивидуальные проекты, масштабные внеэфирные акции и продакт-плейсмент.</p></article>
+        <article class="offer" data-reveal><h3>Интеграции</h3><p>Рекламная интеграция в эфир, спонсорство популярных радиошоу и авторских программ, интервью.</p></article>
+        <article class="offer" data-reveal><h3>Партнёрские мероприятия</h3><p>Спонсорство концертов и событий с участием мировых и отечественных знаменитостей.</p></article>
+      </div>
+
+      <div class="process">
+        <h3 class="h3" data-reveal>Как мы работаем</h3>
+        <ol class="steps">
+          <li data-reveal style="--d:0s"><b>Знакомство</b><span>Изучаем ваш бизнес, конкурентов и опыт рекламы.</span></li>
+          <li data-reveal style="--d:.06s"><b>Медиапланирование</b><span>Формируем предложение под вашу целевую аудиторию.</span></li>
+          <li data-reveal style="--d:.12s"><b>Продакшн</b><span>Пишем сценарий и создаём продающий ролик.</span></li>
+          <li data-reveal style="--d:.18s"><b>Тестирование</b><span>Проверяем на фокус-группе и вносим правки.</span></li>
+          <li data-reveal style="--d:.24s"><b>Запуск</b><span>Выходим в эфир на наших станциях и фиксируем результат.</span></li>
+          <li data-reveal style="--d:.3s"><b>Сопровождение</b><span>Менеджер контролирует кампанию и документооборот.</span></li>
+        </ol>
+      </div>
+
+      <div class="studio" data-reveal>
+        <img class="studio-img" src="assets/img/studio.jpg" alt="Пульт в студии звукозаписи" loading="lazy" decoding="async" width="1600" height="1066">
+        <div class="studio-body">
+          <h3 class="h3">Продакшн-студия «РЗС»</h3>
+          <p>Одна из первых студий в Тюмени с собственным производством рекламы. Звукорежиссёры — финалисты и победители крупных фестивалей. Работаем с клиентами из Тюмени, Самары, Тольятти, Петербурга и Москвы.</p>
+          <ul class="studio-list">
+            <li>Рекламные аудиоролики: имиджевые, игровые, музыкальные</li>
+            <li>Джинглы, рекламные песни и пропевки</li>
+            <li>Дикторское озвучивание видео и ТВ-рекламы</li>
+            <li>Голосовые меню и автоответчики (IVR)</li>
+            <li>Объявления для торговых центров и магазинов</li>
+            <li>Аудиокниги, подкасты, радиоспектакли</li>
+          </ul>
+          <a class="link" href="https://rzs.ru/proizvodstvo-reklamy/" target="_blank" rel="noopener">Примеры работ на rzs.ru<span class="ext" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+
+      <div class="ads-cta" data-reveal>
+        <p>Подберём станции и время выхода под ваш бюджет.</p>
+        <div class="ads-cta-actions">
+          <a class="btn btn--accent" href="#contacts">Оставить заявку</a>
+          <a class="btn btn--ghost" href="tel:+73452688212">+7 (3452) 68-82-12</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · News -->
+  <section class="section news" id="news" aria-labelledby="news-title">
+    <div class="container">
+      <div class="sec-head sec-head--row">
+        <h2 class="h2" id="news-title" data-reveal>Новости и события</h2>
+        <a class="link" href="https://rzs.ru/novosti/" target="_blank" rel="noopener">Все новости<span class="ext" aria-hidden="true">↗</span></a>
+      </div>
+      <div class="news-grid" id="newsGrid"></div>
+      <ul class="news-list" id="newsList"></ul>
+    </div>
+  </section>
+
+  <!-- 07 · Geography -->
+  <section class="section geo" id="geo" aria-labelledby="geo-title">
+    <div class="container geo-grid">
+      <div class="geo-copy">
+        <h2 class="h2" id="geo-title" data-reveal>География вещания</h2>
+        <p class="lede" data-reveal style="--d:.08s">Десять городов в трёх регионах. «Дорожное радио» дополнительно вещает в 12 городах Тюменской области, ХМАО и ЯНАО.</p>
+        <div class="city-list" id="cityList"></div>
+      </div>
+      <div class="map" data-reveal>
+        <svg id="mapSvg" role="img" aria-label="Карта вещания: Тюменская область, ХМАО — Югра и ЯНАО, 10 городов"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 · Contacts -->
+  <section class="section contacts" id="contacts" aria-labelledby="contacts-title">
+    <div class="container contacts-grid">
+      <div>
+        <h2 class="h2" id="contacts-title" data-reveal>Обсудим вашу кампанию</h2>
+        <p class="lede" data-reveal style="--d:.08s">Тюмень, ул. Республики, 211а, 7-й этаж. По будням с 10:00 до 18:00.</p>
+        <div class="departments" id="departments"></div>
+      </div>
+
+      <form class="form" id="leadForm" novalidate data-reveal>
+        <h3 class="h3">Заявка в рекламную службу</h3>
+        <div class="field">
+          <label for="f-name">Имя</label>
+          <input id="f-name" name="name" autocomplete="name" required aria-describedby="name-error">
+          <span class="field-error" id="name-error"></span>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-phone">Телефон</label>
+            <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7" required aria-describedby="phone-error">
+            <span class="field-error" id="phone-error"></span>
+          </div>
+          <div class="field">
+            <label for="f-email">Почта <small>необязательно</small></label>
+            <input id="f-email" name="email" type="email" autocomplete="email" aria-describedby="email-error">
+            <span class="field-error" id="email-error"></span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-company">Компания <small>необязательно</small></label>
+          <input id="f-company" name="company" autocomplete="organization">
+        </div>
+        <fieldset class="field">
+          <legend>Интересуют станции</legend>
+          <div class="chips" id="formStations"></div>
+        </fieldset>
+        <div class="field">
+          <label for="f-message">Задача <small>необязательно</small></label>
+          <textarea id="f-message" name="message" rows="3" placeholder="Например: запуск нового магазина в марте"></textarea>
+        </div>
+        <button class="btn btn--accent btn--block" type="submit">Отправить заявку</button>
+        <p class="form-note">Заявка откроется в вашей почтовой программе, адресат — reklama@rzs.ru.</p>
+        <p class="form-status" id="formStatus" role="status"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="logo" href="#top" aria-label="Радио Западной Сибири, в начало"><span class="logo-mark" aria-hidden="true"></span><span class="logo-text">Радио<br>Западной Сибири</span></a>
+        <p class="footer-addr">Тюмень, ул. Республики, 211а, 7-й этаж<br>По будням с 10:00 до 18:00</p>
+      </div>
+      <nav aria-label="Разделы">
+        <h4>Разделы</h4>
+        <a href="#tuner">Тюнер</a><a href="#stations">Станции</a><a href="#ads">Рекламодателям</a><a href="#news">Новости</a><a href="#geo">География</a>
+        <a href="https://rzs.ru/vakansii/" target="_blank" rel="noopener">Вакансии</a>
+      </nav>
+      <nav aria-label="Сайты станций">
+        <h4>Станции в сети</h4>
+        <a href="https://europaplus.ru" target="_blank" rel="noopener">Европа Плюс</a>
+        <a href="https://retrofm.ru" target="_blank" rel="noopener">Ретро FM</a>
+        <a href="https://dorognoe.ru" target="_blank" rel="noopener">Дорожное радио</a>
+        <a href="https://newradio.ru" target="_blank" rel="noopener">Новое радио</a>
+      </nav>
+      <div>
+        <h4>Контакты</h4>
+        <a class="footer-big" href="tel:+73452688212">+7 (3452) 68-82-12</a>
+        <a class="footer-big" href="mailto:reklama@rzs.ru">reklama@rzs.ru</a>
+        <a href="mailto:info@rzs.ru">info@rzs.ru</a>
+        <a href="mailto:law@rzs.ru">law@rzs.ru — юридический отдел</a>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <span>© <span id="year">2026</span> Медиахолдинг «Радио Западной Сибири»</span>
+      <span>Концепт главной страницы</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js" defer></script>
+<script src="js/map-data.js" defer></script>
+<script src="js/audio.js" defer></script>
+<script src="js/tuner.js" defer></script>
+<script src="js/hero.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>

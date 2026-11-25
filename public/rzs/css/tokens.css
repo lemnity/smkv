@@ -1,0 +1,58 @@
+/* Design tokens — RZS «Sound of the region». Палитра из ТЗ (ideas.md, раздел 3); акцент — жёлто-лаймовый #E2F04A (мягче лайма #C9FF43 из ТЗ, по просьбе заказчика). */
+@font-face { font-family: 'Gilroy'; font-weight: 400; font-display: swap; src: url(../../fonts/gilroy-regular.woff2) format('woff2'); }
+@font-face { font-family: 'Gilroy'; font-weight: 500; font-display: swap; src: url(../../fonts/gilroy-medium.woff2) format('woff2'); }
+@font-face { font-family: 'Gilroy'; font-weight: 600; font-display: swap; src: url(../../fonts/gilroy-semibold.woff2) format('woff2'); }
+@font-face { font-family: 'Gilroy'; font-weight: 700; font-display: swap; src: url(../../fonts/gilroy-bold.woff2) format('woff2'); }
+@font-face { font-family: 'Gilroy'; font-weight: 900; font-display: swap; src: url(../../fonts/gilroy-heavy.woff2) format('woff2'); }
+
+/* live colour of the tuned station; animates between stations */
+@property --st { syntax: '<color>'; inherits: true; initial-value: #E2F04A; }
+
+:root {
+  /* surfaces & text */
+  --bg: #080B10;
+  --bg-2: #111820;
+  --card: #151F28;
+  --text: #F5F7F8;
+  --text-2: #9AA6B2;
+  --accent: #E2F04A;
+  --line: #26313C;
+  --danger: #FF7A6E;
+
+  /* stations */
+  --c-novoe: #2FE3B0;
+  --c-europa: #4C82FF;
+  --c-armiya: #FF4A3D;
+  --c-retro: #FF4FA3;
+  --c-doroga: #FFC23D;
+  --st: #E2F04A;
+
+  /* type */
+  --font: 'Gilroy', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  --t-hero: clamp(52px, 9.6vw, 156px);
+  --t-display: clamp(44px, 7vw, 112px);
+  --t-h2: clamp(34px, 4.8vw, 68px);
+  --t-h3: clamp(22px, 2.1vw, 30px);
+  --t-lede: clamp(18px, 1.45vw, 21px);
+  --t-body: 17px;
+  --t-sm: 15px;
+  --t-xs: 13px;
+
+  /* space (4-pt) */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+  --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 144px;
+  --gutter: clamp(16px, 4.4vw, 64px);
+  --wide: 1320px;
+  --header: 72px;
+
+  /* shape: restrained radii */
+  --r-s: 8px; --r-m: 14px; --r-l: 20px; --r-pill: 999px;
+
+  /* motion */
+  --ease: cubic-bezier(.28, .11, .32, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --dur-1: .22s; --dur-2: .5s; --dur-3: .9s;
+
+  color-scheme: dark;
+  transition: --st var(--dur-3) var(--ease);
+}
